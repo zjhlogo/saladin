@@ -34,6 +34,7 @@
 #include "viewer/viewmanager.h"
 #include "xmlui/toolstrip.h"
 #include "xmlui/builder.h"
+#include "windark.h"
 
 MainWindow* mainWindow = NULL;
 
@@ -44,6 +45,11 @@ MainWindow::MainWindow() : QMainWindow(),
     m_targetPane( NULL )
 {
     mainWindow = this;
+
+    if (winDark::isDarkTheme())
+    {
+        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
+    }
 
     setWindowTitle( tr( "Saladin" ) );
 

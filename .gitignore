@@ -13,3 +13,4 @@ configure-msvc.bat
 release-x64.bat
 saladin.sln
 saladin.v12.suo
+.vs/

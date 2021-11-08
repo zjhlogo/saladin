@@ -17,10 +17,16 @@
 **************************************************************************/
 
 #include "application.h"
+#include "windark.h"
 
 int main( int argc, char** argv )
 {
     Application application( argc, argv );
+
+    if (winDark::isDarkTheme())
+    {
+        winDark::setDark_qApp();
+    }
 
     return application.exec();
 }

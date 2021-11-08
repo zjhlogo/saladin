@@ -25,7 +25,8 @@ HEADERS += aboutbox.h \
            searchdialog.h \
            searchhelper.h \
            searchitemmodel.h \
-           settingsdialog.h
+           settingsdialog.h \
+           windark.h
 
 SOURCES += aboutbox.cpp \
            application.cpp \
@@ -46,7 +47,8 @@ SOURCES += aboutbox.cpp \
            searchdialog.cpp \
            searchhelper.cpp \
            searchitemmodel.cpp \
-           settingsdialog.cpp
+           settingsdialog.cpp \
+           windark.cpp
 
 RESOURCES += \
            guide/guide.qrc \
