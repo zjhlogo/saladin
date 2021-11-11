@@ -847,7 +847,7 @@ void MainWindow::startTool( Tool tool, const QString& parameters, const QString&
 
     HINSTANCE result = ShellExecute( (HWND)effectiveWinId(), NULL, (LPCWSTR)path.utf16(), (LPCWSTR)parameters.utf16(), (LPCWSTR)directory.utf16(), SW_SHOWNORMAL );
 
-    if ( (int)result <= 32 ) {
+    if ( result <= (HINSTANCE)32 ) {
         QString name = toolName( tool );
         QMessageBox::warning( this, tr( "Tool failed" ), tr( "The %1 tool could not be started.\nMake sure it is correctly configured in Saladin settings and try again." ).arg( name ) );
     }
