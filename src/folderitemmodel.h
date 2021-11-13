@@ -30,10 +30,12 @@ class FolderItemModel : public QAbstractItemModel
 public:
     enum Columns
     {
-        Column_Name,
+        Column_Name = 0,
+        Column_Ext,
         Column_Size,
         Column_LastModified,
-        Column_Attributes
+        Column_Attributes,
+        Num_Column,
     };
 
 public:

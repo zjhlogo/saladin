@@ -483,7 +483,7 @@ void FolderItemModel::compareWith(const QList<ShellItem>& items)
 
 int FolderItemModel::columnCount(const QModelIndex& parent /*= QModelIndex()*/) const
 {
-    if (!parent.isValid()) return 4;
+    if (!parent.isValid()) return (int)Num_Column;
     return 0;
 }
 
@@ -495,6 +495,8 @@ QVariant FolderItemModel::headerData(int section, Qt::Orientation orientation, i
         {
         case Column_Name:
             return tr("Name");
+        case Column_Ext:
+            return tr("Ext");
         case Column_Size:
             return tr("Size");
         case Column_LastModified:
@@ -557,6 +559,8 @@ QVariant FolderItemModel::data(const QModelIndex& index, int role /*= Qt::Displa
             {
             case Column_Name:
                 return item.name();
+            case Column_Ext:
+                return item.ext();
             case Column_Size:
                 if (item.attributes().testFlag(ShellItem::Directory))
                 {
@@ -709,6 +713,12 @@ bool FolderItemModel::shellItemLessThan(const ShellItem& item1, const ShellItem&
         if (item1.size() < item2.size())
             result = -1;
         else if (item2.size() < item1.size())
+            result = 1;
+        break;
+    case Column_Ext:
+        if (item1.ext() < item2.ext())
+            result = -1;
+        else if (item2.ext() < item1.ext())
             result = 1;
         break;
     case Column_LastModified:

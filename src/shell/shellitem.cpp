@@ -49,6 +49,14 @@ QString ShellItem::name() const
     return d->m_name;
 }
 
+QString ShellItem::ext() const
+{
+    if (d->m_attributes.testFlag(ShellItem::Directory)) return "";
+
+    QFileInfo fi(d->m_name);
+    return fi.suffix();
+}
+
 quint64 ShellItem::size() const
 {
     return d->m_size;
