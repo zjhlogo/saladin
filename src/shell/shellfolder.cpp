@@ -319,7 +319,7 @@ void ShellFolderPrivate::readItemProperties( ShellItem& item )
 
         item.d->m_name = QString::fromWCharArray( data.cFileName );
 
-        item.d->m_size = (qint64)data.nFileSizeHigh << 32 | data.nFileSizeLow;
+        item.d->m_size = (quint64)data.nFileSizeHigh << 32 | data.nFileSizeLow;
 
         item.d->m_modified = fileTimeToQDateTime( &data.ftLastWriteTime );
 

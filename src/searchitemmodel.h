@@ -1,26 +1,26 @@
 /**************************************************************************
-* This file is part of the Saladin program
-* Copyright (C) 2011-2017 Michał Męciński
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**************************************************************************/
+ * This file is part of the Saladin program
+ * Copyright (C) 2011-2017 Michał Męciński
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **************************************************************************/
 
 #ifndef SEARCHITEMMODEL_H
 #define SEARCHITEMMODEL_H
 
-#include "shell/shellitem.h"
 #include "shell/shellfolder.h"
+#include "shell/shellitem.h"
 #include "shell/shellpidl.h"
 
 class SearchHelper;
@@ -38,33 +38,33 @@ public:
     };
 
 public:
-    explicit SearchItemModel( QObject* parent );
+    explicit SearchItemModel(QObject* parent);
     ~SearchItemModel();
 
 public:
-    void startSearch( ShellFolder* folder, const QString& pattern, const QString& text, Qt::CaseSensitivity cs );
+    void startSearch(ShellFolder* folder, const QString& pattern, const QString& text, Qt::CaseSensitivity cs);
     void abortSearch();
 
     bool isSearching() const;
 
-    ShellItem itemAt( const QModelIndex& index ) const;
-    QString pathAt( const QModelIndex& index ) const;
-    ShellFolder* folderAt( const QModelIndex& index ) const;
+    ShellItem itemAt(const QModelIndex& index) const;
+    QString pathAt(const QModelIndex& index) const;
+    ShellFolder* folderAt(const QModelIndex& index) const;
 
 public: // overrides
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-    QModelIndex parent( const QModelIndex& index ) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex& index) const;
 
-    QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
-    Qt::ItemFlags flags( const QModelIndex& index ) const;
+    Qt::ItemFlags flags(const QModelIndex& index) const;
 
 signals:
-    void folderEntered( const QString& path );
+    void folderEntered(const QString& path);
 
     void searchCompleted();
 
@@ -78,7 +78,7 @@ private slots:
 private:
     void clear();
 
-    bool scanFolder( const QString& prefix, ShellFolder* folder );
+    bool scanFolder(const QString& prefix, ShellFolder* folder);
 
 private:
     struct FoundItem
@@ -94,7 +94,7 @@ private:
         QString m_prefix;
     };
 
-    friend bool operator <( const PendingFolder& folder1, const PendingFolder& folder2 );
+    friend bool operator<(const PendingFolder& folder1, const PendingFolder& folder2);
 
 private:
     QList<ShellFolder*> m_folders;
@@ -108,9 +108,9 @@ private:
     QList<int> m_extractQueue;
 
     QString m_text;
-    Qt::CaseSensitivity m_cs;
+    Qt::CaseSensitivity m_cs{Qt::CaseInsensitive};
 
-    SearchHelper* m_helper;
+    SearchHelper* m_helper{};
 
     QList<FoundItem> m_pendingItems;
 };
@@ -119,11 +119,11 @@ class SearchProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit SearchProxyModel( QObject* parent );
+    explicit SearchProxyModel(QObject* parent);
     ~SearchProxyModel();
 
 protected: // overrides
-    bool lessThan( const QModelIndex& index1, const QModelIndex& index2 ) const;
+    bool lessThan(const QModelIndex& index1, const QModelIndex& index2) const;
 };
 
 #endif

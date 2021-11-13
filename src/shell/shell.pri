@@ -26,6 +26,7 @@ SOURCES += shell/changenotifywatcher.cpp \
            shell/shelldropdata.cpp \
            shell/shellfolder.cpp \
            shell/shellitem.cpp \
+           shell/shellitem_p.cpp \
            shell/shellpidl.cpp \
            shell/shellselection.cpp \
            shell/streamdevice.cpp

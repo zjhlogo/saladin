@@ -9,46 +9,47 @@
  *
  **/
 
+#include <winDark.h>
+
+#include <QApplication>
 #include <QPalette>
 #include <QSettings>
 #include <QStyleFactory>
-#include <QApplication>
-#include <winDark.h>
 
-namespace winDark {
-
-/**
- * @brief isDarkTheme
- * @return bool
- */
-bool isDarkTheme()
+namespace winDark
 {
+    /**
+     * @brief isDarkTheme
+     * @return bool
+     */
+    bool isDarkTheme()
+    {
 #ifdef Q_OS_WIN
-    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-                       QSettings::NativeFormat);
-    if(settings.value("AppsUseLightTheme")==0){
-        return true;
-    }
+        QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
+        if (settings.value("AppsUseLightTheme") == 0)
+        {
+            return true;
+        }
 #endif
-    return false;
-}
+        return false;
+    }
 
-/**
- * @brief setDark_qApp
- * @details use this after creating QApplication
- *          if(winDark::isDarkTheme()) winDark::setDark_qApp();
- *
- */
-void setDark_qApp()
-{
+    /**
+     * @brief setDark_qApp
+     * @details use this after creating QApplication
+     *          if(winDark::isDarkTheme()) winDark::setDark_qApp();
+     *
+     */
+    void setDark_qApp()
+    {
 #ifdef Q_OS_WIN
         qApp->setStyle(QStyleFactory::create("Fusion"));
         QPalette darkPalette;
-        QColor darkColor = QColor(25,25,25);
-        QColor disabledColor = QColor(127,127,127);
+        QColor darkColor = QColor(25, 25, 25);
+        QColor disabledColor = QColor(127, 127, 127);
         darkPalette.setColor(QPalette::Window, darkColor);
         darkPalette.setColor(QPalette::WindowText, Qt::white);
-        darkPalette.setColor(QPalette::Base, QColor(18,18,18));
+        darkPalette.setColor(QPalette::Base, QColor(18, 18, 18));
         darkPalette.setColor(QPalette::AlternateBase, darkColor);
         darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
         darkPalette.setColor(QPalette::ToolTipText, Qt::white);
@@ -65,36 +66,30 @@ void setDark_qApp()
         qApp->setPalette(darkPalette);
         qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 #endif
-}
+    }
 
-/**
- * @brief setDark_Titlebar
- * @param hwnd
- * @details Use for each window like
- *    if(winDark::isDarkTheme()) winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
- */
-void setDark_Titlebar(HWND hwnd)
-{
+    /**
+     * @brief setDark_Titlebar
+     * @param hwnd
+     * @details Use for each window like
+     *    if(winDark::isDarkTheme()) winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
+     */
+    void setDark_Titlebar(HWND hwnd)
+    {
 #ifdef Q_OS_WIN
-    HMODULE hUxtheme = LoadLibraryExW(L"uxtheme.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
-    HMODULE hUser32 = GetModuleHandleW(L"user32.dll");
-    fnAllowDarkModeForWindow AllowDarkModeForWindow
-        = reinterpret_cast<fnAllowDarkModeForWindow>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(133)));
-    fnSetPreferredAppMode SetPreferredAppMode
-        = reinterpret_cast<fnSetPreferredAppMode>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(135)));
-    fnSetWindowCompositionAttribute SetWindowCompositionAttribute
-        = reinterpret_cast<fnSetWindowCompositionAttribute>(GetProcAddress(hUser32, "SetWindowCompositionAttribute"));
+        HMODULE hUxtheme = LoadLibraryExW(L"uxtheme.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
+        HMODULE hUser32 = GetModuleHandleW(L"user32.dll");
+        fnAllowDarkModeForWindow AllowDarkModeForWindow = reinterpret_cast<fnAllowDarkModeForWindow>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(133)));
+        fnSetPreferredAppMode SetPreferredAppMode = reinterpret_cast<fnSetPreferredAppMode>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(135)));
+        fnSetWindowCompositionAttribute SetWindowCompositionAttribute = reinterpret_cast<fnSetWindowCompositionAttribute>(
+            GetProcAddress(hUser32, "SetWindowCompositionAttribute"));
 
-    SetPreferredAppMode(AllowDark);
-    BOOL dark = TRUE;
-    AllowDarkModeForWindow(hwnd, dark);
-    WINDOWCOMPOSITIONATTRIBDATA data = {
-        WCA_USEDARKMODECOLORS,
-        &dark,
-        sizeof(dark)
-    };
-    SetWindowCompositionAttribute(hwnd, &data);
+        SetPreferredAppMode(AllowDark);
+        BOOL dark = TRUE;
+        AllowDarkModeForWindow(hwnd, dark);
+        WINDOWCOMPOSITIONATTRIBDATA data = {WCA_USEDARKMODECOLORS, &dark, sizeof(dark)};
+        SetWindowCompositionAttribute(hwnd, &data);
 #endif
-}
+    }
 
-}
+} // namespace winDark

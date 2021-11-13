@@ -34,7 +34,7 @@ public:
     LPITEMIDLIST m_pidl;
 
     QString m_name;
-    qint64 m_size;
+    quint64 m_size;
     QDateTime m_modified;
     QPixmap m_icon;
 

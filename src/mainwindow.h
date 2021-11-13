@@ -1,20 +1,20 @@
 /**************************************************************************
-* This file is part of the Saladin program
-* Copyright (C) 2011-2017 Michał Męciński
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**************************************************************************/
+ * This file is part of the Saladin program
+ * Copyright (C) 2011-2017 Michał Męciński
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **************************************************************************/
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
@@ -50,20 +50,20 @@ public:
 
     ViewManager* viewManager() const { return m_viewManager; }
 
-    void transferSelection( ShellSelection* selection, ShellFolder* targetFolder, ShellSelection::TransferType type, bool canRename );
+    void transferSelection(ShellSelection* selection, ShellFolder* targetFolder, ShellSelection::TransferType type, bool canRename);
 
-    void startTool( Tool tool, ShellFolder* folder, const ShellItem& item );
-    void startTool( Tool tool, const QString& path, const QString& directory );
+    void startTool(Tool tool, ShellFolder* folder, const ShellItem& item);
+    void startTool(Tool tool, const QString& path, const QString& directory);
 
-    void gotoFile( const ShellPidl& folderPidl, const ShellItem& item );
+    void gotoFile(const ShellPidl& folderPidl, const ShellItem& item);
 
 public: // overrides
-    bool eventFilter( QObject* object, QEvent* e );
+    bool eventFilter(QObject* object, QEvent* e);
 
 protected: // overrides
-    void closeEvent( QCloseEvent* e );
+    void closeEvent(QCloseEvent* e);
 
-    void changeEvent( QEvent* e );
+    void changeEvent(QEvent* e);
 
 private slots:
     void configure();
@@ -75,7 +75,7 @@ private slots:
 
     void refresh();
     void refreshDrives();
-    void viewHidden( bool on );
+    void viewHidden(bool on);
 
     void openDirectory();
     void openParent();
@@ -136,30 +136,30 @@ private:
     void initializeSettings();
     void saveSettings();
 
-    void restoreDirectory( int index, const QString& key );
+    void restoreDirectory(int index, const QString& key);
 
-    void setSourcePane( int index );
+    void setSourcePane(int index);
 
-    void invokeCommand( ShellFolder* folder, const QList<ShellItem>& items, const char* verb );
+    void invokeCommand(ShellFolder* folder, const QList<ShellItem>& items, const char* verb);
 
-    void transferItems( ShellFolder* sourceFolder, const QList<ShellItem>& items, ShellFolder* targetFolder, ShellSelection::TransferType type );
-    void deleteItems( ShellFolder* folder, const QList<ShellItem>& items, ShellSelection::Flags flags );
+    void transferItems(ShellFolder* sourceFolder, const QList<ShellItem>& items, ShellFolder* targetFolder, ShellSelection::TransferType type);
+    void deleteItems(ShellFolder* folder, const QList<ShellItem>& items, ShellSelection::Flags flags);
 
-    QString toolPath( Tool tool );
-    QString toolName( Tool tool );
+    QString toolPath(Tool tool);
+    QString toolName(Tool tool);
 
     void createToolStrip();
     void createMenuBar();
 
 private:
-    DriveStripManager* m_driveStripManager;
+    DriveStripManager* m_driveStripManager{};
 
-    ViewManager* m_viewManager;
+    ViewManager* m_viewManager{};
 
-    PaneWidget* m_panes[ 2 ];
+    PaneWidget* m_panes[2]{};
 
-    PaneWidget* m_sourcePane;
-    PaneWidget* m_targetPane;
+    PaneWidget* m_sourcePane{};
+    PaneWidget* m_targetPane{};
 };
 
 extern MainWindow* mainWindow;

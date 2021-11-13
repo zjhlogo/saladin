@@ -16,10 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **************************************************************************/
 
-#include "application.h"
+#include "shellitem_p.h"
 
-int main(int argc, char** argv)
+ShellItemPrivate::ShellItemPrivate()
+    : m_pidl(NULL)
+    , m_size(0)
+    , m_attributes(0)
+    , m_state(0)
 {
-    Application application(argc, argv);
-    return application.exec();
+}
+
+ShellItemPrivate::ShellItemPrivate(const ShellItemPrivate& other)
+    : QSharedData(other)
+    , m_pidl(ILClone(other.m_pidl))
+    , m_name(other.m_name)
+    , m_size(other.m_size)
+    , m_modified(other.m_modified)
+    , m_icon(other.m_icon)
+    , m_attributes(other.m_attributes)
+    , m_state(other.m_state)
+{
+}
+
+ShellItemPrivate::~ShellItemPrivate()
+{
+    if (m_pidl)
+    {
+        CoTaskMemFree(m_pidl);
+        m_pidl = NULL;
+    }
 }

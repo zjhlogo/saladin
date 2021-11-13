@@ -1,20 +1,20 @@
 /**************************************************************************
-* This file is part of the Saladin program
-* Copyright (C) 2011-2017 Michał Męciński
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**************************************************************************/
+ * This file is part of the Saladin program
+ * Copyright (C) 2011-2017 Michał Męciński
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **************************************************************************/
 
 #ifndef SHELLITEM_H
 #define SHELLITEM_H
@@ -43,7 +43,7 @@ public:
         Encrypted = 0x4000,
         ReparsePoint = 0x8000,
     };
-    Q_DECLARE_FLAGS( Attributes, Attribute );
+    Q_DECLARE_FLAGS(Attributes, Attribute);
 
     enum StateFlag
     {
@@ -52,32 +52,33 @@ public:
         HasCalculatedSize = 4,
         IsSelected = 8
     };
-    Q_DECLARE_FLAGS( State, StateFlag );
+    Q_DECLARE_FLAGS(State, StateFlag);
 
 public:
     ShellItem();
     ~ShellItem();
 
-    ShellItem( const ShellItem& other );
-    ShellItem& operator =( const ShellItem& other );
+    ShellItem(const ShellItem& other);
+    ShellItem& operator=(const ShellItem& other);
 
 public:
     bool isValid() const;
 
     QString name() const;
-    qint64 size() const;
+    quint64 size() const;
+    QString humanReadableSize() const;
     QDateTime lastModified() const;
     QPixmap icon() const;
 
     Attributes attributes() const;
     State state() const;
 
-    void setSelected( bool selected );
+    void setSelected(bool selected);
     bool isSelected() const;
 
 public:
-    friend bool operator ==( const ShellItem& lhs, const ShellItem& rhs );
-    friend bool operator !=( const ShellItem& lhs, const ShellItem& rhs );
+    friend bool operator==(const ShellItem& lhs, const ShellItem& rhs);
+    friend bool operator!=(const ShellItem& lhs, const ShellItem& rhs);
 
 private:
     QSharedDataPointer<ShellItemPrivate> d;
@@ -90,9 +91,9 @@ private:
     friend class ShellDropData;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( ShellItem::Attributes )
-Q_DECLARE_OPERATORS_FOR_FLAGS( ShellItem::State )
+Q_DECLARE_OPERATORS_FOR_FLAGS(ShellItem::Attributes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(ShellItem::State)
 
-Q_DECLARE_TYPEINFO( ShellItem, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO(ShellItem, Q_MOVABLE_TYPE);
 
 #endif
