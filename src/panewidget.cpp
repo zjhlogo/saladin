@@ -59,6 +59,12 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
     else
         m_strip->addAuxiliaryAction(mainWindow->action("copyToLeftPane"));
 
+    QTabBar* tabBar = new QTabBar(this);
+    tabBar->setStyleSheet("QTabBar::tab:!selected { border: 1px solid #191919; }");
+    tabBar->addTab("Tab1");
+    tabBar->addTab("Tab2");
+    layout->addWidget(tabBar);
+
     QHBoxLayout* editLayout = new QHBoxLayout();
 
     QFrame* editFrame = new QFrame(this);
@@ -923,18 +929,18 @@ void PaneWidget::updateLocation()
 
 void PaneWidget::updateEditPalette()
 {
-    QPalette palette = Application::palette();
-    if (m_isSource)
-    {
-        palette.setColor(QPalette::Base, palette.color(QPalette::Highlight));
-        palette.setColor(QPalette::Text, palette.color(QPalette::HighlightedText));
-    }
-    else
-    {
-        palette.setColor(QPalette::Base, palette.color(QPalette::Window));
-        palette.setColor(QPalette::Text, palette.color(QPalette::WindowText));
-    }
-    m_edit->setPalette(palette);
+    //QPalette palette = Application::palette();
+    //if (m_isSource)
+    //{
+    //    palette.setColor(QPalette::Base, palette.color(QPalette::Highlight));
+    //    palette.setColor(QPalette::Text, palette.color(QPalette::HighlightedText));
+    //}
+    //else
+    //{
+    //    palette.setColor(QPalette::Base, palette.color(QPalette::Window));
+    //    palette.setColor(QPalette::Text, palette.color(QPalette::WindowText));
+    //}
+    //m_edit->setPalette(palette);
 }
 
 void PaneWidget::selectAll()
