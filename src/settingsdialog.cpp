@@ -285,10 +285,10 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     int index = m_languageComboBox->findData(settings->value("Language").toString());
     if (index >= 2) m_languageComboBox->setCurrentIndex(index);
 
-    m_pidls[0] = settings->value("HomeDirectory1").value<ShellPidl>();
+    m_pidls[0] = ShellFolder(settings->value("HomeDirectory1").toString(), this).pidl();
     m_leftPaneEdit->setText(m_pidls[0].path());
 
-    m_pidls[1] = settings->value("HomeDirectory2").value<ShellPidl>();
+    m_pidls[1] = ShellFolder(settings->value("HomeDirectory2").toString(), this).pidl();
     m_rightPaneEdit->setText(m_pidls[1].path());
 
     m_rememberCheckBox->setChecked(settings->value("RememberDirectories").toBool());
@@ -337,8 +337,8 @@ bool SettingsDialog::apply()
         QMessageBox::warning(this, tr("Warning"), tr("Language settings will be applied when the application is restarted."));
     settings->setValue("Language", language);
 
-    settings->setValue("HomeDirectory1", QVariant::fromValue(m_pidls[0]));
-    settings->setValue("HomeDirectory2", QVariant::fromValue(m_pidls[1]));
+    settings->setValue("HomeDirectory1", QVariant::fromValue(m_pidls[0].path()));
+    settings->setValue("HomeDirectory2", QVariant::fromValue(m_pidls[1].path()));
     settings->setValue("RememberDirectories", m_rememberCheckBox->isChecked());
 
     settings->setValue("Theme", m_themeComboBox->currentData());

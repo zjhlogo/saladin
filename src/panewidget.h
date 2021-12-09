@@ -56,8 +56,13 @@ public:
 
     void setSourcePane(bool source);
 
+    void InitFolders(const QStringList& paths, int selectedIndex);
+
     void setFolder(ShellFolder* folder);
     ShellFolder* folder() const;
+
+    QStringList getTabFolderList() const;
+    int getSelectedTab() const;
 
     QList<ShellItem> items() const;
     QList<ShellItem> selectedItems() const;
@@ -103,6 +108,8 @@ signals:
 
 private slots:
     void changeDirectory();
+    void tabChanged(int index);
+    void tabDoubleClicked(int index);
     void driveSelected(int index);
 
     void openItem(const QModelIndex& index);
@@ -144,8 +151,10 @@ private:
     void openDrive(const ShellDrive& drive);
 
     void updateLocation();
+    void updateTabText();
 
     QString formatSize(qint64 size, bool afterOf);
+    QString getDirName(const QString& path);
 
     void setHistoryIndex(int index);
     void setBookmark(const Bookmark& bookmark);
@@ -155,6 +164,7 @@ private:
 
     XmlUi::ToolStrip* m_strip{};
 
+    QTabBar* m_tabBar{};
     QLineEdit* m_edit{};
 
     XmlUi::ActionButton* m_bookmarkButton{};

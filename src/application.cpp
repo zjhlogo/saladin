@@ -334,24 +334,30 @@ void Application::initializeDefaultPaths()
 
 void Application::initializeSettings()
 {
-    if (!m_settings->contains("Directory1")) m_settings->setValue("Directory1", QVariant::fromValue(ShellFolder::defaultFolder()));
-    if (!m_settings->contains("Directory2")) m_settings->setValue("Directory2", QVariant::fromValue(ShellFolder::defaultFolder()));
+    if (!m_settings->contains("Paths_1"))
+    {
+        QStringList paths;
+        paths.append(ShellFolder::defaultFolder().path());
+        m_settings->setValue("Paths_1", QVariant::fromValue(paths.join(',')));
+    }
 
-    if (!m_settings->contains("RememberDirectories")) m_settings->setValue("RememberDirectories", false);
+    if (!m_settings->contains("Paths_2"))
+    {
+        QStringList paths;
+        paths.append(ShellFolder::defaultFolder().path());
+        m_settings->setValue("Paths_2", QVariant::fromValue(paths.join(',')));
+    }
+
+    if (!m_settings->contains("RememberDirectories")) m_settings->setValue("RememberDirectories", true);
 
     if (!m_settings->contains("HomeDirectory1"))
     {
-        if (!m_settings->value("RememberDirectories").toBool())
-            m_settings->setValue("HomeDirectory1", m_settings->value("Directory1"));
-        else
-            m_settings->setValue("HomeDirectory1", QVariant::fromValue(ShellFolder::defaultFolder()));
+        m_settings->setValue("HomeDirectory1", QVariant::fromValue(ShellFolder::defaultFolder().path()));
     }
+
     if (!m_settings->contains("HomeDirectory2"))
     {
-        if (!m_settings->value("RememberDirectories").toBool())
-            m_settings->setValue("HomeDirectory2", m_settings->value("Directory2"));
-        else
-            m_settings->setValue("HomeDirectory2", QVariant::fromValue(ShellFolder::defaultFolder()));
+        m_settings->setValue("HomeDirectory2", QVariant::fromValue(ShellFolder::defaultFolder().path()));
     }
 
     if (!m_settings->contains("BinaryFont")) m_settings->setValue("BinaryFont", "Courier New");

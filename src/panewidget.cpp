@@ -59,18 +59,20 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
     else
         m_strip->addAuxiliaryAction(mainWindow->action("copyToLeftPane"));
 
-    QTabBar* tabBar = new QTabBar(this);
-    tabBar->setStyleSheet("QTabBar::tab:!selected { border: 1px solid #191919; }");
-    tabBar->addTab("Tab1");
-    tabBar->addTab("Tab2");
-    layout->addWidget(tabBar);
+    m_tabBar = new QTabBar(this);
+    m_tabBar->setStyleSheet("QTabBar::tab { text-align: left; width: 100px; }");
+    m_tabBar->setExpanding(false);
+
+    layout->addWidget(m_tabBar);
+    connect(m_tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+    connect(m_tabBar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(tabDoubleClicked(int)));
 
     QHBoxLayout* editLayout = new QHBoxLayout();
 
     QFrame* editFrame = new QFrame(this);
-    //editFrame->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    // editFrame->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     editLayout->addWidget(editFrame);
-    //editLayout->addSpacing(3);
+    // editLayout->addSpacing(3);
 
     QHBoxLayout* innerLayout = new QHBoxLayout(editFrame);
     innerLayout->setMargin(0);
@@ -717,6 +719,25 @@ ShellFolder* PaneWidget::folder() const
     return m_model->folder();
 }
 
+QStringList PaneWidget::getTabFolderList() const
+{
+    QStringList paths;
+
+    int count = m_tabBar->count();
+    for (int i = 0; i < count; ++i)
+    {
+        auto tabData = m_tabBar->tabData(i);
+        paths.append(tabData.toString());
+    }
+
+    return paths;
+}
+
+int PaneWidget::getSelectedTab() const
+{
+    return m_tabBar->currentIndex();
+}
+
 QList<ShellItem> PaneWidget::items() const
 {
     return m_model->items();
@@ -766,9 +787,39 @@ void PaneWidget::changeDirectory()
     setDirectory(m_edit->text());
 }
 
+void PaneWidget::tabChanged(int index)
+{
+    auto tabData = m_tabBar->tabData(index);
+    if (tabData.isValid())
+    {
+        setDirectory(tabData.toString());
+    }
+}
+
+void PaneWidget::tabDoubleClicked(int index)
+{
+    if (index != -1)
+    {
+        // delete current tab
+        if (m_tabBar->count() <= 1) return;
+
+        m_tabBar->removeTab(index);
+    }
+    else
+    {
+        // add new tab
+        int currentIndex = m_tabBar->currentIndex();
+        auto tabData = m_tabBar->tabData(currentIndex);
+
+        int newIndex = m_tabBar->addTab(getDirName(tabData.toString()));
+        m_tabBar->setTabData(newIndex, tabData);
+        m_tabBar->setCurrentIndex(newIndex);
+    }
+}
+
 void PaneWidget::setDirectory(const QString& path)
 {
-    if (path == m_model->folder()->path())
+    if (m_model->folder() && path == m_model->folder()->path())
     {
         m_model->refresh();
         m_view->setFocus();
@@ -877,6 +928,7 @@ void PaneWidget::setFolder(ShellFolder* folder)
     m_model->setFolder(folder);
 
     updateLocation();
+    updateTabText();
 
     if (!m_lockHistory)
     {
@@ -921,26 +973,52 @@ void PaneWidget::setSourcePane(bool source)
     }
 }
 
+void PaneWidget::InitFolders(const QStringList& paths, int selectedIndex)
+{
+    for (int i = 0; i < paths.length(); ++i)
+    {
+        int newIndex = m_tabBar->addTab(getDirName(paths[i]));
+        m_tabBar->setTabData(newIndex, QVariant::fromValue(paths[i]));
+    }
+
+    m_tabBar->setCurrentIndex(selectedIndex);
+    setDirectory(paths[selectedIndex]);
+}
+
 void PaneWidget::updateLocation()
 {
     QString path = m_model->folder()->path();
     m_edit->setText(path);
 }
 
+void PaneWidget::updateTabText()
+{
+    QString path = m_model->folder()->path();
+
+    int currentIndex = m_tabBar->currentIndex();
+    if (currentIndex == -1)
+    {
+        currentIndex = m_tabBar->addTab("NewTab");
+    }
+
+    m_tabBar->setTabText(currentIndex, getDirName(path));
+    m_tabBar->setTabData(currentIndex, QVariant(path));
+}
+
 void PaneWidget::updateEditPalette()
 {
-    //QPalette palette = Application::palette();
-    //if (m_isSource)
+    // QPalette palette = Application::palette();
+    // if (m_isSource)
     //{
     //    palette.setColor(QPalette::Base, palette.color(QPalette::Highlight));
     //    palette.setColor(QPalette::Text, palette.color(QPalette::HighlightedText));
     //}
-    //else
+    // else
     //{
     //    palette.setColor(QPalette::Base, palette.color(QPalette::Window));
     //    palette.setColor(QPalette::Text, palette.color(QPalette::WindowText));
     //}
-    //m_edit->setPalette(palette);
+    // m_edit->setPalette(palette);
 }
 
 void PaneWidget::selectAll()
@@ -1263,4 +1341,13 @@ QString PaneWidget::formatSize(qint64 size, bool afterOf)
     if (size < 1048576) return tr("%1 kB").arg(size / 1024.0, 0, 'f', 1);
     if (size < 1073741824) return tr("%1 MB").arg(size / 1048576.0, 0, 'f', 1);
     return tr("%1 GB").arg(size / 1073741824.0, 0, 'f', 1);
+}
+
+QString PaneWidget::getDirName(const QString& path)
+{
+    auto dir = QDir(path);
+
+    auto dirName = dir.dirName();
+    if (dirName.isEmpty()) dirName = path;
+    return dirName;
 }

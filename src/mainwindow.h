@@ -136,8 +136,6 @@ private:
     void initializeSettings();
     void saveSettings();
 
-    void restoreDirectory(int index, const QString& key);
-
     void setSourcePane(int index);
 
     void invokeCommand(ShellFolder* folder, const QList<ShellItem>& items, const char* verb);

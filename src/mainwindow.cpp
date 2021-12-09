@@ -446,12 +446,21 @@ void MainWindow::initializeSettings()
 
     for (int i = 0; i < 2; i++)
     {
-        QString key;
+        QStringList paths;
+        int selectedIndex = -1;
+
         if (settings->value("RememberDirectories").toBool())
-            key = QString("Directory%1").arg(i + 1);
+        {
+            paths = settings->value(QString("Paths_%1").arg(i + 1)).toString().split(',');
+            selectedIndex = settings->value(QString("SelectedPath_%1").arg(i + 1)).toInt();
+        }
         else
-            key = QString("HomeDirectory%1").arg(i + 1);
-        restoreDirectory(i, key);
+        {
+            paths.append(settings->value(QString("HomeDirectory%1").arg(i + 1)).toString());
+            selectedIndex = 0;
+        }
+
+        m_panes[i]->InitFolders(paths, selectedIndex);
     }
 
     m_panes[0]->activateView();
@@ -476,31 +485,15 @@ void MainWindow::saveSettings()
     {
         for (int i = 0; i < 2; i++)
         {
-            ShellFolder* folder = m_panes[i]->folder();
-            QString path = folder->path();
-            if (!path.startsWith(QLatin1String("ftp://"), Qt::CaseInsensitive))
-            {
-                QString key = QString("Directory%1").arg(i + 1);
-                settings->setValue(key, QVariant::fromValue(folder->pidl()));
-            }
+            QStringList paths = m_panes[i]->getTabFolderList();
+            QString key = QString("Paths_%1").arg(i + 1);
+            settings->setValue(key, QVariant::fromValue(paths.join(',')));
+
+            auto selectedTabIndex = m_panes[i]->getSelectedTab();
+            key = QString("SelectedPath_%1").arg(i + 1);
+            settings->setValue(key, QVariant::fromValue(selectedTabIndex));
         }
     }
-}
-
-void MainWindow::restoreDirectory(int index, const QString& key)
-{
-    LocalSettings* settings = application->applicationSettings();
-
-    ShellPidl pidl = settings->value(key).value<ShellPidl>();
-
-    ShellFolder* folder = new ShellFolder(pidl, m_panes[index]);
-    if (!folder->isValid())
-    {
-        delete folder;
-        folder = new ShellFolder(ShellFolder::defaultFolder(), m_panes[index]);
-    }
-
-    m_panes[index]->setFolder(folder);
 }
 
 void MainWindow::closeEvent(QCloseEvent* e)
@@ -648,10 +641,12 @@ void MainWindow::openRoot()
 
 void MainWindow::openHome()
 {
+    LocalSettings* settings = application->applicationSettings();
+
     int index = (m_sourcePane == m_panes[0]) ? 0 : 1;
 
-    QString key = QString("HomeDirectory%1").arg(index + 1);
-    restoreDirectory(index, key);
+    QString homePath = settings->value(QString("HomeDirectory%1").arg(index + 1)).toString();
+    m_panes[index]->setDirectory(homePath);
 
     m_panes[index]->activateView();
 }
