@@ -62,6 +62,7 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
     m_tabBar = new QTabBar(this);
     m_tabBar->setStyleSheet("QTabBar::tab { text-align: left; width: 100px; }");
     m_tabBar->setExpanding(false);
+    m_tabBar->setMovable(true);
 
     layout->addWidget(m_tabBar);
     connect(m_tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
@@ -1343,11 +1344,17 @@ QString PaneWidget::formatSize(qint64 size, bool afterOf)
     return tr("%1 GB").arg(size / 1073741824.0, 0, 'f', 1);
 }
 
-QString PaneWidget::getDirName(const QString& path)
+QString PaneWidget::getDirName(const QString& path, int maxLength)
 {
     auto dir = QDir(path);
 
     auto dirName = dir.dirName();
     if (dirName.isEmpty()) dirName = path;
+
+    if (dirName.length() > maxLength)
+    {
+        dirName = dirName.left(maxLength) + "..";
+    }
+
     return dirName;
 }

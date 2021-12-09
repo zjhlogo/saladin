@@ -154,7 +154,7 @@ private:
     void updateTabText();
 
     QString formatSize(qint64 size, bool afterOf);
-    QString getDirName(const QString& path);
+    QString getDirName(const QString& path, int maxLength = 10);
 
     void setHistoryIndex(int index);
     void setBookmark(const Bookmark& bookmark);
