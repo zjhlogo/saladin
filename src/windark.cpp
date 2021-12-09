@@ -47,6 +47,14 @@ namespace winDark
         QPalette darkPalette;
         QColor darkColor = QColor(25, 25, 25);
         QColor disabledColor = QColor(127, 127, 127);
+        darkPalette.setColor(QPalette::Light, darkColor);
+        darkPalette.setColor(QPalette::Midlight, darkColor);
+        darkPalette.setColor(QPalette::Dark, darkColor);
+        darkPalette.setColor(QPalette::Mid, darkColor);
+        darkPalette.setColor(QPalette::Shadow, darkColor);
+        darkPalette.setColor(QPalette::LinkVisited, darkColor);
+        darkPalette.setColor(QPalette::NoRole, darkColor);
+
         darkPalette.setColor(QPalette::Window, darkColor);
         darkPalette.setColor(QPalette::WindowText, Qt::white);
         darkPalette.setColor(QPalette::Base, QColor(18, 18, 18));
