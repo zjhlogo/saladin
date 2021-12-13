@@ -49,6 +49,7 @@
     <action id="cut"/>
     <action id="copy"/>
     <action id="copyNames"/>
+    <action id="copyPaths"/>
     <action id="paste"/>
     <separator/>
     <action id="configure"/>
@@ -136,6 +137,7 @@
   <menu id="menuEditCopy">
     <action id="copy"/>
     <action id="copyNames"/>
+    <action id="copyPaths"/>
   </menu>
   <menu id="menuOpen">
     <action id="openDirectory"/>

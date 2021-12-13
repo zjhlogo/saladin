@@ -35,7 +35,7 @@
 #include "xmlui/builder.h"
 #include "xmlui/toolstrip.h"
 
-MainWindow* mainWindow = NULL;
+MainWindow* mainWindow = nullptr;
 
 MainWindow::MainWindow()
 {
@@ -86,9 +86,14 @@ MainWindow::MainWindow()
     setAction("copy", action);
 
     action = new QAction(tr("Copy File Names"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_1));
     connect(action, SIGNAL(triggered()), this, SLOT(copyNames()));
     setAction("copyNames", action);
+
+    action = new QAction(tr("Copy File Paths"), this);
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_2));
+    connect(action, SIGNAL(triggered()), this, SLOT(copyPaths()));
+    setAction("copyPaths", action);
 
     action = new QAction(tr("Refresh"), this);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
@@ -403,7 +408,7 @@ MainWindow::~MainWindow()
     saveSettings();
 
     delete m_viewManager;
-    m_viewManager = NULL;
+    m_viewManager = nullptr;
 }
 
 void MainWindow::initializeSettings()
@@ -599,6 +604,24 @@ void MainWindow::copyNames()
         text = names.join("\r\n") + "\r\n";
     else
         text = names.first();
+
+    QApplication::clipboard()->setText(text);
+}
+
+void MainWindow::copyPaths()
+{
+    QList<ShellItem> items = m_sourcePane->selectedItems();
+    if (items.isEmpty()) return;
+
+    QStringList paths;
+    foreach (ShellItem item, items)
+        paths.append(item.path());
+
+    QString text;
+    if (paths.count() > 1)
+        text = paths.join("\r\n") + "\r\n";
+    else
+        text = paths.first();
 
     QApplication::clipboard()->setText(text);
 }
@@ -829,7 +852,7 @@ void MainWindow::startTool(Tool tool, const QString& parameters, const QString& 
     if (path.isEmpty()) return;
 
     HINSTANCE result =
-        ShellExecute((HWND)effectiveWinId(), NULL, (LPCWSTR)path.utf16(), (LPCWSTR)parameters.utf16(), (LPCWSTR)directory.utf16(), SW_SHOWNORMAL);
+        ShellExecute((HWND)effectiveWinId(), nullptr, (LPCWSTR)path.utf16(), (LPCWSTR)parameters.utf16(), (LPCWSTR)directory.utf16(), SW_SHOWNORMAL);
 
     if (result <= (HINSTANCE)32)
     {
@@ -1377,6 +1400,7 @@ void MainWindow::loadIcons()
     action("popupEditCopy")->setIcon(IconLoader::icon("edit-copy"));
     action("copy")->setIcon(IconLoader::icon("edit-copy"));
     action("copyNames")->setIcon(IconLoader::icon("copy-names"));
+    action("copyPaths")->setIcon(IconLoader::icon("copy-names"));
     action("refresh")->setIcon(IconLoader::icon("refresh"));
     action("refreshDrives")->setIcon(IconLoader::icon("refresh"));
     action("viewHidden")->setIcon(IconLoader::icon("view-hidden"));

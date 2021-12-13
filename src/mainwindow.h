@@ -72,6 +72,7 @@ private slots:
     void cut();
     void copy();
     void copyNames();
+    void copyPaths();
 
     void refresh();
     void refreshDrives();

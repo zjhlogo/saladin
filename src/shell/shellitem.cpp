@@ -41,12 +41,29 @@ ShellItem& ShellItem::operator=(const ShellItem& other)
 
 bool ShellItem::isValid() const
 {
-    return d->m_pidl != NULL;
+    return d->m_pidl != nullptr;
 }
 
 QString ShellItem::name() const
 {
     return d->m_name;
+}
+
+QString ShellItem::path() const
+{
+    QString path = d->m_name;
+
+    wchar_t* name = nullptr;
+    HRESULT hr = SHGetNameFromIDList(d->m_pidl, SIGDN_DESKTOPABSOLUTEEDITING, &name);
+
+    if (SUCCEEDED(hr))
+    {
+        path = QString::fromWCharArray(name);
+        CoTaskMemFree(name);
+    }
+
+    path.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    return path;
 }
 
 QString ShellItem::ext() const
