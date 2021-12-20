@@ -433,12 +433,12 @@ void Application::initializePalette()
 
 QString Application::iconsPath() const
 {
-    QString theme = m_settings->value("Theme").toString();
+    //QString theme = m_settings->value("Theme").toString();
 
-    if (theme == QLatin1String("dark"))
+    //if (theme == QLatin1String("dark"))
         return ":/icons/dark";
-    else
-        return ":/icons";
+    //else
+    //    return ":/icons";
 }
 
 QString Application::locateDataFile(const QString& name)
