@@ -627,15 +627,15 @@ bool PaneWidget::dragDropHelper(QDropEvent* e, bool doDrop)
                     if (m_model->isParentFolder(index))
                     {
                         ShellItem item;
-                        targetFolder = folder()->parentFolder(item);
+                        targetFolder = getFolder()->parentFolder(item);
                     }
                     else if (index.isValid())
                     {
-                        targetFolder = folder()->openFolder(m_model->itemAt(index));
+                        targetFolder = getFolder()->openFolder(m_model->itemAt(index));
                     }
                     else
                     {
-                        targetFolder = folder();
+                        targetFolder = getFolder();
                     }
 
                     if (targetFolder)
@@ -645,7 +645,7 @@ bool PaneWidget::dragDropHelper(QDropEvent* e, bool doDrop)
                                                       m_dropData->dropAction() & Qt::CopyAction ? ShellSelection::Copy : ShellSelection::Move,
                                                       false);
 
-                        if (targetFolder != folder()) delete targetFolder;
+                        if (targetFolder != getFolder()) delete targetFolder;
 
                         result = false;
                     }
@@ -658,7 +658,7 @@ bool PaneWidget::dragDropHelper(QDropEvent* e, bool doDrop)
                 if (m_model->isParentFolder(index))
                 {
                     ShellItem item;
-                    ShellFolder* parentFolder = folder()->parentFolder(item);
+                    ShellFolder* parentFolder = getFolder()->parentFolder(item);
                     if (parentFolder)
                     {
                         targetPath = parentFolder->path();
@@ -667,11 +667,11 @@ bool PaneWidget::dragDropHelper(QDropEvent* e, bool doDrop)
                 }
                 else if (index.isValid())
                 {
-                    targetPath = folder()->itemPath(m_model->itemAt(index));
+                    targetPath = getFolder()->itemPath(m_model->itemAt(index));
                 }
                 else
                 {
-                    targetPath = folder()->path();
+                    targetPath = getFolder()->path();
                 }
 
                 mainWindow->raise();
@@ -715,7 +715,7 @@ void PaneWidget::gotoItem()
     if (index.isValid()) m_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
 }
 
-ShellFolder* PaneWidget::folder() const
+ShellFolder* PaneWidget::getFolder() const
 {
     return m_model->folder();
 }

@@ -73,6 +73,7 @@ private slots:
     void copy();
     void copyNames();
     void copyPaths();
+    void copyPathsRecursive();
 
     void refresh();
     void refreshDrives();

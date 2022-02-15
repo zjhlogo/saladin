@@ -95,6 +95,11 @@ MainWindow::MainWindow()
     connect(action, SIGNAL(triggered()), this, SLOT(copyPaths()));
     setAction("copyPaths", action);
 
+    action = new QAction(tr("Copy File Paths Recursive"), this);
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_3));
+    connect(action, SIGNAL(triggered()), this, SLOT(copyPathsRecursive()));
+    setAction("copyPathsRecursive", action);
+
     action = new QAction(tr("Refresh"), this);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
     connect(action, SIGNAL(triggered()), this, SLOT(refresh()));
@@ -568,17 +573,17 @@ void MainWindow::configure()
 
 void MainWindow::paste()
 {
-    m_sourcePane->folder()->invokeCommand("paste");
+    m_sourcePane->getFolder()->invokeCommand("paste");
 }
 
 void MainWindow::cut()
 {
-    invokeCommand(m_sourcePane->folder(), m_sourcePane->selectedItems(), "cut");
+    invokeCommand(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), "cut");
 }
 
 void MainWindow::copy()
 {
-    invokeCommand(m_sourcePane->folder(), m_sourcePane->selectedItems(), "copy");
+    invokeCommand(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), "copy");
 }
 
 void MainWindow::invokeCommand(ShellFolder* folder, const QList<ShellItem>& items, const char* verb)
@@ -613,15 +618,80 @@ void MainWindow::copyPaths()
     QList<ShellItem> items = m_sourcePane->selectedItems();
     if (items.isEmpty()) return;
 
+    ShellFolder* folder = m_sourcePane->getFolder();
+
     QStringList paths;
     foreach (ShellItem item, items)
-        paths.append(item.path());
+    {
+        QString path = folder->path() + "/" + item.name();
+        path.replace(QLatin1Char('\\'), QLatin1Char('/'));
+
+        paths.append(path);
+    }
 
     QString text;
     if (paths.count() > 1)
         text = paths.join("\r\n") + "\r\n";
     else
         text = paths.first();
+
+    QApplication::clipboard()->setText(text);
+}
+
+void getPathsRecursive(QStringList& pathsOut, const QString& dirPath)
+{
+    QDir rootDir(dirPath);
+
+    {
+        QStringList allSubDirs = rootDir.entryList(QDir::Filter::Dirs);
+        foreach(QString dirName, allSubDirs)
+        {
+            if (dirName == "." || dirName == "..") continue;
+
+            auto subDirPath = rootDir.path() + "\\" + dirName;
+            getPathsRecursive(pathsOut, subDirPath);
+        }
+    }
+
+    {
+        QStringList allFiles = rootDir.entryList(QDir::Filter::Files);
+        foreach(QString subFileName, allFiles)
+        {
+            auto subFilePath = rootDir.path() + "/" + subFileName;
+            subFilePath.replace(QLatin1Char('\\'), QLatin1Char('/'));
+            pathsOut.append(subFilePath);
+        }
+    }
+}
+
+void MainWindow::copyPathsRecursive()
+{
+    ShellFolder* folder = m_sourcePane->getFolder();
+    QStringList paths;
+
+    QList<ShellItem> items = m_sourcePane->selectedItems();
+    foreach(ShellItem item, items)
+    {
+        QString itemPath = folder->path() + "\\" + item.name();
+
+        if (item.attributes().testFlag(ShellItem::Attribute::Directory))
+        {
+            // get all files from current folder
+            getPathsRecursive(paths, itemPath);
+        }
+        else
+        {
+            itemPath.replace(QLatin1Char('\\'), QLatin1Char('/'));
+            paths.append(itemPath);
+        }
+    }
+
+    QString text;
+    foreach(QString path, paths)
+    {
+        text += path;
+        text += "\r\n";
+    }
 
     QApplication::clipboard()->setText(text);
 }
@@ -644,7 +714,7 @@ void MainWindow::viewHidden(bool on)
 
 void MainWindow::viewSameDirectory()
 {
-    m_targetPane->setFolder(m_sourcePane->folder()->clone());
+    m_targetPane->setFolder(m_sourcePane->getFolder()->clone());
 }
 
 void MainWindow::openDirectory()
@@ -682,20 +752,20 @@ void MainWindow::gotoFile(const ShellPidl& folderPidl, const ShellItem& item)
 
 void MainWindow::swapPanes()
 {
-    ShellFolder* folder1 = m_panes[0]->folder()->clone();
-    ShellFolder* folder2 = m_panes[1]->folder()->clone();
+    ShellFolder* folder1 = m_panes[0]->getFolder()->clone();
+    ShellFolder* folder2 = m_panes[1]->getFolder()->clone();
     m_panes[0]->setFolder(folder2);
     m_panes[1]->setFolder(folder1);
 }
 
 void MainWindow::copyToRightPane()
 {
-    m_panes[1]->setFolder(m_panes[0]->folder()->clone());
+    m_panes[1]->setFolder(m_panes[0]->getFolder()->clone());
 }
 
 void MainWindow::copyToLeftPane()
 {
-    m_panes[0]->setFolder(m_panes[1]->folder()->clone());
+    m_panes[0]->setFolder(m_panes[1]->getFolder()->clone());
 }
 
 void MainWindow::selectMask()
@@ -765,9 +835,9 @@ void MainWindow::viewCurrent()
     LocalSettings* settings = application->applicationSettings();
 
     if (settings->value("InternalViewer").toBool())
-        m_viewManager->openView(m_sourcePane->folder()->itemPidl(item));
+        m_viewManager->openView(m_sourcePane->getFolder()->itemPidl(item));
     else
-        startTool(ViewerTool, m_sourcePane->folder(), m_sourcePane->currentItem());
+        startTool(ViewerTool, m_sourcePane->getFolder(), m_sourcePane->currentItem());
 }
 
 void MainWindow::viewSelected()
@@ -787,13 +857,13 @@ void MainWindow::viewSelected()
     {
         QList<ShellPidl> pidls;
         foreach (ShellItem item, items)
-            pidls.append(m_sourcePane->folder()->itemPidl(item));
+            pidls.append(m_sourcePane->getFolder()->itemPidl(item));
         m_viewManager->openView(pidls);
     }
     else
     {
         if (items.count() == 1)
-            startTool(ViewerTool, m_sourcePane->folder(), items.first());
+            startTool(ViewerTool, m_sourcePane->getFolder(), items.first());
         else
             QMessageBox::warning(this, tr("Cannot view files"), tr("Only the internal viewer supports viewing multiple files."));
     }
@@ -801,12 +871,12 @@ void MainWindow::viewSelected()
 
 void MainWindow::editCurrent()
 {
-    startTool(EditorTool, m_sourcePane->folder(), m_sourcePane->currentItem());
+    startTool(EditorTool, m_sourcePane->getFolder(), m_sourcePane->currentItem());
 }
 
 void MainWindow::editNew()
 {
-    ShellFolder* folder = m_sourcePane->folder();
+    ShellFolder* folder = m_sourcePane->getFolder();
     ShellItem::Attributes attributes = folder->attributes();
 
     if (!attributes.testFlag(ShellItem::FileSystem) || !attributes.testFlag(ShellItem::Directory)) return;
@@ -912,22 +982,22 @@ QString MainWindow::toolName(Tool tool)
 
 void MainWindow::copySelected()
 {
-    transferItems(m_sourcePane->folder(), m_sourcePane->selectedItems(), m_targetPane->folder(), ShellSelection::Copy);
+    transferItems(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), m_targetPane->getFolder(), ShellSelection::Copy);
 }
 
 void MainWindow::cloneSelected()
 {
-    transferItems(m_sourcePane->folder(), m_sourcePane->selectedItems(), m_sourcePane->folder(), ShellSelection::Copy);
+    transferItems(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), m_sourcePane->getFolder(), ShellSelection::Copy);
 }
 
 void MainWindow::moveSelected()
 {
-    transferItems(m_sourcePane->folder(), m_sourcePane->selectedItems(), m_targetPane->folder(), ShellSelection::Move);
+    transferItems(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), m_targetPane->getFolder(), ShellSelection::Move);
 }
 
 void MainWindow::renameSelected()
 {
-    transferItems(m_sourcePane->folder(), m_sourcePane->selectedItems(), m_sourcePane->folder(), ShellSelection::Move);
+    transferItems(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), m_sourcePane->getFolder(), ShellSelection::Move);
 }
 
 void MainWindow::transferItems(ShellFolder* sourceFolder, const QList<ShellItem>& items, ShellFolder* targetFolder, ShellSelection::TransferType type)
@@ -1071,7 +1141,7 @@ void MainWindow::transferSelection(ShellSelection* selection, ShellFolder* targe
 
 void MainWindow::createFolder()
 {
-    ShellFolder* folder = m_sourcePane->folder();
+    ShellFolder* folder = m_sourcePane->getFolder();
 
     if (!folder->canCreateFolder()) return;
 
@@ -1105,12 +1175,12 @@ void MainWindow::createFolder()
 
 void MainWindow::moveToTrashCan()
 {
-    deleteItems(m_sourcePane->folder(), m_sourcePane->selectedItems(), 0);
+    deleteItems(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), 0);
 }
 
 void MainWindow::deleteSelected()
 {
-    deleteItems(m_sourcePane->folder(), m_sourcePane->selectedItems(), ShellSelection::DeletePermanently);
+    deleteItems(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), ShellSelection::DeletePermanently);
 }
 
 void MainWindow::deleteItems(ShellFolder* folder, const QList<ShellItem>& items, ShellSelection::Flags flags)
@@ -1127,7 +1197,7 @@ void MainWindow::deleteItems(ShellFolder* folder, const QList<ShellItem>& items,
 
 void MainWindow::openTerminal()
 {
-    ShellFolder* folder = m_sourcePane->folder();
+    ShellFolder* folder = m_sourcePane->getFolder();
     ShellItem::Attributes attributes = folder->attributes();
 
     if (!attributes.testFlag(ShellItem::FileSystem) || !attributes.testFlag(ShellItem::Directory)) return;
@@ -1140,7 +1210,7 @@ void MainWindow::packToZip()
     QList<ShellItem> items = m_sourcePane->selectedItems();
     if (items.isEmpty()) return;
 
-    ShellFolder* targetFolder = m_targetPane->folder();
+    ShellFolder* targetFolder = m_targetPane->getFolder();
     ShellItem::Attributes attributes = targetFolder->attributes();
 
     if (!attributes.testFlag(ShellItem::FileSystem) || !attributes.testFlag(ShellItem::Directory)) return;
@@ -1162,7 +1232,7 @@ void MainWindow::packToZip()
     else
     {
         dialog.setPrompt(tr("Pack <b>%1</b> selected items:").arg(items.count()));
-        dialog.setName(m_sourcePane->folder()->name() + ".zip");
+        dialog.setName(m_sourcePane->getFolder()->name() + ".zip");
     }
 
     dialog.setTarget(targetFolder->path());
@@ -1183,7 +1253,7 @@ void MainWindow::packToZip()
     ShellFolder* zipFolder = targetFolder->openFolder(item);
     if (!zipFolder) return;
 
-    ShellSelection selection(m_sourcePane->folder(), items, this);
+    ShellSelection selection(m_sourcePane->getFolder(), items, this);
     bool done = selection.dragDropTo(zipFolder, ShellSelection::Copy);
 
     delete zipFolder;
@@ -1219,7 +1289,7 @@ void MainWindow::compareFiles()
     {
         ShellItem item = items.first();
         if (!item.isValid() || !item.attributes().testFlag(ShellItem::FileSystem) || item.attributes().testFlag(ShellItem::Directory)) return;
-        QString path = m_sourcePane->folder()->itemPath(item);
+        QString path = m_sourcePane->getFolder()->itemPath(item);
         if (path.isEmpty()) return;
         paths.append(path);
 
@@ -1228,7 +1298,7 @@ void MainWindow::compareFiles()
         {
             ShellItem item = items.first();
             if (!item.isValid() || !item.attributes().testFlag(ShellItem::FileSystem) || item.attributes().testFlag(ShellItem::Directory)) return;
-            QString path = m_targetPane->folder()->itemPath(item);
+            QString path = m_targetPane->getFolder()->itemPath(item);
             if (path.isEmpty()) return;
             paths.prepend(path);
         }
@@ -1239,7 +1309,7 @@ void MainWindow::compareFiles()
         {
             ShellItem item = items.at(i);
             if (!item.isValid() || !item.attributes().testFlag(ShellItem::FileSystem) || item.attributes().testFlag(ShellItem::Directory)) return;
-            QString path = m_sourcePane->folder()->itemPath(item);
+            QString path = m_sourcePane->getFolder()->itemPath(item);
             if (path.isEmpty()) return;
             paths.append(path);
         }
@@ -1249,17 +1319,17 @@ void MainWindow::compareFiles()
 
     QString parameters = QString("\"%1\" \"%2\"").arg(paths.at(0), paths.at(1));
 
-    startTool(DiffTool, parameters, m_sourcePane->folder()->path());
+    startTool(DiffTool, parameters, m_sourcePane->getFolder()->path());
 }
 
 void MainWindow::compareDirectories()
 {
-    if (!m_sourcePane->folder()->isEqual(m_targetPane->folder())) m_sourcePane->compareWith(m_targetPane->items());
+    if (!m_sourcePane->getFolder()->isEqual(m_targetPane->getFolder())) m_sourcePane->compareWith(m_targetPane->items());
 }
 
 void MainWindow::search()
 {
-    SearchDialog* dialog = new SearchDialog(m_sourcePane->folder(), this);
+    SearchDialog* dialog = new SearchDialog(m_sourcePane->getFolder(), this);
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     dialog->setWindowModality(Qt::WindowModal);
     dialog->show();
@@ -1267,7 +1337,7 @@ void MainWindow::search()
 
 void MainWindow::explore()
 {
-    m_sourcePane->folder()->explore();
+    m_sourcePane->getFolder()->explore();
 }
 
 void MainWindow::showHistory()
@@ -1282,7 +1352,7 @@ void MainWindow::showBookmarks()
 
 void MainWindow::addBookmark()
 {
-    ShellFolder* folder = m_sourcePane->folder();
+    ShellFolder* folder = m_sourcePane->getFolder();
 
     OperationDialog::Flags flags = OperationDialog::WithName | OperationDialog::CanEditName | OperationDialog::WithLocation;
     if (!folder->password().isEmpty()) flags |= OperationDialog::WithCheckBox;
@@ -1322,19 +1392,19 @@ void MainWindow::showDrivesMenu2()
 
 void MainWindow::showProperties()
 {
-    invokeCommand(m_sourcePane->folder(), m_sourcePane->selectedItems(), "properties");
+    invokeCommand(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), "properties");
 }
 
 void MainWindow::otherOpenFolder()
 {
-    ShellFolder* folder = m_sourcePane->folder()->openFolder(m_sourcePane->currentItem());
+    ShellFolder* folder = m_sourcePane->getFolder()->openFolder(m_sourcePane->currentItem());
     if (folder) m_targetPane->setFolder(folder);
 }
 
 void MainWindow::otherOpenParent()
 {
     ShellItem item;
-    ShellFolder* folder = m_sourcePane->folder()->parentFolder(item);
+    ShellFolder* folder = m_sourcePane->getFolder()->parentFolder(item);
     if (folder) m_targetPane->setFolder(folder);
 }
 
@@ -1401,6 +1471,7 @@ void MainWindow::loadIcons()
     action("copy")->setIcon(IconLoader::icon("edit-copy"));
     action("copyNames")->setIcon(IconLoader::icon("copy-names"));
     action("copyPaths")->setIcon(IconLoader::icon("copy-names"));
+    action("copyPathsRecursive")->setIcon(IconLoader::icon("copy-names"));
     action("refresh")->setIcon(IconLoader::icon("refresh"));
     action("refreshDrives")->setIcon(IconLoader::icon("refresh"));
     action("viewHidden")->setIcon(IconLoader::icon("view-hidden"));

@@ -65,7 +65,6 @@ public:
     bool isValid() const;
 
     QString name() const;
-    QString path() const;
     QString ext() const;
     quint64 size() const;
     QString humanReadableSize() const;

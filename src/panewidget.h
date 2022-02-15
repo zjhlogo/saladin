@@ -59,7 +59,7 @@ public:
     void InitFolders(const QStringList& paths, int selectedIndex);
 
     void setFolder(ShellFolder* folder);
-    ShellFolder* folder() const;
+    ShellFolder* getFolder() const;
 
     QStringList getTabFolderList() const;
     int getSelectedTab() const;

@@ -49,23 +49,6 @@ QString ShellItem::name() const
     return d->m_name;
 }
 
-QString ShellItem::path() const
-{
-    QString path = d->m_name;
-
-    wchar_t* name = nullptr;
-    HRESULT hr = SHGetNameFromIDList(d->m_pidl, SIGDN_DESKTOPABSOLUTEEDITING, &name);
-
-    if (SUCCEEDED(hr))
-    {
-        path = QString::fromWCharArray(name);
-        CoTaskMemFree(name);
-    }
-
-    path.replace(QLatin1Char('\\'), QLatin1Char('/'));
-    return path;
-}
-
 QString ShellItem::ext() const
 {
     if (d->m_attributes.testFlag(ShellItem::Directory)) return "";

@@ -50,6 +50,7 @@
     <action id="copy"/>
     <action id="copyNames"/>
     <action id="copyPaths"/>
+    <action id="copyPathsRecursive"/>
     <action id="paste"/>
     <separator/>
     <action id="configure"/>
@@ -138,6 +139,7 @@
     <action id="copy"/>
     <action id="copyNames"/>
     <action id="copyPaths"/>
+    <action id="copyPathsRecursive"/>
   </menu>
   <menu id="menuOpen">
     <action id="openDirectory"/>
