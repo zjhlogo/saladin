@@ -644,7 +644,7 @@ void getPathsRecursive(QStringList& pathsOut, const QString& dirPath)
 
     {
         QStringList allSubDirs = rootDir.entryList(QDir::Filter::Dirs);
-        foreach(QString dirName, allSubDirs)
+        foreach (QString dirName, allSubDirs)
         {
             if (dirName == "." || dirName == "..") continue;
 
@@ -655,7 +655,7 @@ void getPathsRecursive(QStringList& pathsOut, const QString& dirPath)
 
     {
         QStringList allFiles = rootDir.entryList(QDir::Filter::Files);
-        foreach(QString subFileName, allFiles)
+        foreach (QString subFileName, allFiles)
         {
             auto subFilePath = rootDir.path() + "/" + subFileName;
             subFilePath.replace(QLatin1Char('\\'), QLatin1Char('/'));
@@ -670,7 +670,7 @@ void MainWindow::copyPathsRecursive()
     QStringList paths;
 
     QList<ShellItem> items = m_sourcePane->selectedItems();
-    foreach(ShellItem item, items)
+    foreach (ShellItem item, items)
     {
         QString itemPath = folder->path() + "\\" + item.name();
 
@@ -687,7 +687,7 @@ void MainWindow::copyPathsRecursive()
     }
 
     QString text;
-    foreach(QString path, paths)
+    foreach (QString path, paths)
     {
         text += path;
         text += "\r\n";

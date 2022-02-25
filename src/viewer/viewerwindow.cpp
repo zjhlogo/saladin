@@ -28,7 +28,7 @@
 
 ViewerWindow::ViewerWindow()
     : QMainWindow()
-    , m_view(NULL)
+    , m_view(nullptr)
     , m_restoreMaximized(false)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);

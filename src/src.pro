@@ -60,6 +60,7 @@ include( shell/shell.pri )
 include( utils/utils.pri )
 include( viewer/viewer.pri )
 include( xmlui/xmlui.pri )
+include( custom_widgets/custom_widgets.pri )
 
 INCLUDEPATH += .
 

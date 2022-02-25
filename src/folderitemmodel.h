@@ -126,7 +126,7 @@ private:
     bool m_hasParent{};
 
     int m_sortColumn{-1};
-    Qt::SortOrder m_sortOrder{ Qt::AscendingOrder };
+    Qt::SortOrder m_sortOrder{Qt::AscendingOrder};
 
     QList<int> m_extractQueue;
 

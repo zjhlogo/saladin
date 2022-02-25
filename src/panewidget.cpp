@@ -18,6 +18,7 @@
 
 #include "panewidget.h"
 #include "application.h"
+#include "custom_widgets/PathLineEditor.h"
 #include "drivestripmanager.h"
 #include "folderitemdelegate.h"
 #include "folderitemmodel.h"
@@ -78,7 +79,7 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
     QHBoxLayout* innerLayout = new QHBoxLayout(editFrame);
     innerLayout->setMargin(0);
 
-    m_edit = new QLineEdit(editFrame);
+    m_edit = new PathLineEditor(editFrame);
     m_edit->setFocusPolicy(Qt::ClickFocus);
     m_edit->setFrame(false);
     m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -568,7 +569,7 @@ bool PaneWidget::viewDragMoveEvent(QDragMoveEvent* e)
 bool PaneWidget::viewDragLeaveEvent(QDragLeaveEvent* /*e*/)
 {
     delete m_dropData;
-    m_dropData = NULL;
+    m_dropData = nullptr;
 
     m_view->setDragging(false);
 
@@ -580,7 +581,7 @@ bool PaneWidget::viewDropEvent(QDropEvent* e)
     dragDropHelper(e, true);
 
     delete m_dropData;
-    m_dropData = NULL;
+    m_dropData = nullptr;
 
     m_view->setDragging(false);
 

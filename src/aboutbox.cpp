@@ -114,7 +114,7 @@ AboutBoxSection::AboutBoxSection(const QPixmap& pixmap, const QString& message, 
 }
 
 AboutBoxSection::AboutBoxSection(Qt::WindowFlags flags)
-    : QFrame(NULL, flags)
+    : QFrame(nullptr, flags)
 {
     initialize();
 }
@@ -170,7 +170,7 @@ void AboutBoxSection::clearButtons()
         delete m_buttonsLayout->itemAt(0)->widget();
 
     delete m_buttonsLayout;
-    m_buttonsLayout = NULL;
+    m_buttonsLayout = nullptr;
 }
 
 AboutBoxToolSection::AboutBoxToolSection()

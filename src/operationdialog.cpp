@@ -316,7 +316,7 @@ void OperationDialog::rename()
         if (m_renameButton)
         {
             m_renameButton->deleteLater();
-            m_renameButton = NULL;
+            m_renameButton = nullptr;
         }
 
         expandTo(QSize(700, 500));

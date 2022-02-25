@@ -46,7 +46,7 @@ void SearchItemModel::clear()
     if (m_helper)
     {
         m_helper->abort();
-        m_helper = NULL;
+        m_helper = nullptr;
     }
 }
 
@@ -192,7 +192,7 @@ bool SearchItemModel::scanFolder(const QString& prefix, ShellFolder* folder)
 
 void SearchItemModel::helperCompleted()
 {
-    if (m_pendingItems.isEmpty() || m_helper == NULL) return;
+    if (m_pendingItems.isEmpty() || m_helper == nullptr) return;
 
     QList<int> results = m_helper->results();
 
@@ -245,7 +245,7 @@ QString SearchItemModel::pathAt(const QModelIndex& index) const
 ShellFolder* SearchItemModel::folderAt(const QModelIndex& index) const
 {
     int row = index.row();
-    if (row < 0) return NULL;
+    if (row < 0) return nullptr;
     return m_items.at(row).m_folder;
 }
 

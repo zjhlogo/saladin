@@ -101,7 +101,7 @@ void ToolStrip::beginSection(const QString& title, bool uniform)
 
 void ToolStrip::endSection()
 {
-    m_sectionLayout = NULL;
+    m_sectionLayout = nullptr;
 }
 
 void ToolStrip::beginRow()
@@ -118,7 +118,7 @@ void ToolStrip::beginRow()
 void ToolStrip::endRow()
 {
     m_rowLayout->addStretch(1);
-    m_rowLayout = NULL;
+    m_rowLayout = nullptr;
 }
 
 void ToolStrip::clearToolActions()
@@ -196,23 +196,23 @@ void ToolStrip::childEvent(QChildEvent* e)
 {
     QWidget::childEvent(e);
 
-    if (e->type() == QEvent::ChildRemoved && e->child() == m_layout->headerWidget()) m_layout->setHeaderWidget(NULL);
+    if (e->type() == QEvent::ChildRemoved && e->child() == m_layout->headerWidget()) m_layout->setHeaderWidget(nullptr);
 }
 
 static void drawSeparator(const QRect& rect, QPainter* painter, QWidget* widget)
 {
-    #if ( QT_VERSION >= 0x040500 )
-        QStyleOptionFrameV3 option;
-        option.init( widget );
-        option.frameShape = QFrame::VLine;
-        option.state |= QStyle::State_Sunken;
-        option.rect = rect;
-        option.lineWidth = 1;
-        widget->style()->drawControl( QStyle::CE_ShapedFrame, &option, painter, widget );
-    #else
-        int x = ( rect.left() + rect.right() ) / 2;
-        qDrawShadeLine( painter, QPoint( x, rect.top() ), QPoint( x, rect.bottom() ), widget->palette(), true, 1, 0 );
-    #endif
+#if (QT_VERSION >= 0x040500)
+    QStyleOptionFrameV3 option;
+    option.init(widget);
+    option.frameShape = QFrame::VLine;
+    option.state |= QStyle::State_Sunken;
+    option.rect = rect;
+    option.lineWidth = 1;
+    widget->style()->drawControl(QStyle::CE_ShapedFrame, &option, painter, widget);
+#else
+    int x = (rect.left() + rect.right()) / 2;
+    qDrawShadeLine(painter, QPoint(x, rect.top()), QPoint(x, rect.bottom()), widget->palette(), true, 1, 0);
+#endif
 }
 
 void ToolStrip::paintEvent(QPaintEvent* /*e*/)
@@ -275,7 +275,7 @@ void ToolStripAction::setPopupMode(QToolButton::ToolButtonPopupMode mode)
 
 ToolStripLayout::ToolStripLayout(QWidget* parent)
     : QLayout(parent)
-    , m_headerWidget(NULL)
+    , m_headerWidget(nullptr)
     , m_dirty(true)
     , m_simpleLayout(true)
     , m_auxWidth(0)
@@ -429,7 +429,7 @@ int ToolStripLayout::count() const
 
 QLayoutItem* ToolStripLayout::itemAt(int index) const
 {
-    return (index >= 0 && index < m_items.count()) ? m_items.at(index) : NULL;
+    return (index >= 0 && index < m_items.count()) ? m_items.at(index) : nullptr;
 }
 
 void ToolStripLayout::addItem(QLayoutItem* item)
@@ -449,14 +449,14 @@ ToolStripSectionLayout* ToolStripLayout::layoutAt(int index) const
 {
     QLayoutItem* item = itemAt(index);
     if (item && item->layout()) return qobject_cast<ToolStripSectionLayout*>(item->layout());
-    return NULL;
+    return nullptr;
 }
 
 QToolButton* ToolStripLayout::buttonAt(int index) const
 {
     QLayoutItem* item = itemAt(index);
     if (item && item->widget()) return qobject_cast<QToolButton*>(item->widget());
-    return NULL;
+    return nullptr;
 }
 
 static void addActions(QLayoutItem* item, QMenu* menu)
@@ -669,7 +669,7 @@ QSize ToolStripSectionLayout::maximumSize() const
 
 static int calculateWidth(QLayoutItem* item)
 {
-    if (item == NULL) return 0;
+    if (item == nullptr) return 0;
 
     QLayout* layout = item->layout();
     if (layout)
@@ -741,7 +741,7 @@ int ToolStripSectionLayout::count() const
 
 QLayoutItem* ToolStripSectionLayout::itemAt(int index) const
 {
-    return (index >= 0 && index < m_items.count()) ? m_items.at(index) : NULL;
+    return (index >= 0 && index < m_items.count()) ? m_items.at(index) : nullptr;
 }
 
 void ToolStripSectionLayout::addItem(QLayoutItem* item)
@@ -862,10 +862,10 @@ void ActionButton::adjustText()
     {
         setToolTip(QString("%1 (%2)").arg(defaultAction()->toolTip(), shortcut.toString(QKeySequence::NativeText)));
     }
-    else if (popupMode() == QToolButton::MenuButtonPopup && defaultAction()->menu() != NULL)
+    else if (popupMode() == QToolButton::MenuButtonPopup && defaultAction()->menu() != nullptr)
     {
         QAction* defAction = defaultAction()->menu()->defaultAction();
-        if (defAction != NULL)
+        if (defAction != nullptr)
         {
             shortcut = defAction->shortcut();
             if (!shortcut.isEmpty()) setToolTip(QString("%1 (%2)").arg(defaultAction()->toolTip(), shortcut.toString(QKeySequence::NativeText)));

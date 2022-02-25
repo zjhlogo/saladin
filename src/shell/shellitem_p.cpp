@@ -19,7 +19,7 @@
 #include "shellitem_p.h"
 
 ShellItemPrivate::ShellItemPrivate()
-    : m_pidl(NULL)
+    : m_pidl(nullptr)
     , m_size(0)
     , m_attributes(0)
     , m_state(0)
@@ -43,6 +43,6 @@ ShellItemPrivate::~ShellItemPrivate()
     if (m_pidl)
     {
         CoTaskMemFree(m_pidl);
-        m_pidl = NULL;
+        m_pidl = nullptr;
     }
 }

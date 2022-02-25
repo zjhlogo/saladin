@@ -111,8 +111,8 @@ bool FormatHelper::checkText(QIODevice& file, bool force, QByteArray& format)
     QByteArray header = file.peek(512);
     if (header.isEmpty()) return false;
 
-    QTextCodec* codec = QTextCodec::codecForUtfText(header, NULL);
-    if (codec != NULL)
+    QTextCodec* codec = QTextCodec::codecForUtfText(header, nullptr);
+    if (codec != nullptr)
     {
         format = codec->name();
         return true;

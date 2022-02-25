@@ -1,120 +1,120 @@
 /**************************************************************************
-* This file is part of the Saladin program
-* Copyright (C) 2011-2017 Michał Męciński
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**************************************************************************/
+ * This file is part of the Saladin program
+ * Copyright (C) 2011-2017 Michał Męciński
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **************************************************************************/
 
 #include "imageview.h"
+#include "application.h"
 #include "imagelabel.h"
 #include "imageloader.h"
-
-#include "application.h"
 #include "shell/streamdevice.h"
-#include "utils/localsettings.h"
 #include "utils/iconloader.h"
+#include "utils/localsettings.h"
 #include "xmlui/builder.h"
 
-ImageView::ImageView( QObject* parent, QWidget* parentWidget ) : View( parent ),
-    m_loader( NULL )
+ImageView::ImageView(QObject* parent, QWidget* parentWidget)
+    : View(parent)
+    , m_loader(nullptr)
 {
     QAction* action;
 
-    action = new QAction( tr( "&Copy" ), this );
-    action->setShortcut( QKeySequence::Copy );
-    connect( action, SIGNAL( triggered() ), this, SLOT( copy() ) );
-    setAction( "copy", action );
+    action = new QAction(tr("&Copy"), this);
+    action->setShortcut(QKeySequence::Copy);
+    connect(action, SIGNAL(triggered()), this, SLOT(copy()));
+    setAction("copy", action);
 
-    action = new QAction( tr( "Zoom To &Fit" ), this );
-    action->setShortcut( Qt::Key_F );
-    action->setCheckable( true );
-    connect( action, SIGNAL( triggered() ), this, SLOT( zoomFit() ) );
-    setAction( "zoomFit", action );
+    action = new QAction(tr("Zoom To &Fit"), this);
+    action->setShortcut(Qt::Key_F);
+    action->setCheckable(true);
+    connect(action, SIGNAL(triggered()), this, SLOT(zoomFit()));
+    setAction("zoomFit", action);
 
-    action = new QAction( tr( "Zoom &In" ), this );
-    action->setShortcuts( QList<QKeySequence>() << QKeySequence( Qt::CTRL + Qt::Key_Plus ) << QKeySequence( Qt::CTRL + Qt::Key_Equal ) );
-    connect( action, SIGNAL( triggered() ), this, SLOT( zoomIn() ) );
-    setAction( "zoomIn", action );
+    action = new QAction(tr("Zoom &In"), this);
+    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_Plus) << QKeySequence(Qt::CTRL + Qt::Key_Equal));
+    connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
+    setAction("zoomIn", action);
 
-    action = new QAction( tr( "Zoom &Out" ), this );
-    action->setShortcuts( QList<QKeySequence>() << QKeySequence( Qt::CTRL + Qt::Key_Minus ) << QKeySequence( Qt::CTRL + Qt::Key_Underscore ) );
-    connect( action, SIGNAL( triggered() ), this, SLOT( zoomOut() ) );
-    setAction( "zoomOut", action );
+    action = new QAction(tr("Zoom &Out"), this);
+    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_Minus) << QKeySequence(Qt::CTRL + Qt::Key_Underscore));
+    connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
+    setAction("zoomOut", action);
 
-    action = new QAction( tr( "Original &Size" ), this );
-    action->setShortcut( Qt::CTRL + Qt::Key_0 );
-    connect( action, SIGNAL( triggered() ), this, SLOT( zoomOriginal() ) );
-    setAction( "zoomOriginal", action );
+    action = new QAction(tr("Original &Size"), this);
+    action->setShortcut(Qt::CTRL + Qt::Key_0);
+    connect(action, SIGNAL(triggered()), this, SLOT(zoomOriginal()));
+    setAction("zoomOriginal", action);
 
-    action = new QAction( tr( "Rotate &Left" ), this );
-    action->setShortcut( Qt::Key_L );
-    connect( action, SIGNAL( triggered() ), this, SLOT( rotateLeft() ) );
-    setAction( "rotateLeft", action );
+    action = new QAction(tr("Rotate &Left"), this);
+    action->setShortcut(Qt::Key_L);
+    connect(action, SIGNAL(triggered()), this, SLOT(rotateLeft()));
+    setAction("rotateLeft", action);
 
-    action = new QAction( tr( "Rotate &Right" ), this );
-    action->setShortcut( Qt::Key_R );
-    connect( action, SIGNAL( triggered() ), this, SLOT( rotateRight() ) );
-    setAction( "rotateRight", action );
+    action = new QAction(tr("Rotate &Right"), this);
+    action->setShortcut(Qt::Key_R);
+    connect(action, SIGNAL(triggered()), this, SLOT(rotateRight()));
+    setAction("rotateRight", action);
 
-    action = new QAction( tr( "&Black Background" ), this );
-    action->setShortcut( Qt::Key_B );
-    action->setCheckable( true );
-    connect( action, SIGNAL( triggered() ), this, SLOT( blackBackground() ) );
-    setAction( "blackBackground", action );
+    action = new QAction(tr("&Black Background"), this);
+    action->setShortcut(Qt::Key_B);
+    action->setCheckable(true);
+    connect(action, SIGNAL(triggered()), this, SLOT(blackBackground()));
+    setAction("blackBackground", action);
 
-    action = new QAction( tr( "Information" ), this );
-    action->setShortcut( Qt::Key_I );
-    connect( action, SIGNAL( triggered() ), this, SLOT( viewInformation() ) );
-    setAction( "viewInformation", action );
+    action = new QAction(tr("Information"), this);
+    action->setShortcut(Qt::Key_I);
+    connect(action, SIGNAL(triggered()), this, SLOT(viewInformation()));
+    setAction("viewInformation", action);
 
     loadIcons();
 
-    connect( application, SIGNAL( themeChanged() ), this, SLOT( loadIcons() ) );
+    connect(application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
-    loadXmlUiFile( ":/resources/imageview.xml" );
+    loadXmlUiFile(":/resources/imageview.xml");
 
-    QWidget* main = new QWidget( parentWidget );
-    QVBoxLayout* mainLayout = new QVBoxLayout( main );
-    mainLayout->setContentsMargins( 3, 0, 3, 0 );
-    mainLayout->setSpacing( 0 );
+    QWidget* main = new QWidget(parentWidget);
+    QVBoxLayout* mainLayout = new QVBoxLayout(main);
+    mainLayout->setContentsMargins(3, 0, 3, 0);
+    mainLayout->setSpacing(0);
 
-    m_scroll = new QScrollArea( main );
-    m_scroll->setWidgetResizable( true );
+    m_scroll = new QScrollArea(main);
+    m_scroll->setWidgetResizable(true);
 
     QPalette scrollPalette = parentWidget->palette();
-    scrollPalette.setColor( QPalette::Window, QColor::fromRgb( 255, 255, 255 ) );
-    m_scroll->setPalette( scrollPalette );
+    scrollPalette.setColor(QPalette::Window, QColor::fromRgb(255, 255, 255));
+    m_scroll->setPalette(scrollPalette);
 
-    m_label = new ImageLabel( m_scroll );
-    m_label->setContextMenuPolicy( Qt::CustomContextMenu );
+    m_label = new ImageLabel(m_scroll);
+    m_label->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    m_scroll->setWidget( m_label );
+    m_scroll->setWidget(m_label);
 
-    connect( m_label, SIGNAL( zoomIn() ), this, SLOT( zoomIn() ) );
-    connect( m_label, SIGNAL( zoomOut() ), this, SLOT( zoomOut() ) );
+    connect(m_label, SIGNAL(zoomIn()), this, SLOT(zoomIn()));
+    connect(m_label, SIGNAL(zoomOut()), this, SLOT(zoomOut()));
 
-    connect( m_label, SIGNAL( zoomChanged() ), this, SLOT( updateStatus() ) );
-    
-    connect( m_label, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( contextMenuRequested( const QPoint& ) ) );
+    connect(m_label, SIGNAL(zoomChanged()), this, SLOT(updateStatus()));
 
-    mainLayout->addWidget( m_scroll );
+    connect(m_label, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenuRequested(const QPoint&)));
 
-    main->setFocusProxy( m_scroll );
+    mainLayout->addWidget(m_scroll);
 
-    setMainWidget( main );
+    main->setFocusProxy(m_scroll);
 
-    setStatus( tr( "Image" ) );
+    setMainWidget(main);
+
+    setStatus(tr("Image"));
 
     initializeSettings();
 
@@ -123,9 +123,10 @@ ImageView::ImageView( QObject* parent, QWidget* parentWidget ) : View( parent ),
 
 ImageView::~ImageView()
 {
-    if ( m_loader ) {
+    if (m_loader)
+    {
         m_loader->abort();
-        m_loader = NULL;
+        m_loader = nullptr;
     }
 
     storeSettings();
@@ -140,39 +141,40 @@ void ImageView::initializeSettings()
 {
     LocalSettings* settings = application->applicationSettings();
 
-    bool fit = settings->value( "ZoomToFit", false ).toBool();
-    action( "zoomFit" )->setChecked( fit );
-    m_label->setZoom( fit ? -1.0 : 1.0 );
+    bool fit = settings->value("ZoomToFit", false).toBool();
+    action("zoomFit")->setChecked(fit);
+    m_label->setZoom(fit ? -1.0 : 1.0);
 
-    bool black = settings->value( "BlackBackground", false ).toBool();
-    action( "blackBackground" )->setChecked( black );
-    m_label->setBlackBackground( black );
+    bool black = settings->value("BlackBackground", false).toBool();
+    action("blackBackground")->setChecked(black);
+    m_label->setBlackBackground(black);
 }
 
 void ImageView::storeSettings()
 {
     LocalSettings* settings = application->applicationSettings();
 
-    settings->setValue( "ZoomToFit", m_label->zoom() < 0.0 );
-    settings->setValue( "BlackBackground", m_label->isBlackBackground() );
+    settings->setValue("ZoomToFit", m_label->zoom() < 0.0);
+    settings->setValue("BlackBackground", m_label->isBlackBackground());
 }
 
 void ImageView::load()
 {
-    if ( m_loader ) {
+    if (m_loader)
+    {
         m_loader->abort();
-        m_loader = NULL;
+        m_loader = nullptr;
     }
 
-    m_label->setImage( QImage() );
+    m_label->setImage(QImage());
 
-    m_loader = new ImageLoader( pidl() );
+    m_loader = new ImageLoader(pidl());
 
-    connect( m_loader, SIGNAL( imageAvailable() ), this, SLOT( loadImage() ), Qt::QueuedConnection );
+    connect(m_loader, SIGNAL(imageAvailable()), this, SLOT(loadImage()), Qt::QueuedConnection);
 
     m_loader->start();
 
-    setStatus( tr( "Image" ) );
+    setStatus(tr("Image"));
 }
 
 void ImageView::loadImage()
@@ -181,7 +183,7 @@ void ImageView::loadImage()
 
     QByteArray format = m_loader->format();
 
-    m_label->setImage( image );
+    m_label->setImage(image);
 
     updateActions();
     updateStatus();
@@ -192,74 +194,72 @@ void ImageView::updateActions()
     bool hasImage = !m_label->image().isNull();
     double zoom = m_label->zoom();
 
-    action( "copy" )->setEnabled( hasImage );
-    action( "zoomIn" )->setEnabled( hasImage && zoom > 0.0 && zoom < 20.0 );
-    action( "zoomOut" )->setEnabled( hasImage && zoom > 0.05 );
-    action( "zoomOriginal" )->setEnabled( hasImage && zoom > 0.0 && !qFuzzyIsNull( zoom - 1.0 ) );
-    action( "rotateLeft" )->setEnabled( hasImage );
-    action( "rotateRight" )->setEnabled( hasImage );
+    action("copy")->setEnabled(hasImage);
+    action("zoomIn")->setEnabled(hasImage && zoom > 0.0 && zoom < 20.0);
+    action("zoomOut")->setEnabled(hasImage && zoom > 0.05);
+    action("zoomOriginal")->setEnabled(hasImage && zoom > 0.0 && !qFuzzyIsNull(zoom - 1.0));
+    action("rotateLeft")->setEnabled(hasImage);
+    action("rotateRight")->setEnabled(hasImage);
 }
 
 void ImageView::updateStatus()
 {
-    if ( !m_label->image().isNull() )
-        setStatus( tr( "Image" ) + ", " + format().toUpper() + QString( " (%1 x %2, %3%)" ).arg( m_label->image().width() ).arg( m_label->image().height() ).arg( (int)( m_label->actualZoom() * 100.0 ) ) );
+    if (!m_label->image().isNull())
+        setStatus(tr("Image") + ", " + format().toUpper()
+                  + QString(" (%1 x %2, %3%)").arg(m_label->image().width()).arg(m_label->image().height()).arg((int)(m_label->actualZoom() * 100.0)));
 }
 
 void ImageView::copy()
 {
     QImage image = m_label->image();
-    if ( !image.isNull() )
-        QApplication::clipboard()->setImage( image );
+    if (!image.isNull()) QApplication::clipboard()->setImage(image);
 }
 
 void ImageView::zoomFit()
 {
-    bool checked = action( "zoomFit" )->isChecked();
+    bool checked = action("zoomFit")->isChecked();
 
-    m_label->setZoom( checked ? -1.0 : 1.0 );
+    m_label->setZoom(checked ? -1.0 : 1.0);
 
     updateActions();
 }
 
 void ImageView::zoomIn()
 {
-    if ( m_label->zoom() > 0.0 && m_label->zoom () < 20.0 )
-        zoom( 1.25 );
+    if (m_label->zoom() > 0.0 && m_label->zoom() < 20.0) zoom(1.25);
 }
 
 void ImageView::zoomOut()
 {
-    if ( m_label->zoom() > 0.05 )
-        zoom( 0.8 );
+    if (m_label->zoom() > 0.05) zoom(0.8);
 }
 
 void ImageView::zoomOriginal()
 {
-    zoom( 1.0 / m_label->zoom() );
+    zoom(1.0 / m_label->zoom());
 }
 
-void ImageView::zoom( double factor )
+void ImageView::zoom(double factor)
 {
-    m_label->setZoom( factor * m_label->zoom() );
+    m_label->setZoom(factor * m_label->zoom());
 
-    adjustScrollBar( m_scroll->horizontalScrollBar(), factor );
-    adjustScrollBar( m_scroll->verticalScrollBar(), factor );
+    adjustScrollBar(m_scroll->horizontalScrollBar(), factor);
+    adjustScrollBar(m_scroll->verticalScrollBar(), factor);
 
     updateActions();
 }
 
-void ImageView::adjustScrollBar( QScrollBar* scrollBar, double factor )
+void ImageView::adjustScrollBar(QScrollBar* scrollBar, double factor)
 {
-    scrollBar->setValue( int( factor * scrollBar->value() + ( ( factor - 1.0 ) * scrollBar->pageStep() / 2.0 ) ) );
+    scrollBar->setValue(int(factor * scrollBar->value() + ((factor - 1.0) * scrollBar->pageStep() / 2.0)));
 }
 
 void ImageView::rotateLeft()
 {
     QTransform transform;
-    transform.rotate( -90 );
+    transform.rotate(-90);
 
-    m_label->setImage( m_label->image().transformed( transform ) );
+    m_label->setImage(m_label->image().transformed(transform));
 
     updateStatus();
 }
@@ -267,98 +267,91 @@ void ImageView::rotateLeft()
 void ImageView::rotateRight()
 {
     QTransform transform;
-    transform.rotate( 90 );
+    transform.rotate(90);
 
-    m_label->setImage( m_label->image().transformed( transform ) );
+    m_label->setImage(m_label->image().transformed(transform));
 
     updateStatus();
 }
 
 void ImageView::blackBackground()
 {
-    bool black = action( "blackBackground" )->isChecked();
+    bool black = action("blackBackground")->isChecked();
 
-    m_label->setBlackBackground( black );
+    m_label->setBlackBackground(black);
 }
 
 void ImageView::viewInformation()
 {
     const QImage& image = m_label->image();
 
-    if ( !image.isNull() ) {
+    if (!image.isNull())
+    {
         ShellPidl filePidl = pidl();
 
         QString path = filePidl.path();
 
-        StreamDevice device( filePidl );
+        StreamDevice device(filePidl);
 
-        QString info = tr( "File path: %1\nFile size: %2 bytes\nLast modified: %3" ).arg(
-            path,
-            QLocale::system().toString( device.size() ),
-            device.lastModified().toString( "yyyy-MM-dd hh:mm" ) );
+        QString info = tr("File path: %1\nFile size: %2 bytes\nLast modified: %3")
+                           .arg(path, QLocale::system().toString(device.size()), device.lastModified().toString("yyyy-MM-dd hh:mm"));
 
         info += "\n\n";
 
-        info += tr( "Image format: %1" ).arg( QString( format().toUpper() ) );
+        info += tr("Image format: %1").arg(QString(format().toUpper()));
 
         info += "\n";
 
-        info += tr( "Image size: %1 x %2 pixels" )
-            .arg( image.width() )
-            .arg( image.height() );
+        info += tr("Image size: %1 x %2 pixels").arg(image.width()).arg(image.height());
 
-        if ( format() == "png" ) {
+        if (format() == "png")
+        {
             double dpiX = image.dotsPerMeterX() * 0.0254;
             double dpiY = image.dotsPerMeterY() * 0.0254;
 
-            double cmX = image.width() / ( image.dotsPerMeterX() * 0.01 );
-            double cmY = image.height() / ( image.dotsPerMeterY() * 0.01 );
+            double cmX = image.width() / (image.dotsPerMeterX() * 0.01);
+            double cmY = image.height() / (image.dotsPerMeterY() * 0.01);
 
             double inchX = image.width() / dpiX;
             double inchY = image.height() / dpiX;
 
             info += "\n";
 
-            info += tr( "Print size: %1 x %2 cm / %3 x %4 \" (%5 x %6 dpi)" )
-                .arg( cmX, 0, 'f', 2 )
-                .arg( cmY, 0, 'f', 2 )
-                .arg( inchX, 0, 'f', 2 )
-                .arg( inchY, 0, 'f', 2 )
-                .arg( dpiX, 0, 'f', 0 )
-                .arg( dpiY, 0, 'f', 0 );
+            info += tr("Print size: %1 x %2 cm / %3 x %4 \" (%5 x %6 dpi)")
+                        .arg(cmX, 0, 'f', 2)
+                        .arg(cmY, 0, 'f', 2)
+                        .arg(inchX, 0, 'f', 2)
+                        .arg(inchY, 0, 'f', 2)
+                        .arg(dpiX, 0, 'f', 0)
+                        .arg(dpiY, 0, 'f', 0);
         }
 
         int colorCount = image.colorCount();
-        if ( colorCount == 0 )
-            colorCount = 1 << qMin( image.bitPlaneCount(), 24 );
+        if (colorCount == 0) colorCount = 1 << qMin(image.bitPlaneCount(), 24);
 
         info += "\n";
 
-        info += tr( "Colors: %1 (%2 bpp)\nAlpha channel: %3" )
-            .arg( colorCount )
-            .arg( image.bitPlaneCount() )
-            .arg( image.hasAlphaChannel() ? tr( "yes" ) : tr( "no" ) );
+        info += tr("Colors: %1 (%2 bpp)\nAlpha channel: %3").arg(colorCount).arg(image.bitPlaneCount()).arg(image.hasAlphaChannel() ? tr("yes") : tr("no"));
 
-        QMessageBox::information( mainWidget(), tr( "Information" ), info, QMessageBox::Ok );
+        QMessageBox::information(mainWidget(), tr("Information"), info, QMessageBox::Ok);
     }
 }
 
-void ImageView::contextMenuRequested( const QPoint& pos )
+void ImageView::contextMenuRequested(const QPoint& pos)
 {
-    QMenu* menu = builder()->contextMenu( "menuContext" );
-    if ( menu )
-        menu->popup( m_label->mapToGlobal( pos ) );
+    QMenu* menu = builder()->contextMenu("menuContext");
+    if (menu) menu->popup(m_label->mapToGlobal(pos));
 }
 
 void ImageView::loadIcons()
 {
-    action( "copy" )->setIcon( IconLoader::icon( "edit-copy" ) );
-    action( "zoomFit" )->setIcon( IconLoader::icon( "zoom-fit" ) );
-    action( "zoomIn" )->setIcon( IconLoader::icon( "zoom-in" ) );
-    action( "zoomOut" )->setIcon( IconLoader::icon( "zoom-out" ) );
-    action( "zoomOriginal" )->setIcon( IconLoader::icon( "zoom-orig" ) );
-    action( "rotateLeft" )->setIcon( IconLoader::icon( "rotate-left" ) );
-    action( "rotateRight" )->setIcon( IconLoader::icon( "rotate-right" ) );
-    action( "blackBackground" )->setIcon( IconLoader::icon( "black-background" ) );
-    action( "viewInformation" )->setIcon( IconLoader::icon( "info" ) );
+    action("copy")->setIcon(IconLoader::icon("edit-copy"));
+    action("zoomFit")->setIcon(IconLoader::icon("zoom-fit"));
+    action("zoomIn")->setIcon(IconLoader::icon("zoom-in"));
+    action("zoomOut")->setIcon(IconLoader::icon("zoom-out"));
+    action("zoomOriginal")->setIcon(IconLoader::icon("zoom-orig"));
+    action("rotateLeft")->setIcon(IconLoader::icon("rotate-left"));
+    action("rotateRight")->setIcon(IconLoader::icon("rotate-right"));
+    action("blackBackground")->setIcon(IconLoader::icon("black-background"));
+    action("viewInformation")->setIcon(IconLoader::icon("info"));
 }

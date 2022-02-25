@@ -160,12 +160,12 @@ static int parseInt(const QChar* data, const QChar** endData, int defaultValue)
         data++;
         if (result < 0)
         {
-            *endData = NULL;
+            *endData = nullptr;
             return 0;
         }
     }
 
-    *endData = !empty ? data : NULL;
+    *endData = !empty ? data : nullptr;
 
     return negative ? -result : result;
 }

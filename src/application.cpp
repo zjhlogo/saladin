@@ -29,7 +29,7 @@
 #include "windark.h"
 #include "xmlui/windowsstyle.h"
 
-Application* application = NULL;
+Application* application = nullptr;
 
 Application::Application(int& argc, char** argv)
     : QApplication(argc, argv)
@@ -84,12 +84,12 @@ Application::Application(int& argc, char** argv)
 Application::~Application()
 {
     delete mainWindow;
-    mainWindow = NULL;
+    mainWindow = nullptr;
 
     delete m_updateSection;
 
     delete m_settings;
-    m_settings = NULL;
+    m_settings = nullptr;
 }
 
 void Application::about()
@@ -395,14 +395,14 @@ void Application::initializePalette()
     {
         winDark::setDark_qApp();
 
-        //QPalette pal(QColor(26, 26, 26));
-        //pal.setColor(QPalette::Base, Qt::black);
-        //pal.setColor(QPalette::AlternateBase, QColor(26, 26, 26));
+        // QPalette pal(QColor(26, 26, 26));
+        // pal.setColor(QPalette::Base, Qt::black);
+        // pal.setColor(QPalette::AlternateBase, QColor(26, 26, 26));
         ////pal.setColor(QPalette::Text, Qt::black);
         ////pal.setColor(QPalette::ButtonText, Qt::black);
         ////pal.setColor(QPalette::Highlight, palette().color(QPalette::Highlight));
         ////pal.setColor(QPalette::Link, QColor(51, 153, 255));
-        //setPalette(pal);
+        // setPalette(pal);
     }
 
     // QString theme = m_settings->value("Theme").toString();
@@ -433,12 +433,12 @@ void Application::initializePalette()
 
 QString Application::iconsPath() const
 {
-    //QString theme = m_settings->value("Theme").toString();
+    // QString theme = m_settings->value("Theme").toString();
 
-    //if (theme == QLatin1String("dark"))
-        return ":/icons/dark";
-    //else
-    //    return ":/icons";
+    // if (theme == QLatin1String("dark"))
+    return ":/icons/dark";
+    // else
+    //     return ":/icons";
 }
 
 QString Application::locateDataFile(const QString& name)

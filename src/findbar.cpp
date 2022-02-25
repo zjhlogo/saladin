@@ -57,7 +57,7 @@ FindBar::FindBar(QWidget* parent)
 
     m_comboBox = new QComboBox(this);
     m_comboBox->setEditable(true);
-    m_comboBox->setCompleter(NULL);
+    m_comboBox->setCompleter(nullptr);
     m_comboBox->setInsertPolicy(QComboBox::NoInsert);
     m_comboBox->setMaximumWidth(200);
     layout->addWidget(m_comboBox, 1);
