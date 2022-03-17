@@ -1397,8 +1397,18 @@ void MainWindow::showProperties()
 
 void MainWindow::otherOpenFolder()
 {
-    ShellFolder* folder = m_sourcePane->getFolder()->openFolder(m_sourcePane->currentItem());
-    if (folder) m_targetPane->setFolder(folder);
+    auto currFolder = m_sourcePane->getFolder();
+
+    ShellFolder* folder = currFolder->openFolder(m_sourcePane->currentItem());
+    if (folder)
+    {
+        m_targetPane->setFolder(folder);
+    }
+    else
+    {
+        auto clonedFolder = currFolder->clone();
+        m_targetPane->setFolder(clonedFolder);
+    }
 }
 
 void MainWindow::otherOpenParent()
