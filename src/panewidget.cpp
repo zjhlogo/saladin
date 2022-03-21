@@ -1205,6 +1205,28 @@ void PaneWidget::setBookmark(const Bookmark& bookmark)
     }
 }
 
+void PaneWidget::closeSelectedTab()
+{
+    // delete current tab
+    if (m_tabBar->count() <= 1) return;
+    int index = m_tabBar->currentIndex();
+    if (index >= 0)
+    {
+        m_tabBar->removeTab(index);
+    }
+}
+
+void PaneWidget::duplicateSelectedTab()
+{
+    // add new tab
+    int currentIndex = m_tabBar->currentIndex();
+    auto tabData = m_tabBar->tabData(currentIndex);
+
+    int newIndex = m_tabBar->insertTab(currentIndex + 1, getDirName(tabData.toString()));
+    m_tabBar->setTabData(newIndex, tabData);
+    m_tabBar->setCurrentIndex(newIndex);
+}
+
 void PaneWidget::viewContextMenuRequested(const QPoint& pos)
 {
     if (!m_view->viewport()->visibleRegion().contains(pos)) return;

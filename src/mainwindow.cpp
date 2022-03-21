@@ -67,6 +67,16 @@ MainWindow::MainWindow()
     connect(action, SIGNAL(triggered()), this, SLOT(configure()));
     setAction("configure", action);
 
+    action = new QAction(tr("Close Tab"), this);
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
+    connect(action, SIGNAL(triggered()), this, SLOT(closeTab()));
+    setAction("closeTab", action);
+
+    action = new QAction(tr("Duplicate Tab"), this);
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+    connect(action, SIGNAL(triggered()), this, SLOT(duplicateTab()));
+    setAction("duplicateTab", action);
+
     action = new QAction(tr("Paste"), this);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
     connect(action, SIGNAL(triggered()), this, SLOT(paste()));
@@ -378,10 +388,10 @@ MainWindow::MainWindow()
     connect(shortcut, SIGNAL(activated()), this, SLOT(showProperties()));
 
     shortcut = new QShortcut(Qt::CTRL + Qt::Key_Right, this);
-    connect(shortcut, SIGNAL(activated()), this, SLOT(otherOpenFolder()));
+    connect(shortcut, SIGNAL(activated()), this, SLOT(openInRightPanel()));
 
     shortcut = new QShortcut(Qt::CTRL + Qt::Key_Left, this);
-    connect(shortcut, SIGNAL(activated()), this, SLOT(otherOpenParent()));
+    connect(shortcut, SIGNAL(activated()), this, SLOT(openInLeftPanel()));
 
     QWidget* widget = new QWidget(this);
     setCentralWidget(widget);
@@ -569,6 +579,16 @@ void MainWindow::configure()
 {
     SettingsDialog dialog(this);
     dialog.exec();
+}
+
+void MainWindow::closeTab()
+{
+    m_sourcePane->closeSelectedTab();
+}
+
+void MainWindow::duplicateTab()
+{
+    m_sourcePane->duplicateSelectedTab();
 }
 
 void MainWindow::paste()
@@ -1395,19 +1415,39 @@ void MainWindow::showProperties()
     invokeCommand(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), "properties");
 }
 
+void MainWindow::openInLeftPanel()
+{
+    if (m_sourcePane->getPanelLocation() != PaneWidget::RightPane) return;
+    otherOpenFolder();
+}
+
+void MainWindow::openInRightPanel()
+{
+    if (m_sourcePane->getPanelLocation() != PaneWidget::LeftPane) return;
+    otherOpenFolder();
+}
+
 void MainWindow::otherOpenFolder()
 {
     auto currFolder = m_sourcePane->getFolder();
+    auto currItem = m_sourcePane->currentItem();
 
-    ShellFolder* folder = currFolder->openFolder(m_sourcePane->currentItem());
-    if (folder)
+    if (currItem == ShellItem())
     {
-        m_targetPane->setFolder(folder);
+        otherOpenParent();
     }
     else
     {
-        auto clonedFolder = currFolder->clone();
-        m_targetPane->setFolder(clonedFolder);
+        ShellFolder* folder = currFolder->openFolder(currItem);
+        if (folder)
+        {
+            m_targetPane->setFolder(folder);
+        }
+        else
+        {
+            auto clonedFolder = currFolder->clone();
+            m_targetPane->setFolder(clonedFolder);
+        }
     }
 }
 
@@ -1453,6 +1493,7 @@ void MainWindow::createMenuBar()
     setMenuWidget(menuBar);
 
     menuBar->addMenu(builder()->contextMenu("menuBarEdit"))->setText(tr("&Edit"));
+    menuBar->addMenu(builder()->contextMenu("menuBarNavigate"))->setText(tr("&Navigate"));
     menuBar->addMenu(builder()->contextMenu("menuBarView"))->setText(tr("&View"));
     menuBar->addMenu(builder()->contextMenu("menuBarSelect"))->setText(tr("&Selection"));
     menuBar->addMenu(builder()->contextMenu("menuBarFunctions"))->setText(tr("&Functions"));

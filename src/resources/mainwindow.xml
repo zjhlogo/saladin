@@ -55,6 +55,10 @@
     <separator/>
     <action id="configure"/>
   </menu>
+  <menu id="menuBarNavigate">
+    <action id="closeTab"/>
+    <action id="duplicateTab"/>
+  </menu>
   <menu id="menuBarView">
     <action id="refresh"/>
     <separator/>

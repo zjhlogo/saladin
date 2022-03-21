@@ -49,6 +49,8 @@ public:
     ~PaneWidget();
 
 public:
+    PaneLocation getPanelLocation() const { return m_location; };
+
     void restoreSettings();
     void saveSettings();
 
@@ -92,6 +94,9 @@ public:
     void showDrivesMenu();
     void showHistory();
     void showBookmarks();
+
+    void closeSelectedTab();
+    void duplicateSelectedTab();
 
 public: // overrides
     bool eventFilter(QObject* watched, QEvent* e);

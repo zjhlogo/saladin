@@ -75,6 +75,9 @@ private slots:
     void copyPaths();
     void copyPathsRecursive();
 
+    void closeTab();
+    void duplicateTab();
+
     void refresh();
     void refreshDrives();
     void viewHidden(bool on);
@@ -126,6 +129,9 @@ private slots:
     void showDrivesMenu1();
     void showDrivesMenu2();
     void showProperties();
+
+    void openInLeftPanel();
+    void openInRightPanel();
     void otherOpenFolder();
     void otherOpenParent();
 
