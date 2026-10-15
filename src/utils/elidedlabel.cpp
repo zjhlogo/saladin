@@ -27,7 +27,7 @@ ElidedLabel::ElidedLabel(QWidget* parent)
     : QLabel(parent)
     , m_lastWidth(0)
 {
-    setMinimumWidth(fontMetrics().width("..."));
+    setMinimumWidth(fontMetrics().horizontalAdvance(QLatin1String("...")));
 }
 
 ElidedLabel::~ElidedLabel()

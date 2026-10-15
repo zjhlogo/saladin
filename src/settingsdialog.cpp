@@ -37,7 +37,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     setWindowTitle(tr("Saladin Settings"));
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
     XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
@@ -61,7 +61,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     topLayout->addWidget(separator);
 
     QVBoxLayout* mainLayout = new QVBoxLayout();
-    mainLayout->setMargin(9);
+    mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(4);
     topLayout->addLayout(mainLayout);
 
@@ -416,8 +416,8 @@ void SettingsDialog::loadLanguages()
     m_languageComboBox->addItem(tr("System Default"));
     m_languageComboBox->addSeparator();
 
+    // files in the ini format are always encoded as UTF-8 in Qt 6
     QSettings settings(application->translationsPath() + "/locale.ini", QSettings::IniFormat);
-    settings.setIniCodec("UTF8");
 
     settings.beginGroup("languages");
     QStringList languages = settings.allKeys();

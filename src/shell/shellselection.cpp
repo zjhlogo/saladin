@@ -493,7 +493,7 @@ static Qt::MouseButtons keyStateToMouseButtons(DWORD keyState)
 {
     Qt::MouseButtons result;
     if (keyState & MK_LBUTTON) result |= Qt::LeftButton;
-    if (keyState & MK_MBUTTON) result |= Qt::MidButton;
+    if (keyState & MK_MBUTTON) result |= Qt::MiddleButton;
     if (keyState & MK_RBUTTON) result |= Qt::RightButton;
     if (keyState & MK_XBUTTON1) result |= Qt::XButton1;
     if (keyState & MK_XBUTTON2) result |= Qt::XButton2;

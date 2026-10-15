@@ -108,7 +108,6 @@ void ToolStrip::beginRow()
 {
     m_rowLayout = new QHBoxLayout();
     m_rowLayout->setAlignment(Qt::AlignTop);
-    m_rowLayout->setMargin(0);
     m_rowLayout->setSpacing(0);
     m_rowLayout->setContentsMargins(0, 4, 0, 0);
 
@@ -201,18 +200,13 @@ void ToolStrip::childEvent(QChildEvent* e)
 
 static void drawSeparator(const QRect& rect, QPainter* painter, QWidget* widget)
 {
-#if (QT_VERSION >= 0x040500)
-    QStyleOptionFrameV3 option;
-    option.init(widget);
+    QStyleOptionFrame option;
+    option.initFrom(widget);
     option.frameShape = QFrame::VLine;
     option.state |= QStyle::State_Sunken;
     option.rect = rect;
     option.lineWidth = 1;
     widget->style()->drawControl(QStyle::CE_ShapedFrame, &option, painter, widget);
-#else
-    int x = (rect.left() + rect.right()) / 2;
-    qDrawShadeLine(painter, QPoint(x, rect.top()), QPoint(x, rect.bottom()), widget->palette(), true, 1, 0);
-#endif
 }
 
 void ToolStrip::paintEvent(QPaintEvent* /*e*/)
@@ -238,8 +232,8 @@ void ToolStrip::paintEvent(QPaintEvent* /*e*/)
 
     if (!m_layout->isSimpleLayout())
     {
-        QStyleOptionFrameV3 option;
-        option.init(this);
+        QStyleOptionFrame option;
+        option.initFrom(this);
         option.frameShape = QFrame::HLine;
         option.state |= QStyle::State_Sunken;
         option.lineWidth = 1;
@@ -648,7 +642,7 @@ void ToolStripSectionLayout::setCollapsed(bool collapsed)
 
 Qt::Orientations ToolStripSectionLayout::expandingDirections() const
 {
-    return 0;
+    return Qt::Orientations();
 }
 
 QSize ToolStripSectionLayout::sizeHint() const

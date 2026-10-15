@@ -29,7 +29,7 @@ static QPixmap loadIcon(LPCWSTR pattern, int attributes)
 
     if (list != 0)
     {
-        icon = QtWin::fromHICON(info.hIcon);
+        icon = QPixmap::fromImage(QImage::fromHICON(info.hIcon));
         DestroyIcon(info.hIcon);
     }
 

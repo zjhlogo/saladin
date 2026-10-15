@@ -52,9 +52,13 @@ svn export --quiet --force .. "%BUILDDIR%"
 
 pushd "%BUILDDIR%"
 
-call configure.bat
+cmake -S . -B build -G "NMake Makefiles" ^
+      -DCMAKE_BUILD_TYPE=Release ^
+      -DCMAKE_PREFIX_PATH=%QTDIR%
 
-nmake release
+if errorlevel 1 goto cleanup
+
+cmake --build build
 
 if errorlevel 1 goto cleanup
 

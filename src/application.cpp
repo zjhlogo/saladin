@@ -98,8 +98,8 @@ void Application::about()
     {
         QString message;
         message += "<h3>" + tr("Saladin %1").arg(version()) + "</h3>";
-        message += "<p>" + trUtf8("Copyright &copy; 2011-2017 Michał Męciński") + " (<a href=\"https://twitter.com/MichalMecinski\">@MichalMecinski</a>)<br>";
-        message += trUtf8("Icons copyright &copy; 2017 Łukasz Grabowski") + " (<a href=\"https://twitter.com/LukaszGx\">@LukaszGx</a>)</p>";
+        message += "<p>" + tr("Copyright &copy; 2011-2017 Michał Męciński") + " (<a href=\"https://twitter.com/MichalMecinski\">@MichalMecinski</a>)<br>";
+        message += tr("Icons copyright &copy; 2017 Łukasz Grabowski") + " (<a href=\"https://twitter.com/LukaszGx\">@LukaszGx</a>)</p>";
 
         QString notesMessage;
         notesMessage += "<h4>" + tr("Release Notes") + "</h4>";

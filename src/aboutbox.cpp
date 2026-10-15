@@ -22,6 +22,8 @@
 #include "windark.h"
 #include "xmlui/gradientwidget.h"
 
+#include <QScreen>
+
 AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent)
     : QDialog(parent)
 {
@@ -35,7 +37,7 @@ AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent
     setWindowTitle(title);
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
     XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
@@ -60,7 +62,7 @@ AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent
     topLayout->addWidget(separator);
 
     QVBoxLayout* mainLayout = new QVBoxLayout();
-    mainLayout->setMargin(9);
+    mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(4);
     topLayout->addLayout(mainLayout);
 
@@ -74,7 +76,7 @@ AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent
     scrollArea->setWidgetResizable(true);
 
     m_sectionsLayout = new QVBoxLayout(m_sectionsWidget);
-    m_sectionsLayout->setMargin(6);
+    m_sectionsLayout->setContentsMargins(6, 6, 6, 6);
     m_sectionsLayout->setSpacing(6);
 
     m_sectionsLayout->addStretch(1);
@@ -191,7 +193,7 @@ AboutBoxToolSection::AboutBoxToolSection()
 
     connect(m_closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    connect(QApplication::desktop(), SIGNAL(workAreaResized(int)), this, SLOT(updatePosition()));
+    if (QScreen* screen = QGuiApplication::primaryScreen()) connect(screen, &QScreen::availableGeometryChanged, this, &AboutBoxToolSection::updatePosition);
 }
 
 AboutBoxToolSection::~AboutBoxToolSection()
@@ -219,13 +221,15 @@ bool AboutBoxToolSection::event(QEvent* e)
 
 void AboutBoxToolSection::updatePosition()
 {
-    QDesktopWidget* desktop = QApplication::desktop();
-    QRect screen = desktop->screenGeometry();
-    QRect available = desktop->availableGeometry();
+    QScreen* screen = QGuiApplication::primaryScreen();
+    if (!screen) return;
 
-    if (available.left() > screen.left())
+    QRect geometry = screen->geometry();
+    QRect available = screen->availableGeometry();
+
+    if (available.left() > geometry.left())
         move(available.left(), available.bottom() - height() + 1);
-    else if (available.top() > screen.top())
+    else if (available.top() > geometry.top())
         move(available.right() - width() + 1, available.top());
     else
         move(available.right() - width() + 1, available.bottom() - height() + 1);

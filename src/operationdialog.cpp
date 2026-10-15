@@ -31,7 +31,7 @@ OperationDialog::OperationDialog(Flags flags, QWidget* parent)
     }
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
     XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
@@ -52,7 +52,7 @@ OperationDialog::OperationDialog(Flags flags, QWidget* parent)
     topLayout->addWidget(separator);
 
     m_mainLayout = new QVBoxLayout();
-    m_mainLayout->setMargin(9);
+    m_mainLayout->setContentsMargins(9, 9, 9, 9);
     m_mainLayout->setSpacing(6);
     topLayout->addLayout(m_mainLayout);
 
@@ -182,7 +182,7 @@ void OperationDialog::setName(const QString& text)
         if (!m_nameEdit->isReadOnly())
         {
             int pos = text.lastIndexOf('.');
-            if (pos <= 0 || text.contains(QRegExp("[:\\\\/]"))) pos = text.length();
+            if (pos <= 0 || text.contains(QRegularExpression("[:\\\\/]"))) pos = text.length();
             m_nameEdit->setSelection(0, pos);
         }
     }
@@ -332,7 +332,7 @@ void OperationDialog::expandTo(const QSize& newSize)
         QRect rect(QPoint(0, 0), newSize + frameGeometry().size() - size());
         rect.moveCenter(frameGeometry().center());
 
-        QRect screen = QApplication::desktop()->availableGeometry(this);
+        QRect screen = this->screen()->availableGeometry();
 
         if (rect.bottom() > screen.bottom()) rect.moveBottom(screen.bottom());
         if (rect.top() < screen.top()) rect.moveTop(screen.top());

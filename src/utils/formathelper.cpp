@@ -18,6 +18,7 @@
 
 #include "formathelper.h"
 #include "shell/streamdevice.h"
+#include "utils/textencoding.h"
 
 bool FormatHelper::checkImage(StreamDevice& file, bool force, QByteArray& format)
 {
@@ -85,14 +86,7 @@ static bool checkUtf16(const QByteArray& header, QByteArray& format)
 
 static bool checkUtf8(const QByteArray& header)
 {
-    QTextCodec* codec = QTextCodec::codecForName("UTF-8");
-
-    QTextCodec::ConverterState state;
-    codec->toUnicode(header.data(), header.length(), &state);
-
-    if (state.invalidChars == 0) return true;
-
-    return false;
+    return TextEncoding::isValidUtf8(header);
 }
 
 static bool checkBinary(const QByteArray& header)
@@ -111,10 +105,10 @@ bool FormatHelper::checkText(QIODevice& file, bool force, QByteArray& format)
     QByteArray header = file.peek(512);
     if (header.isEmpty()) return false;
 
-    QTextCodec* codec = QTextCodec::codecForUtfText(header, nullptr);
-    if (codec != nullptr)
+    QByteArray bomFormat;
+    if (TextEncoding::detectBom(header, bomFormat))
     {
-        format = codec->name();
+        format = bomFormat;
         return true;
     }
 
@@ -131,6 +125,6 @@ bool FormatHelper::checkText(QIODevice& file, bool force, QByteArray& format)
         return true;
     }
 
-    format = QTextCodec::codecForLocale()->name();
+    format = TextEncoding::systemName();
     return true;
 }

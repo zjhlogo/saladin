@@ -41,7 +41,7 @@ FindBar::FindBar(QWidget* parent)
     setWindowTitle(tr("Find"));
 
     QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
     layout->setSpacing(5);
 
     m_closeButton = new QToolButton(this);
@@ -154,7 +154,7 @@ void FindBar::setFlags(QTextDocument::FindFlags flags)
 
 QTextDocument::FindFlags FindBar::flags() const
 {
-    QTextDocument::FindFlags flags = 0;
+    QTextDocument::FindFlags flags;
     if (m_caseCheckBox->isChecked()) flags |= QTextDocument::FindCaseSensitively;
     return flags;
 }

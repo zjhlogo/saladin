@@ -25,6 +25,8 @@
 #include "xmlui/gradientwidget.h"
 #include "xmlui/toolstrip.h"
 
+#include <algorithm>
+
 BookmarksDialog::BookmarksDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -53,7 +55,7 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
     builder->addClient(this);
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
     XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
@@ -78,7 +80,7 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
     topLayout->addWidget(separator);
 
     QVBoxLayout* mainLayout = new QVBoxLayout();
-    mainLayout->setMargin(9);
+    mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(4);
     topLayout->addLayout(mainLayout);
 
@@ -122,7 +124,7 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
     resize(700, 500);
 
     m_bookmarks = application->bookmarks();
-    qSort(m_bookmarks);
+    std::sort(m_bookmarks.begin(), m_bookmarks.end());
 
     populateList();
 
@@ -159,7 +161,7 @@ void BookmarksDialog::editRename()
         if (dialog.exec() != QDialog::Accepted) return;
 
         m_bookmarks[index].setName(dialog.name());
-        qSort(m_bookmarks);
+        std::sort(m_bookmarks.begin(), m_bookmarks.end());
 
         populateList();
     }
@@ -173,7 +175,7 @@ void BookmarksDialog::editDelete()
     {
         int index = selection.first().row();
 
-        OperationDialog dialog(0, this);
+        OperationDialog dialog(OperationDialog::Flags(), this);
 
         dialog.setWindowTitle(tr("Delete Bookmark"));
         dialog.setPromptPixmap(IconLoader::pixmap("delete", 22));

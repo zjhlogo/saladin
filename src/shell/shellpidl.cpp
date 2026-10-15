@@ -93,5 +93,5 @@ QDataStream& operator>>(QDataStream& stream, ShellPidl& pidl)
 
 void ShellPidl::registerMetaType()
 {
-    qRegisterMetaTypeStreamOperators<ShellPidl>("ShellPidl");
+    qRegisterMetaType<ShellPidl>("ShellPidl");
 }

@@ -221,7 +221,7 @@ void ViewerWindow::initializeGeometry()
         if (settings->value("ViewerWindowOffset").toBool())
         {
             QPoint position = pos() + QPoint(40, 40);
-            QRect available = QApplication::desktop()->availableGeometry(this);
+            QRect available = screen()->availableGeometry();
             QRect frame = frameGeometry();
             if (position.x() + frame.width() > available.right()) position.rx() = available.left();
             if (position.y() + frame.height() > available.bottom() - 20) position.ry() = available.top();
@@ -230,7 +230,7 @@ void ViewerWindow::initializeGeometry()
     }
     else
     {
-        QRect available = QApplication::desktop()->availableGeometry(this);
+        QRect available = screen()->availableGeometry();
         resize(available.width() * 4 / 5, available.height() * 4 / 5);
         setWindowState(Qt::WindowMaximized);
     }

@@ -18,6 +18,7 @@
 
 #include "searchhelper.h"
 #include "utils/formathelper.h"
+#include "utils/textencoding.h"
 
 SearchHelper::SearchHelper(const QString& pattern, Qt::CaseSensitivity cs)
     : m_matcher(pattern, cs)
@@ -66,17 +67,18 @@ void SearchHelper::run()
 
                 if (FormatHelper::checkText(file, false, format))
                 {
-                    QTextStream stream(&file);
-                    stream.setAutoDetectUnicode(false);
-                    stream.setCodec(format);
+                    TextEncoding decoder(format);
+
+                    char buffer[16 * 1024];
 
                     QString remainder;
 
-                    while (!stream.atEnd() && !m_aborted && !found)
+                    while (!m_aborted && !found)
                     {
-                        QString block = stream.read(16 * 1024);
+                        qint64 read = file.read(buffer, sizeof(buffer));
+                        if (read <= 0) break;
 
-                        block = remainder + block;
+                        QString block = remainder + decoder.decode(QByteArrayView(buffer, read));
 
                         if (m_matcher.indexIn(block) >= 0) found = true;
 

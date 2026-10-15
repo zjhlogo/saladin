@@ -21,6 +21,8 @@
 static const wchar_t ChangeNotifyWatcher_Window[] = L"ChangeNotifyWatcher_Window";
 static const wchar_t ChangeNotifyWatcher_Message[] = L"ChangeNotifyWatcher_Message";
 
+LRESULT CALLBACK ChangeNotifyWatcherProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam);
+
 class ChangeNotifyWatcherGlobal
 {
 public:
@@ -100,7 +102,7 @@ bool ChangeNotifyWatcher::isValid() const
     return m_registerId != 0;
 }
 
-static LRESULT CALLBACK ChangeNotifyWatcherProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK ChangeNotifyWatcherProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 {
     ChangeNotifyWatcherGlobal* g = changeNotifyWatcherGlobal();
 

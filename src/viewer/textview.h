@@ -89,8 +89,6 @@ private:
 
     QString m_encoding;
 
-    QSignalMapper* m_encodingMapper;
-
     FindBar* m_findBar;
 
     bool m_isFindEnabled;

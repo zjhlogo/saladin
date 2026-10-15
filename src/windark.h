@@ -21,7 +21,9 @@
 #ifdef Q_OS_WIN
 #    include <Windows.h>
 #    include <dwmapi.h>
-#    pragma comment(lib, "Dwmapi.lib")
+#    ifdef _MSC_VER
+#        pragma comment(lib, "Dwmapi.lib")
+#    endif
 #endif
 
 namespace winDark

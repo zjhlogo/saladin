@@ -41,7 +41,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     }
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
     XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
@@ -62,7 +62,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     topLayout->addWidget(separator);
 
     QVBoxLayout* mainLayout = new QVBoxLayout();
-    mainLayout->setMargin(9);
+    mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(6);
     topLayout->addLayout(mainLayout);
 
@@ -154,7 +154,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     setAction("gotoFile", action);
 
     action = new QAction(IconLoader::icon("copy-names"), tr("Copy File Names"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_C));
     connect(action, SIGNAL(triggered()), this, SLOT(copyNames()));
     setAction("copyNames", action);
 
@@ -381,7 +381,7 @@ void SearchDialog::contextMenuRequested(const QPoint& pos)
         m_view->setCurrentIndex(index);
 
         ShellSelection selection(m_model->folderAt(index), items, this);
-        selection.showContextMenu(m_view->viewport()->mapToGlobal(pos), 0);
+        selection.showContextMenu(m_view->viewport()->mapToGlobal(pos), ShellSelection::Flags());
     }
 }
 

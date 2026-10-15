@@ -20,6 +20,8 @@
 #include "searchhelper.h"
 #include "utils/iconloader.h"
 
+#include <algorithm>
+
 SearchItemModel::SearchItemModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
@@ -56,10 +58,10 @@ void SearchItemModel::startSearch(ShellFolder* folder, const QString& pattern, c
 
     clear();
 
-    QStringList parts = pattern.split(QLatin1Char(';'), QString::SkipEmptyParts);
+    QStringList parts = pattern.split(QLatin1Char(';'), Qt::SkipEmptyParts);
 
     foreach (QString part, parts)
-        m_filters.append(QRegExp(part, Qt::CaseInsensitive, QRegExp::Wildcard));
+        m_filters.append(QRegularExpression(QRegularExpression::wildcardToRegularExpression(part), QRegularExpression::CaseInsensitiveOption));
 
     m_text = text;
     m_cs = cs;
@@ -118,7 +120,7 @@ bool operator<(const SearchItemModel::PendingFolder& folder1, const SearchItemMo
 
 bool SearchItemModel::scanFolder(const QString& prefix, ShellFolder* folder)
 {
-    QList<ShellItem> items = folder->listItems(0);
+    QList<ShellItem> items = folder->listItems(ShellFolder::Flags());
 
     QList<PendingFolder> pendingFolders;
     QList<FoundItem> foundItems;
@@ -134,9 +136,9 @@ bool SearchItemModel::scanFolder(const QString& prefix, ShellFolder* folder)
         }
         else
         {
-            foreach (QRegExp filter, m_filters)
+            foreach (QRegularExpression filter, m_filters)
             {
-                if (filter.exactMatch(item.name()))
+                if (filter.match(item.name()).hasMatch())
                 {
                     FoundItem foundItem;
                     foundItem.m_item = item;
@@ -151,7 +153,7 @@ bool SearchItemModel::scanFolder(const QString& prefix, ShellFolder* folder)
 
     if (!pendingFolders.isEmpty())
     {
-        qSort(pendingFolders);
+        std::sort(pendingFolders.begin(), pendingFolders.end());
         m_pendingFolders = pendingFolders + m_pendingFolders;
     }
 
@@ -375,7 +377,7 @@ QVariant SearchItemModel::data(const QModelIndex& index, int role /*= Qt::Displa
 
 Qt::ItemFlags SearchItemModel::flags(const QModelIndex& index) const
 {
-    if (!index.isValid()) return 0;
+    if (!index.isValid()) return Qt::ItemFlags();
 
     return Qt::ItemIsEnabled;
 }

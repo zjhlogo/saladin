@@ -26,7 +26,7 @@ GoToDialog::GoToDialog(int lines, int current, QWidget* parent)
     setWindowTitle(tr("Go To Line"));
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
     XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
@@ -47,7 +47,7 @@ GoToDialog::GoToDialog(int lines, int current, QWidget* parent)
     topLayout->addWidget(separator);
 
     QBoxLayout* mainLayout = new QVBoxLayout();
-    mainLayout->setMargin(9);
+    mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(6);
     topLayout->addLayout(mainLayout);
 

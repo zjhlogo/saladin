@@ -76,7 +76,7 @@ public: // overrides
         case ChildItem:
         {
             QStyleOptionViewItem childOption = option;
-            int indent = option.fontMetrics.width("    ");
+            int indent = option.fontMetrics.horizontalAdvance(QLatin1String("    "));
             childOption.rect.adjust(indent, 0, 0, 0);
             childOption.textElideMode = Qt::ElideNone;
             m_delegate->paint(painter, childOption, index);
@@ -116,7 +116,7 @@ SeparatorComboBox::~SeparatorComboBox()
 
 void SeparatorComboBox::addSeparator()
 {
-    QStandardItem* item = new QStandardItem(QString::null);
+    QStandardItem* item = new QStandardItem(QString());
     item->setFlags(item->flags() & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
     item->setData(SeparatorItemDelegate::SeparatorItem, SeparatorItemDelegate::ItemTypeRole);
 

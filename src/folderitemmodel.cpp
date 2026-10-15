@@ -19,6 +19,8 @@
 #include "folderitemmodel.h"
 #include "utils/iconloader.h"
 
+#include <algorithm>
+
 class ShellItemLessThan
 {
 public:
@@ -56,11 +58,11 @@ void FolderItemModel::setFolder(ShellFolder* folder)
     delete m_folder;
     m_folder = folder;
 
-    ShellFolder::Flags flags = 0;
+    ShellFolder::Flags flags;
     if (m_includeHidden) flags |= ShellFolder::IncludeHidden;
 
     m_items = m_folder->listItems(flags);
-    qSort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
+    std::sort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
 
     connect(m_folder, SIGNAL(itemChanged(const ItemChange&)), this, SLOT(itemChanged(const ItemChange&)));
     connect(m_folder, SIGNAL(folderUpdated()), this, SLOT(folderUpdated()));
@@ -89,11 +91,11 @@ void FolderItemModel::refresh()
     QModelIndexList oldIndexes = persistentIndexList();
     QStringList names = storeIndexes(oldIndexes);
 
-    ShellFolder::Flags flags = 0;
+    ShellFolder::Flags flags;
     if (m_includeHidden) flags |= ShellFolder::IncludeHidden;
 
     m_items = m_folder->listItems(flags);
-    qSort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
+    std::sort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
 
     QModelIndexList newIndexes = restoreIndexes(names, oldIndexes);
     changePersistentIndexList(oldIndexes, newIndexes);
@@ -227,7 +229,7 @@ void FolderItemModel::applyChanges()
             }
         }
 
-        qSort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
+        std::sort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
 
         QModelIndexList newIndexes = restoreIndexes(names, oldIndexes);
         changePersistentIndexList(oldIndexes, newIndexes);
@@ -657,7 +659,7 @@ bool FolderItemModel::setData(const QModelIndex& index, const QVariant& value, i
 
 Qt::ItemFlags FolderItemModel::flags(const QModelIndex& index) const
 {
-    if (!index.isValid()) return 0;
+    if (!index.isValid()) return Qt::ItemFlags();
 
     Qt::ItemFlags result = Qt::ItemIsEnabled;
 
@@ -687,7 +689,7 @@ void FolderItemModel::resort()
     QModelIndexList oldIndexes = persistentIndexList();
     QStringList names = storeIndexes(oldIndexes);
 
-    qSort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
+    std::sort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
 
     QModelIndexList newIndexes = restoreIndexes(names, oldIndexes);
     changePersistentIndexList(oldIndexes, newIndexes);

@@ -28,7 +28,7 @@ QPixmap IconLoader::pixmap(const QString& name, int size)
     QString key = QString("pixmap:%1:%2").arg(name).arg(size);
 
     QPixmap pixmap;
-    if (QPixmapCache::find(key, pixmap)) return pixmap;
+    if (QPixmapCache::find(key, &pixmap)) return pixmap;
 
     QString path = QString("%1/%2-%3.png").arg(application->iconsPath(), name).arg(size);
 
@@ -44,7 +44,7 @@ QPixmap IconLoader::overlayedPixmap(const QString& name, const QString& overlay,
     QString key = QString("overlayed:%1:%2:%3").arg(name).arg(overlay).arg(size);
 
     QPixmap resultPixmap;
-    if (QPixmapCache::find(key, resultPixmap)) return resultPixmap;
+    if (QPixmapCache::find(key, &resultPixmap)) return resultPixmap;
 
     QPixmap basePixmap = pixmap(name, size);
     QPixmap overlayPixmap = pixmap(overlay, size);
@@ -66,7 +66,7 @@ QPixmap IconLoader::overlayedPixmap(const QString& name, const QString& overlay1
     QString key = QString("overlayed2:%1:%2:%3:%4").arg(name).arg(overlay1).arg(overlay2).arg(size);
 
     QPixmap resultPixmap;
-    if (QPixmapCache::find(key, resultPixmap)) return resultPixmap;
+    if (QPixmapCache::find(key, &resultPixmap)) return resultPixmap;
 
     QPixmap basePixmap = pixmap(name, size);
     QPixmap overlay1Pixmap = pixmap(overlay1, size);

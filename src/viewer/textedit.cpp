@@ -81,7 +81,7 @@ int TextEdit::lineNumberAreaWidth()
         digits++;
     }
 
-    return fontMetrics().width(QLatin1Char('9')) * digits + 4;
+    return fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + 4;
 }
 
 void TextEdit::updateLineNumberAreaWidth()

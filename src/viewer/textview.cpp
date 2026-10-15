@@ -99,7 +99,7 @@ TextView::TextView(QObject* parent, QWidget* parentWidget)
 
     QWidget* main = new QWidget(parentWidget);
     QVBoxLayout* mainLayout = new QVBoxLayout(main);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
 
     QVBoxLayout* editLayout = new QVBoxLayout();
@@ -114,7 +114,7 @@ TextView::TextView(QObject* parent, QWidget* parentWidget)
     m_edit->setFont(font);
 
     QFontMetrics metrics(font);
-    m_edit->setTabStopWidth(4 * metrics.width(' '));
+    m_edit->setTabStopDistance(4 * metrics.horizontalAdvance(QLatin1Char(' ')));
 
     QPalette palette = m_edit->palette();
     palette.setBrush(QPalette::Inactive, QPalette::Highlight, palette.brush(QPalette::Active, QPalette::Highlight));
@@ -147,9 +147,6 @@ TextView::TextView(QObject* parent, QWidget* parentWidget)
     setStatus(tr("Text"));
 
     main->installEventFilter(this);
-
-    m_encodingMapper = new QSignalMapper(this);
-    connect(m_encodingMapper, SIGNAL(mapped(const QString&)), this, SLOT(setEncoding(const QString&)));
 
     encodingAction->setMenu(createEncodingMenu());
 
@@ -241,8 +238,9 @@ QMenu* TextView::createEncodingMenu()
 
         if (stdEncodings[i].m_key != 0) action->setShortcut(stdEncodings[i].m_key);
 
-        connect(action, SIGNAL(triggered()), m_encodingMapper, SLOT(map()));
-        m_encodingMapper->setMapping(action, stdEncodings[i].m_format);
+        const char* formatName = stdEncodings[i].m_format;
+        action->setData(QString::fromLatin1(formatName));
+        connect(action, &QAction::triggered, this, [this, formatName]() { setEncoding(QString::fromLatin1(formatName)); });
 
         menu->addAction(action);
     }
@@ -298,8 +296,9 @@ QMenu* TextView::createEncodingMenu()
         QAction* action = new QAction(text, this);
         action->setCheckable(true);
 
-        connect(action, SIGNAL(triggered()), m_encodingMapper, SLOT(map()));
-        m_encodingMapper->setMapping(action, extEncodings[i].m_format);
+        const char* formatName = extEncodings[i].m_format;
+        action->setData(QString::fromLatin1(formatName));
+        connect(action, &QAction::triggered, this, [this, formatName]() { setEncoding(QString::fromLatin1(formatName)); });
 
         int index = 0;
         while (index < names.count() && QString::localeAwareCompare(name, names.at(index)) >= 0)
@@ -332,13 +331,17 @@ void TextView::load()
     m_length = 0;
     m_currentLine = 0;
 
-    QObject* current = m_encodingMapper->mapping(QString(format()));
+    QString currentFormat = QString::fromLatin1(format());
 
     QList<QAction*> actions = action("selectEncoding")->menu()->actions();
     foreach (QAction* action, actions)
     {
-        if (action->isCheckable()) action->setChecked(action == current);
-        if (action == current) m_encoding = action->text();
+        if (!action->isCheckable()) continue;
+
+        bool current = action->data().toString() == currentFormat;
+
+        action->setChecked(current);
+        if (current) m_encoding = action->text();
     }
 
     m_loader = new TextLoader(pidl(), format());

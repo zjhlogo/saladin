@@ -56,7 +56,7 @@ GuideDialog::GuideDialog(QWidget* parent)
     builder->addClient(this);
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
     XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
@@ -80,7 +80,7 @@ GuideDialog::GuideDialog(QWidget* parent)
     topLayout->addWidget(separator);
 
     QVBoxLayout* mainLayout = new QVBoxLayout();
-    mainLayout->setMargin(9);
+    mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(4);
     topLayout->addLayout(mainLayout);
 

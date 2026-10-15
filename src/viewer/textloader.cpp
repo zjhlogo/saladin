@@ -18,6 +18,7 @@
 
 #include "textloader.h"
 #include "shell/streamdevice.h"
+#include "utils/textencoding.h"
 
 TextLoader::TextLoader(const ShellPidl& pidl, const QByteArray& format)
     : m_pidl(pidl)
@@ -39,9 +40,9 @@ void TextLoader::run()
 
     if (file.open(QIODevice::ReadOnly))
     {
-        QTextStream stream(&file);
-        stream.setAutoDetectUnicode(false);
-        stream.setCodec(m_format);
+        TextEncoding decoder(m_format);
+
+        char buffer[16 * 1024];
 
         qint64 length = 0;
 
@@ -49,7 +50,10 @@ void TextLoader::run()
 
         while (!m_aborted && !m_atEnd)
         {
-            QString block = stream.read(16 * 1024);
+            qint64 read = file.read(buffer, sizeof(buffer));
+            if (read < 0) read = 0;
+
+            QString block = decoder.decode(QByteArrayView(buffer, read));
 
             if (cr && !block.isEmpty() && block.at(0) == QLatin1Char('\n')) block.remove(0, 1);
 
@@ -64,9 +68,12 @@ void TextLoader::run()
 
             if (!block.isEmpty()) m_queue.enqueue(block);
 
-            m_estimatedLength = file.size() * length / file.pos();
+            if (file.pos() > 0)
+                m_estimatedLength = file.size() * length / file.pos();
+            else
+                m_estimatedLength = 0;
 
-            if (stream.atEnd()) m_atEnd = true;
+            if (read < (qint64)sizeof(buffer)) m_atEnd = true;
 
             m_mutex.unlock();
 

@@ -390,7 +390,7 @@ STDMETHODIMP_(ULONG) WindowDropTarget::Release()
 
 static Qt::DropActions effectToDropActions(DWORD effect)
 {
-    Qt::DropActions actions = 0;
+    Qt::DropActions actions;
     if (effect & DROPEFFECT_LINK) actions |= Qt::LinkAction;
     if (effect & DROPEFFECT_COPY) actions |= Qt::CopyAction;
     if (effect & DROPEFFECT_MOVE) actions |= Qt::MoveAction;
@@ -407,7 +407,7 @@ static DWORD dropActionToEffect(Qt::DropAction action)
 
 static Qt::MouseButtons keyStateToMouseButtons(DWORD keyState)
 {
-    Qt::MouseButtons buttons = 0;
+    Qt::MouseButtons buttons;
     if (keyState & MK_LBUTTON) buttons |= Qt::LeftButton;
     if (keyState & MK_RBUTTON) buttons |= Qt::RightButton;
     if (keyState & MK_MBUTTON) buttons |= Qt::MiddleButton;
@@ -418,7 +418,7 @@ static Qt::MouseButtons keyStateToMouseButtons(DWORD keyState)
 
 static Qt::KeyboardModifiers keyStateToKeyboardModifiers(DWORD keyState)
 {
-    Qt::KeyboardModifiers modifiers = 0;
+    Qt::KeyboardModifiers modifiers;
     if (keyState & MK_SHIFT) modifiers |= Qt::ShiftModifier;
     if (keyState & MK_CONTROL) modifiers |= Qt::ControlModifier;
     if (keyState & MK_ALT) modifiers |= Qt::AltModifier;

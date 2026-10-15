@@ -23,6 +23,8 @@
 #include "shell/shellfolder.h"
 #include "utils/localsettings.h"
 
+#include <algorithm>
+
 class ShellDriveLessThan
 {
 public:
@@ -45,7 +47,7 @@ DriveStripManager::DriveStripManager(QWidget* parent)
     m_computer = new ShellComputer(parent);
 
     m_drives = m_computer->listDrives();
-    qSort(m_drives.begin(), m_drives.end(), ShellDriveLessThan());
+    std::sort(m_drives.begin(), m_drives.end(), ShellDriveLessThan());
 
     connect(m_computer, SIGNAL(driveChanged(const ShellDrive&)), this, SLOT(driveChanged(const ShellDrive&)));
     connect(m_computer, SIGNAL(computerUpdated()), this, SLOT(refresh()));
@@ -101,14 +103,13 @@ ShellDrive DriveStripManager::driveFromFolder(ShellFolder* folder) const
     return ShellDrive();
 }
 
-void DriveStripManager::registerToolStrip(XmlUi::ToolStrip* strip, QObject* receiver, const char* member)
+void DriveStripManager::registerToolStrip(XmlUi::ToolStrip* strip, QObject* receiver, const std::function<void(int)>& driveSelected)
 {
     StripInfo info;
 
     info.m_strip = strip;
-    info.m_mapper = new QSignalMapper(this);
-
-    connect(info.m_mapper, SIGNAL(mapped(int)), receiver, member);
+    info.m_receiver = receiver;
+    info.m_driveSelected = driveSelected;
 
     populateToolStrip(info);
 
@@ -136,8 +137,8 @@ void DriveStripManager::populateToolStrip(StripInfo& info)
         action->setToolTip(drive.name());
         action->setIcon(drive.icon());
 
-        info.m_mapper->setMapping(action, i);
-        connect(action, SIGNAL(triggered()), info.m_mapper, SLOT(map()));
+        std::function<void(int)> handler = info.m_driveSelected;
+        connect(action, &QAction::triggered, info.m_receiver, [handler, i]() { handler(i); });
 
         info.m_strip->addToolAction(action);
 
@@ -171,7 +172,7 @@ void DriveStripManager::driveChanged(const ShellDrive& drive)
 void DriveStripManager::refresh()
 {
     m_drives = m_computer->listDrives();
-    qSort(m_drives.begin(), m_drives.end(), ShellDriveLessThan());
+    std::sort(m_drives.begin(), m_drives.end(), ShellDriveLessThan());
 
     for (int i = 0; i < m_strips.count(); i++)
         populateToolStrip(m_strips[i]);

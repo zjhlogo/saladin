@@ -72,7 +72,7 @@ QPixmap ShellBasePrivate::extractIcon(LPITEMIDLIST pidl)
 
     if (status)
     {
-        result = QtWin::fromHICON(info.hIcon);
+        result = QPixmap::fromImage(QImage::fromHICON(info.hIcon));
         DestroyIcon(info.hIcon);
     }
 

@@ -34,13 +34,15 @@
 #include "utils/localsettings.h"
 #include "xmlui/builder.h"
 
+#include <algorithm>
+
 PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
     : QWidget(parent)
     , m_location(location)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     layout->addSpacing(3);
 
@@ -77,7 +79,7 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
     // editLayout->addSpacing(3);
 
     QHBoxLayout* innerLayout = new QHBoxLayout(editFrame);
-    innerLayout->setMargin(0);
+    innerLayout->setContentsMargins(0, 0, 0, 0);
 
     m_edit = new PathLineEditor(editFrame);
     m_edit->setFocusPolicy(Qt::ClickFocus);
@@ -197,7 +199,7 @@ void PaneWidget::saveSettings()
 
 void PaneWidget::populateDrives()
 {
-    mainWindow->driveStripManager()->registerToolStrip(m_strip, this, SLOT(driveSelected(int)));
+    mainWindow->driveStripManager()->registerToolStrip(m_strip, this, [this](int index) { driveSelected(index); });
 }
 
 bool PaneWidget::eventFilter(QObject* watched, QEvent* e)
@@ -1040,20 +1042,20 @@ void PaneWidget::invertSelection()
 
 void PaneWidget::setPatternSelection(const QString& pattern, bool selected)
 {
-    QStringList parts = pattern.split(QLatin1Char(';'), QString::SkipEmptyParts);
+    QStringList parts = pattern.split(QLatin1Char(';'), Qt::SkipEmptyParts);
 
-    QList<QRegExp> filters;
+    QList<QRegularExpression> filters;
     foreach (QString part, parts)
-        filters.append(QRegExp(part, Qt::CaseInsensitive, QRegExp::Wildcard));
+        filters.append(QRegularExpression(QRegularExpression::wildcardToRegularExpression(part), QRegularExpression::CaseInsensitiveOption));
 
     for (int i = 0; i < m_model->rowCount(); i++)
     {
         QModelIndex index = m_model->index(i, 0);
         if (!m_model->isParentFolder(index))
         {
-            foreach (QRegExp filter, filters)
+            foreach (QRegularExpression filter, filters)
             {
-                if (filter.exactMatch(m_model->itemAt(index).name()))
+                if (filter.match(m_model->itemAt(index).name()).hasMatch())
                 {
                     m_model->setItemSelected(index, selected);
                     break;
@@ -1150,7 +1152,7 @@ void PaneWidget::showBookmarks()
     QMenu menu;
 
     QList<Bookmark> bookmarks = application->bookmarks();
-    qSort(bookmarks);
+    std::sort(bookmarks.begin(), bookmarks.end());
 
     QList<QAction*> actions;
     for (int i = 0; i < bookmarks.count(); i++)
@@ -1266,7 +1268,7 @@ void PaneWidget::viewContextMenuRequested(const QPoint& pos)
     {
         m_model->unselectAll();
 
-        m_model->folder()->showContextMenu(m_view->viewport()->mapToGlobal(pos), 0);
+        m_model->folder()->showContextMenu(m_view->viewport()->mapToGlobal(pos), ShellSelection::Flags());
     }
 }
 

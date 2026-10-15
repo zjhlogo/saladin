@@ -27,6 +27,5 @@
 #include <QtWidgets>
 #include <QtNetwork>
 #include <QtXml>
-#include <QtWinExtras>
 
 #endif

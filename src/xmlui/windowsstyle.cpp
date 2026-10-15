@@ -218,7 +218,7 @@ QSize WindowsStyle::sizeFromContents(ContentsType type, const QStyleOption* opti
                 QFont fontBold = menuItem->font;
                 fontBold.setBold(true);
                 QFontMetrics metricsBold(fontBold);
-                space += metricsBold.width(menuItem->text) - metrics.width(menuItem->text);
+                space += metricsBold.horizontalAdvance(menuItem->text) - metrics.horizontalAdvance(menuItem->text);
             }
             return QSize(contentsSize.width() + space, 22);
         }
@@ -304,7 +304,7 @@ void WindowsStyle::drawControl(ControlElement element, const QStyleOption* optio
     case CE_ShapedFrame:
         if (qobject_cast<const ToolStrip*>(widget) || qobject_cast<const QFrame*>(widget))
         {
-            if (const QStyleOptionFrameV3* optionFrame = qstyleoption_cast<const QStyleOptionFrameV3*>(option))
+            if (const QStyleOptionFrame* optionFrame = qstyleoption_cast<const QStyleOptionFrame*>(option))
             {
                 if (optionFrame->frameShape == QFrame::VLine)
                 {

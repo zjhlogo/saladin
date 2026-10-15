@@ -174,7 +174,7 @@ MainWindow::MainWindow()
     setAction("unselectMask", action);
 
     action = new QAction(tr("Unselect All"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_A));
     connect(action, SIGNAL(triggered()), this, SLOT(unselectAll()));
     setAction("unselectAll", action);
 
@@ -285,7 +285,7 @@ MainWindow::MainWindow()
     setAction("openDirectory", action);
 
     action = new QAction(tr("Browse For Folder..."), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_O));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_O));
     connect(action, SIGNAL(triggered()), this, SLOT(browse()));
     setAction("browse", action);
 
@@ -309,7 +309,7 @@ MainWindow::MainWindow()
     setAction("compareFiles", action);
 
     action = new QAction(tr("Compare Directories"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_M));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M));
     connect(action, SIGNAL(triggered()), this, SLOT(compareDirectories()));
     setAction("compareDirectories", action);
 
@@ -319,7 +319,7 @@ MainWindow::MainWindow()
     setAction("search", action);
 
     action = new QAction(tr("Explore"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_E));
     connect(action, SIGNAL(triggered()), this, SLOT(explore()));
     setAction("explore", action);
 
@@ -334,7 +334,7 @@ MainWindow::MainWindow()
     setAction("showBookmarks", action);
 
     action = new QAction(tr("Add Bookmark..."), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_D));
     connect(action, SIGNAL(triggered()), this, SLOT(addBookmark()));
     setAction("addBookmark", action);
 
@@ -438,7 +438,7 @@ void MainWindow::initializeSettings()
     }
     else
     {
-        QRect available = QApplication::desktop()->availableGeometry(this);
+        QRect available = screen()->availableGeometry();
         resize(available.width() * 4 / 5, available.height() * 4 / 5);
         setWindowState(Qt::WindowMaximized);
     }
@@ -1138,7 +1138,7 @@ void MainWindow::transferSelection(ShellSelection* selection, ShellFolder* targe
 
     if (canTransfer)
     {
-        ShellSelection::Flags transferFlags = 0;
+        ShellSelection::Flags transferFlags;
         if (dialog.checkBoxChecked()) transferFlags |= ShellSelection::ForceOverwrite;
 
         QStringList newNames;
@@ -1195,7 +1195,7 @@ void MainWindow::createFolder()
 
 void MainWindow::moveToTrashCan()
 {
-    deleteItems(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), 0);
+    deleteItems(m_sourcePane->getFolder(), m_sourcePane->selectedItems(), ShellSelection::Flags());
 }
 
 void MainWindow::deleteSelected()

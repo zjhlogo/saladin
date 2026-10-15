@@ -134,7 +134,7 @@ static QDateTime systemTimeToQDateTime(const SYSTEMTIME* systemTime)
     QDate date(localTime.wYear, localTime.wMonth, localTime.wDay);
     QTime time(localTime.wHour, localTime.wMinute, localTime.wSecond, localTime.wMilliseconds);
 
-    return QDateTime(date, time, Qt::LocalTime);
+    return QDateTime(date, time);
 }
 
 static QDateTime fileTimeToQDateTime(const FILETIME* fileTime)

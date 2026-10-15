@@ -45,8 +45,7 @@ void BinaryLoader::run()
         for (int i = 0; i < 256; i++)
             input[i] = i;
 
-        QTextCodec* codec = QTextCodec::codecForLocale();
-        QString output = codec->toUnicode(input, 256);
+        QString output = QString::fromLocal8Bit(input, 256);
         QChar* map = output.data();
 
         for (int i = 0; i < 256; i++)

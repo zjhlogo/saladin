@@ -25,6 +25,8 @@
 
 #include <QObject>
 
+#include <functional>
+
 class DriveStripManager : public QObject
 {
     Q_OBJECT
@@ -40,7 +42,7 @@ public:
 
     ShellDrive driveFromFolder(ShellFolder* folder) const;
 
-    void registerToolStrip(XmlUi::ToolStrip* strip, QObject* receiver, const char* member);
+    void registerToolStrip(XmlUi::ToolStrip* strip, QObject* receiver, const std::function<void(int)>& driveSelected);
 
     void showDrivesMenu(XmlUi::ToolStrip* strip);
 
@@ -57,7 +59,8 @@ private:
     struct StripInfo
     {
         XmlUi::ToolStrip* m_strip;
-        QSignalMapper* m_mapper;
+        QObject* m_receiver;
+        std::function<void(int)> m_driveSelected;
         QList<QAction*> m_actions;
     };
 

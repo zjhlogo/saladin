@@ -103,7 +103,7 @@ private:
 
     QList<PendingFolder> m_pendingFolders;
 
-    QList<QRegExp> m_filters;
+    QList<QRegularExpression> m_filters;
 
     QList<int> m_extractQueue;
 

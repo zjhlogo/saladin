@@ -22,7 +22,7 @@ MultiRenameWidget::MultiRenameWidget(QWidget* parent)
     : QWidget(parent)
 {
     QGridLayout* layout = new QGridLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     layout->setColumnMinimumWidth(2, 5);
 
@@ -239,7 +239,7 @@ static QString toTitleCase(const QString& input)
 
     bool start = true;
 
-    for (QChar* data = output.data(); *data != 0; data++)
+    for (QChar* data = output.data(); data->unicode() != 0; data++)
     {
         if (data->isLetter())
         {
@@ -282,15 +282,14 @@ void MultiRenameWidget::transformNames()
     QString search = m_searchEdit->text();
     if (!search.isEmpty())
     {
-        QRegExp regExp;
+        QRegularExpression regExp;
 
         Qt::CaseSensitivity sensitivity = m_caseCheckBox->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
 
         bool isRegExp = m_regExpCheckBox->isChecked();
         if (isRegExp)
         {
-            regExp.setCaseSensitivity(sensitivity);
-            regExp.setPatternSyntax(QRegExp::RegExp2);
+            if (sensitivity == Qt::CaseInsensitive) regExp.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
             regExp.setPattern(search);
         }
 

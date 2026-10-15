@@ -151,7 +151,7 @@ bool ShellFolder::hasParent() const
 
 ShellItem::Attributes ShellFolder::attributes()
 {
-    ShellItem::Attributes result = 0;
+    ShellItem::Attributes result;
 
     ShellItem item;
     ShellFolder* parentFolder = d->createParentFolder(item);
@@ -257,7 +257,7 @@ static QDateTime systemTimeToQDateTime(const SYSTEMTIME* systemTime)
     QDate date(localTime.wYear, localTime.wMonth, localTime.wDay);
     QTime time(localTime.wHour, localTime.wMinute, localTime.wSecond, localTime.wMilliseconds);
 
-    return QDateTime(date, time, Qt::LocalTime);
+    return QDateTime(date, time);
 }
 
 static QDateTime fileTimeToQDateTime(const FILETIME* fileTime)
@@ -278,7 +278,7 @@ static QDateTime variantTimeToQDateTime(double vtime)
 
 static ShellItem::Attributes fileAttributesToAttributes(DWORD fileAttributes)
 {
-    ShellItem::Attributes attributes = 0;
+    ShellItem::Attributes attributes;
 
     if (fileAttributes & FILE_ATTRIBUTE_READONLY) attributes |= ShellItem::ReadOnly;
     if (fileAttributes & FILE_ATTRIBUTE_HIDDEN) attributes |= ShellItem::Hidden;
@@ -296,8 +296,8 @@ void ShellFolderPrivate::readItemProperties(ShellItem& item)
 {
     item.d->m_name = displayName(item.d->m_pidl, SHGDN_INFOLDER);
 
-    ShellItem::Attributes attributes = 0;
-    ShellItem::State state = 0;
+    ShellItem::Attributes attributes;
+    ShellItem::State state;
 
     ULONG shellAttributes = SFGAO_FOLDER | SFGAO_STREAM | SFGAO_FILESYSTEM | SFGAO_CANRENAME;
     HRESULT hr = m_folder->GetAttributesOf(1, (LPCITEMIDLIST*)&item.d->m_pidl, &shellAttributes);
