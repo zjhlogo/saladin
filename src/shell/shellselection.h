@@ -56,7 +56,7 @@ public:
 
 public:
     ShellSelection(ShellFolder* folder, const QList<ShellItem>& items, QWidget* parent);
-    ~ShellSelection();
+    ~ShellSelection() override;
 
 public:
     ShellFolder* folder() const;

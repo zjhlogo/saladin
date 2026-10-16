@@ -1,22 +1,12 @@
-/*********************************************************************
- * \file   PathLineEditor.cpp
- * \brief  
- * 
- * \author zjhlogo
- * \date   02/25/2022
+// \file PathLineEditor.cpp
+// \author zhangjianhua
+// \date 2026/10/16
 
- * *********************************************************************/
 #include "PathLineEditor.h"
 
 PathLineEditor::PathLineEditor(QWidget* parent)
     : QLineEdit(parent)
 {
-    //
-}
-
-PathLineEditor::~PathLineEditor()
-{
-    //
 }
 
 void PathLineEditor::focusInEvent(QFocusEvent* e)

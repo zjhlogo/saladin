@@ -80,7 +80,7 @@ QPixmap IconCache::loadFileIcon(const QString& extension)
 
     QString pattern = "*." + extension;
 
-    QPixmap icon = loadIcon((LPCWSTR)pattern.utf16(), FILE_ATTRIBUTE_NORMAL);
+    QPixmap icon = loadIcon(reinterpret_cast<LPCWSTR>(pattern.utf16()), FILE_ATTRIBUTE_NORMAL);
 
     g->m_fileIcons.insert(extension, icon);
 
