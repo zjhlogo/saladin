@@ -72,6 +72,9 @@ public slots:
 signals:
     void themeChanged();
 
+private slots:
+    void updateColorScheme();
+
 private:
     bool loadTranslation(const QString& name, bool tryQtDir);
 
@@ -98,6 +101,8 @@ private:
     LocalSettings* m_settings;
 
     QString m_theme;
+
+    bool m_darkTheme = false;
 
     QList<Bookmark> m_bookmarks;
 

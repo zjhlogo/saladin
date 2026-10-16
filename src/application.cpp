@@ -60,6 +60,9 @@ Application::Application(int& argc, char** argv)
 
     initializePalette();
 
+    // Follow the system light/dark color scheme while the application is running.
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged, this, &Application::updateColorScheme);
+
     mainWindow = new MainWindow();
 
     QNetworkProxyFactory::setUseSystemConfiguration(true);
@@ -391,44 +394,40 @@ void Application::initializeSettings()
 
 void Application::initializePalette()
 {
-    if (winDark::isDarkTheme())
+    bool dark = winDark::isDarkTheme();
+
+    if (dark == m_darkTheme) return;
+
+    m_darkTheme = dark;
+
+    if (dark)
     {
-        winDark::setDark_qApp();
-
-        // QPalette pal(QColor(26, 26, 26));
-        // pal.setColor(QPalette::Base, Qt::black);
-        // pal.setColor(QPalette::AlternateBase, QColor(26, 26, 26));
-        ////pal.setColor(QPalette::Text, Qt::black);
-        ////pal.setColor(QPalette::ButtonText, Qt::black);
-        ////pal.setColor(QPalette::Highlight, palette().color(QPalette::Highlight));
-        ////pal.setColor(QPalette::Link, QColor(51, 153, 255));
-        // setPalette(pal);
+        setStyle(QStyleFactory::create("Fusion"));
+        setPalette(winDark::darkPalette());
+        setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
     }
+    else
+    {
+        setStyle(new XmlUi::WindowsStyle());
+        setPalette(style()->standardPalette());
+        setStyleSheet(QString());
+    }
+}
 
-    // QString theme = m_settings->value("Theme").toString();
+void Application::updateColorScheme()
+{
+    bool dark = winDark::isDarkTheme();
 
-    // if (theme == QLatin1String("white"))
-    //{
-    //    QPalette pal(Qt::white);
-    //    pal.setColor(QPalette::Window, style()->standardPalette().color(QPalette::Window));
-    //    pal.setColor(QPalette::Highlight, palette().color(QPalette::Highlight));
-    //    setPalette(pal);
-    //}
-    // else if (theme == QLatin1String("dark"))
-    //{
-    //    QPalette pal(QColor(26, 26, 26));
-    //    pal.setColor(QPalette::Base, Qt::black);
-    //    pal.setColor(QPalette::AlternateBase, QColor(26, 26, 26));
-    //    pal.setColor(QPalette::Text, Qt::black);
-    //    pal.setColor(QPalette::ButtonText, Qt::black);
-    //    pal.setColor(QPalette::Highlight, palette().color(QPalette::Highlight));
-    //    pal.setColor(QPalette::Link, QColor(51, 153, 255));
-    //    setPalette(pal);
-    //}
-    // else
-    //{
-    //    setPalette(style()->standardPalette());
-    //}
+    if (dark == m_darkTheme) return;
+
+    // Re-apply the palette, propagate it to all widgets, clear the pixmap cache
+    // and notify the windows so they can reload their theme-dependent resources.
+    updateTheme();
+
+    foreach (QWidget* widget, topLevelWidgets())
+    {
+        if (widget->isWindow()) winDark::setDark_Titlebar(reinterpret_cast<HWND>(widget->winId()), dark);
+    }
 }
 
 QString Application::iconsPath() const

@@ -16,7 +16,6 @@
 #include <QApplication>
 #include <QPalette>
 #include <QSettings>
-#include <QStyleFactory>
 
 #ifdef Q_OS_WIN
 #    include <Windows.h>
@@ -28,8 +27,8 @@
 
 namespace winDark
 {
-    void setDark_qApp();
-    void setDark_Titlebar(HWND hwnd);
+    QPalette darkPalette();
+    void setDark_Titlebar(HWND hwnd, bool dark = true);
     bool isDarkTheme();
 
 #ifdef Q_OS_WIN

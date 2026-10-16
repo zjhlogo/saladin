@@ -7,14 +7,19 @@
  * Warning: this is not a proper solution, and Windows api can change !!
  * Stylesheet based on https://forum.qt.io/post/523388
  *
+ * Dark theme detection now uses QStyleHints::colorScheme (Qt >= 6.5)
+ * with the registry read kept as a fallback; see Application::initializePalette()
+ * for the dark/light theme application and runtime following.
+ *
  **/
 
 #include <winDark.h>
 
 #include <QApplication>
+#include <QGuiApplication>
 #include <QPalette>
 #include <QSettings>
-#include <QStyleFactory>
+#include <QStyleHints>
 
 namespace winDark
 {
@@ -25,6 +30,12 @@ namespace winDark
     bool isDarkTheme()
     {
 #ifdef Q_OS_WIN
+        // Qt >= 6.5 reports the system color scheme and tracks changes at runtime.
+        Qt::ColorScheme scheme = QGuiApplication::styleHints()->colorScheme();
+
+        if (scheme != Qt::ColorScheme::Unknown) return scheme == Qt::ColorScheme::Dark;
+
+        // Fallback for platform themes that don't report a color scheme.
         QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
         if (settings.value("AppsUseLightTheme") == 0)
         {
@@ -35,15 +46,11 @@ namespace winDark
     }
 
     /**
-     * @brief setDark_qApp
-     * @details use this after creating QApplication
-     *          if(winDark::isDarkTheme()) winDark::setDark_qApp();
-     *
+     * @brief darkPalette
+     * @return the dark palette to be set on the application
      */
-    void setDark_qApp()
+    QPalette darkPalette()
     {
-#ifdef Q_OS_WIN
-        qApp->setStyle(QStyleFactory::create("Fusion"));
         QPalette darkPalette;
         QColor darkColor = QColor(25, 25, 25);
         QColor disabledColor = QColor(127, 127, 127);
@@ -71,18 +78,18 @@ namespace winDark
         darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
         darkPalette.setColor(QPalette::HighlightedText, Qt::black);
         darkPalette.setColor(QPalette::Disabled, QPalette::HighlightedText, disabledColor);
-        qApp->setPalette(darkPalette);
-        qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
-#endif
+
+        return darkPalette;
     }
 
     /**
      * @brief setDark_Titlebar
      * @param hwnd
+     * @param dark true to use dark title bar colors, false to restore light ones
      * @details Use for each window like
      *    if(winDark::isDarkTheme()) winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
      */
-    void setDark_Titlebar(HWND hwnd)
+    void setDark_Titlebar(HWND hwnd, bool dark)
     {
 #ifdef Q_OS_WIN
         HMODULE hUxtheme = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
@@ -98,9 +105,9 @@ namespace winDark
         if (!AllowDarkModeForWindow || !SetPreferredAppMode || !SetWindowCompositionAttribute) return;
 
         SetPreferredAppMode(AllowDark);
-        BOOL dark = TRUE;
-        AllowDarkModeForWindow(hwnd, dark);
-        WINDOWCOMPOSITIONATTRIBDATA data = {WCA_USEDARKMODECOLORS, &dark, sizeof(dark)};
+        BOOL useDarkColors = dark ? TRUE : FALSE;
+        AllowDarkModeForWindow(hwnd, useDarkColors);
+        WINDOWCOMPOSITIONATTRIBDATA data = {WCA_USEDARKMODECOLORS, &useDarkColors, sizeof(useDarkColors)};
         SetWindowCompositionAttribute(hwnd, &data);
 #endif
     }
