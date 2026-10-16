@@ -65,8 +65,19 @@ QPixmap ShellBasePrivate::extractIcon(LPITEMIDLIST pidl)
 
     LPITEMIDLIST absolutePidl = ILCombine(m_pidl, pidl);
 
+    // Filesystem items are resolved by path, which skips the slower PIDL binding
+    // done for SHGFI_PIDL. SHGFI_SYSICONINDEX makes SHGetFileInfo resolve the icon
+    // through the system image list (the shell's icon cache shared with Explorer),
+    // so re-requesting the icon of the same file is served from the cache instead
+    // of re-extracting it from the file.
+    wchar_t path[MAX_PATH];
+    bool hasPath = SHGetPathFromIDListW(absolutePidl, path);
+
+    DWORD flags = SHGFI_ICON | SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ADDOVERLAYS;
+    if (!hasPath) flags |= SHGFI_PIDL;
+
     SHFILEINFO info;
-    DWORD_PTR status = SHGetFileInfo((LPCWSTR)absolutePidl, 0, &info, sizeof(info), SHGFI_PIDL | SHGFI_ICON | SHGFI_SMALLICON | SHGFI_ADDOVERLAYS);
+    DWORD_PTR status = SHGetFileInfo(hasPath ? reinterpret_cast<LPCWSTR>(path) : reinterpret_cast<LPCWSTR>(absolutePidl), 0, &info, sizeof(info), flags);
 
     CoTaskMemFree(absolutePidl);
 
