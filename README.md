@@ -61,10 +61,6 @@ cmake --install build --config Release
 
 可翻译字符串位于 `translations/saladin_*.ts`。安装了 Qt *Linguist* 工具时会自动生成编译后的 `.qm` 文件（目标 `saladin_lrelease`；否则使用仓库中已提交的 `.qm` 文件）。要新增语言，请新建 `.ts` 文件，并在 `SALADIN_LANGUAGES`（`CMakeLists.txt`）和 `translations/locale.ini` 中注册。
 
-## 打包
-
-`installer/` 目录包含官方发布所用的 NSIS 安装程序脚本（`saladin.nsi`）。它是遗留代码（最初为 Qt 5 构建编写），正在随本次移植一同现代化。
-
 ## 许可证
 
 Saladin 是自由软件：您可以根据自由软件基金会发布的 **GNU 通用公共许可证**（第 **3** 版，或您自选的任何更高版本）重新分发和/或修改它。完整许可文本见
