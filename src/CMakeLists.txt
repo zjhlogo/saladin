@@ -218,3 +218,38 @@ target_link_libraries(saladin PRIVATE
 )
 
 install(TARGETS saladin RUNTIME DESTINATION bin)
+
+# --- Qt runtime deployment -------------------------------------------------
+#
+# Copy the Qt runtime next to the executable after every successful link, so
+# debug/saladin.exe and release/saladin.exe can be started without a Qt
+# environment. See "Qt runtime deployment" in the top-level CMakeLists.txt.
+
+if(SALADIN_DEPLOY_QT_RUNTIME)
+    # Qt binary and plugins directories, taken from the Qt6::Core target.
+    get_target_property(_qt_bin_dir Qt6::Core QT6_INSTALL_BINS)
+    get_target_property(_qt_plugin_dir Qt6::Core QT6_INSTALL_PLUGINS)
+    if(NOT _qt_bin_dir)
+        # Fallback: derive the binary directory from the qmake location.
+        get_target_property(_qt_qmake Qt6::qmake IMPORTED_LOCATION)
+        get_filename_component(_qt_bin_dir "${_qt_qmake}" DIRECTORY)
+    endif()
+    if(NOT _qt_plugin_dir)
+        get_filename_component(_qt_plugin_dir "${_qt_bin_dir}/../plugins" ABSOLUTE)
+    endif()
+
+    add_custom_command(TARGET saladin POST_BUILD
+        COMMAND "${CMAKE_COMMAND}"
+            "-DQT_RUNTIME_BIN_DIR=${_qt_bin_dir}"
+            "-DQT_RUNTIME_PLUGIN_DIR=${_qt_plugin_dir}"
+            "-DQT_RUNTIME_OUTPUT_DIR=$<TARGET_FILE_DIR:saladin>"
+            "-DQT_RUNTIME_MODULES=${SALADIN_QT_MODULES}"
+            "-DQT_RUNTIME_PLUGINS=${SALADIN_QT_PLUGINS}"
+            "-DQT_RUNTIME_MINGW_DLLS=${SALADIN_QT_MINGW_DLLS}"
+            "-DQT_RUNTIME_DEBUG=$<CONFIG:Debug>"
+            "-DQT_RUNTIME_MSVC=$<BOOL:${MSVC}>"
+            -P "${CMAKE_SOURCE_DIR}/cmake/DeployQtRuntime.cmake"
+        COMMENT "Deploying Qt runtime files"
+        VERBATIM
+    )
+endif()

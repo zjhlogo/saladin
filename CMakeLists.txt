@@ -80,6 +80,50 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_SOURCE_DIR}/release")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL     "${CMAKE_SOURCE_DIR}/release")
 
 # ---------------------------------------------------------------------------
+# Qt runtime deployment
+#
+# After every successful link the Qt runtime files (DLLs and the runtime
+# plugins used by Saladin) are copied next to the executable, so debug/ and
+# release/ contain a directly runnable program without a Qt environment.
+#
+# The deployed file set is defined below and implemented in
+# cmake/DeployQtRuntime.cmake; it mirrors the runtime installed by
+# installer/saladin.nsi, updated for Qt 6. Disable it (e.g. for builds that
+# collect the runtime separately) with:
+#
+#   cmake -S . -B build -DSALADIN_DEPLOY_QT_RUNTIME=OFF
+#
+# Note that the Visual C++ runtime DLLs are not copied; install the Visual
+# C++ redistributable or use the installer for deployment to clean machines.
+# ---------------------------------------------------------------------------
+
+option(SALADIN_DEPLOY_QT_RUNTIME "Copy Qt runtime files next to the executable after building" ON)
+
+set(SALADIN_QT_MODULES
+    Core Gui Widgets Network Xml)
+
+# Runtime plugins, given as paths relative to the Qt plugins directory and
+# without extension. The deploy script copies each <path>[d].dll that exists
+# in the Qt installation (plugins absent from the package are skipped).
+set(SALADIN_QT_PLUGINS
+    platforms/qwindows
+    styles/qmodernwindowsstyle
+    styles/qwindowsvistastyle
+    imageformats/qgif
+    imageformats/qico
+    imageformats/qjpeg
+    imageformats/qtiff
+    imageformats/qwebp
+    tls/qschannelbackend
+    networkinformation/qnetworklistmanager)
+
+# MinGW toolchain DLLs shipped in the Qt binary directory (ignored on MSVC).
+set(SALADIN_QT_MINGW_DLLS
+    libgcc_s_seh-1.dll
+    libstdc++-6.dll
+    libwinpthread-1.dll)
+
+# ---------------------------------------------------------------------------
 # Translations
 # ---------------------------------------------------------------------------
 

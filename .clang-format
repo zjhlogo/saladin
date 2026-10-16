@@ -35,7 +35,6 @@ SpaceBeforeParens: ControlStatements
 SpaceInEmptyParentheses: false
 SpacesInAngles: false
 SpacesInCStyleCastParentheses: false
-SpacesInContainerLiterals: true
 PenaltyBreakAssignment: 160
 PenaltyBreakBeforeFirstCallParameter: 160
 PenaltyBreakTemplateDeclaration: 160
