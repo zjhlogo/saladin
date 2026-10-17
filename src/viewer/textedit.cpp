@@ -112,12 +112,12 @@ void TextEdit::resizeEvent(QResizeEvent* e)
 
 void TextEdit::lineNumberAreaPaintEvent(QPaintEvent* e)
 {
-    QString theme = application->applicationSettings()->value("Theme").toString();
-
+    // The theme in effect, not the raw "Theme" setting: with "Follow System"
+    // the dark palette is used when Windows itself is dark.
     QColor background;
     QColor foreground;
 
-    if (theme == QLatin1String("dark"))
+    if (application->isDarkTheme())
     {
         background = QColor(16, 16, 16);
         foreground = QColor(128, 128, 128);

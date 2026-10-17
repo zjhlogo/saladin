@@ -54,11 +54,9 @@ Application::Application(int& argc, char** argv)
     loadTranslation("qt", true);
     loadTranslation("saladin", false);
 
-    setStyle(new XmlUi::WindowsStyle());
+    initializePalette();
 
     setWindowIcon(IconLoader::icon("saladin"));
-
-    initializePalette();
 
     // Follow the system light/dark color scheme while the application is running.
     connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged, this, &Application::updateColorScheme);
@@ -380,7 +378,7 @@ void Application::initializeSettings()
     if (!m_settings->contains("BinaryFont")) m_settings->setValue("BinaryFont", "Courier New");
     if (!m_settings->contains("BinaryFontSize")) m_settings->setValue("BinaryFontSize", 10);
 
-    if (!m_settings->contains("Theme")) m_settings->setValue("Theme", "classic");
+    if (!m_settings->contains("Theme")) m_settings->setValue("Theme", "system");
 
     if (!m_settings->contains("HideToolStrip")) m_settings->setValue("HideToolStrip", false);
 
@@ -408,10 +406,26 @@ void Application::initializeSettings()
 
 void Application::initializePalette()
 {
-    bool dark = winDark::isDarkTheme();
+    // The theme selected in the settings is authoritative: "classic" and
+    // "white" always use the light palette, "dark" always uses the dark one and
+    // "system" follows the Windows color scheme. Anything else (e.g. a missing
+    // value) is treated as "system".
+    QString theme = m_settings->value("Theme").toString();
 
-    if (dark == m_darkTheme) return;
+    if (theme != QLatin1String("classic") && theme != QLatin1String("white") && theme != QLatin1String("dark") && theme != QLatin1String("system"))
+        theme = QLatin1String("system");
 
+    bool systemDark = winDark::isSystemDarkTheme();
+    bool dark = (theme == QLatin1String("system")) ? systemDark : (theme == QLatin1String("dark"));
+
+    // Windows created later (dialogs, viewers) ask winDark::isDarkTheme() for
+    // their title bars, so let it report the theme in effect instead of the raw
+    // system color scheme.
+    winDark::setThemeOverride(theme == QLatin1String("system") ? -1 : (dark ? 1 : 0));
+
+    if (theme == m_appliedTheme && dark == m_darkTheme) return;
+
+    m_appliedTheme = theme;
     m_darkTheme = dark;
 
     if (dark)
@@ -422,6 +436,9 @@ void Application::initializePalette()
     }
     else
     {
+        // Set the style first and the palette second: QApplication::setPalette()
+        // polishes the palette, which is where XmlUi::WindowsStyle picks up the
+        // "classic" and "white" variants of the light theme.
         setStyle(new XmlUi::WindowsStyle());
         setPalette(style()->standardPalette());
         setStyleSheet(QString());
@@ -446,12 +463,8 @@ void Application::updateColorScheme()
 
 QString Application::iconsPath() const
 {
-    // QString theme = m_settings->value("Theme").toString();
-
-    // if (theme == QLatin1String("dark"))
-    return ":/icons/dark";
-    // else
-    //     return ":/icons";
+    // The dark icon set is drawn for dark backgrounds and vice versa.
+    return m_darkTheme ? ":/icons/dark" : ":/icons";
 }
 
 QString Application::locateDataFile(const QString& name)

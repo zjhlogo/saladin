@@ -29,6 +29,13 @@ namespace winDark
 {
     QPalette darkPalette();
     void setDark_Titlebar(HWND hwnd, bool dark = true);
+
+    // Color scheme of the operating system itself.
+    bool isSystemDarkTheme();
+
+    // Color scheme actually in effect: an explicit application theme overrides
+    // the system scheme, -1 makes the application follow the system again.
+    void setThemeOverride(int mode);
     bool isDarkTheme();
 
 #ifdef Q_OS_WIN

@@ -20,108 +20,108 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/application.cpp" line="103"/>
+        <location filename="../src/application.cpp" line="101"/>
         <source>Saladin %1</source>
         <translation>Saladin %1</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="123"/>
+        <location filename="../src/application.cpp" line="121"/>
         <source>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</source>
         <translation>Ez egy szabadon használható szoftver: a Free Software Foundation által közzétett (3-as, vagy (tetszés szerint) bármely későbbi licenc verzióban) a GNU általános nyilvános licence alatt szabadon terjeszthető és/vagy módosítható.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="113"/>
+        <location filename="../src/application.cpp" line="111"/>
         <source>Help</source>
         <translation>Súgó</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="114"/>
+        <location filename="../src/application.cpp" line="112"/>
         <source>Open the Saladin Quick Guide for help.</source>
         <translation>A súgó eléréséhez nyissa meg a Saladin gyors útmutatóját</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="117"/>
-        <location filename="../src/application.cpp" line="188"/>
+        <location filename="../src/application.cpp" line="115"/>
+        <location filename="../src/application.cpp" line="186"/>
         <source>Latest Version</source>
         <translation>Legújabb verzió</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="118"/>
+        <location filename="../src/application.cpp" line="116"/>
         <source>Automatic checking for latest version is disabled. You can enable it in program settings.</source>
         <translation>A legújabb verzió automatikus ellenőrzése le van tiltva. Ez a program beállításaiban engedélyezhető.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="129"/>
+        <location filename="../src/application.cpp" line="127"/>
         <source>About Saladin</source>
         <translation>Saladin névjegy</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="135"/>
+        <location filename="../src/application.cpp" line="133"/>
         <source>&amp;Quick Guide</source>
         <translation>&amp;Gyors útmutató</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="104"/>
+        <location filename="../src/application.cpp" line="102"/>
         <source>Copyright &amp;copy; 2011-2017 Michał Męciński</source>
         <translation>Szerzői jog &amp;copy; 2011-2017 Michał Męciński</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="105"/>
+        <location filename="../src/application.cpp" line="103"/>
         <source>Icons copyright &amp;copy; 2017 Łukasz Grabowski</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="108"/>
+        <location filename="../src/application.cpp" line="106"/>
         <source>Release Notes</source>
         <translation>Kiadási jegyzet</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="109"/>
+        <location filename="../src/application.cpp" line="107"/>
         <source>See what&apos;s new in this version of Saladin:</source>
         <translation>Nézze meg a Saladin aktuális verziójának újdonságait:</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="121"/>
+        <location filename="../src/application.cpp" line="119"/>
         <source>License</source>
         <translation>Licenc</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="148"/>
+        <location filename="../src/application.cpp" line="146"/>
         <source>&amp;Check Now</source>
         <translation>&amp;Ellenőrzés</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="195"/>
+        <location filename="../src/application.cpp" line="193"/>
         <source>Checking for latest version...</source>
         <translation>A legújabb verzió ellenőrzése...</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="202"/>
+        <location filename="../src/application.cpp" line="200"/>
         <source>Checking for latest version failed.</source>
         <translation>A legújabb verzió ellenőrzése sikertelen volt.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="204"/>
+        <location filename="../src/application.cpp" line="202"/>
         <source>&amp;Retry</source>
         <translation>&amp;Újra</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="212"/>
+        <location filename="../src/application.cpp" line="210"/>
         <source>Your version of Saladin is up to date.</source>
         <translation>A Saladin verziója naprakész.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="219"/>
+        <location filename="../src/application.cpp" line="217"/>
         <source>The latest version of Saladin is %1.</source>
         <translation>A Saladin legújabb változata: %1.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="221"/>
+        <location filename="../src/application.cpp" line="219"/>
         <source>&amp;Release Notes</source>
         <translation>&amp;Kiadási jegyzet</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="224"/>
+        <location filename="../src/application.cpp" line="222"/>
         <source>Do&amp;wnload</source>
         <translation>&amp;Letöltés</translation>
     </message>
@@ -1616,57 +1616,62 @@ Győződjön meg róla, hogy az eszköz elérhető, majd próbálkozzon újra.</
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="145"/>
+        <source>Follow System</source>
+        <translation>Rendszer követése</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="146"/>
         <source>Classic</source>
         <translation>Klasszikus</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="146"/>
+        <location filename="../src/settingsdialog.cpp" line="147"/>
         <source>White</source>
         <translation>Fehér</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="147"/>
+        <location filename="../src/settingsdialog.cpp" line="148"/>
         <source>Dark</source>
         <translation>Sötét</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="154"/>
+        <location filename="../src/settingsdialog.cpp" line="155"/>
         <source>Fonts</source>
         <translation>Betűtípusok</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="158"/>
+        <location filename="../src/settingsdialog.cpp" line="159"/>
         <source>&amp;Binary view:</source>
         <translation>&amp;Bináris nézet:</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="171"/>
-        <location filename="../src/settingsdialog.cpp" line="187"/>
+        <location filename="../src/settingsdialog.cpp" line="172"/>
+        <location filename="../src/settingsdialog.cpp" line="188"/>
         <source> pt</source>
         <translation>kp</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="174"/>
+        <location filename="../src/settingsdialog.cpp" line="175"/>
         <source>&amp;Text view:</source>
         <translation>&amp;Szöveges nézet:</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="192"/>
+        <location filename="../src/settingsdialog.cpp" line="193"/>
         <source>Misc. Options</source>
         <translation>Egyéb lehetőségek</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="196"/>
+        <location filename="../src/settingsdialog.cpp" line="197"/>
         <source>Confirm &amp;Drag &amp;&amp; Drop operations</source>
         <translation>&amp;Fogd és vidd műveletek jóváhagyása</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="199"/>
+        <location filename="../src/settingsdialog.cpp" line="200"/>
         <source>Automatic Update</source>
         <translation>Automatikus frissítés</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="203"/>
+        <location filename="../src/settingsdialog.cpp" line="204"/>
         <source>&amp;Enable automatic checking for latest version of Saladin</source>
         <translation>&amp;A Saladin legújabb verziójának automatikus ellenőrzése</translation>
     </message>
@@ -1676,82 +1681,82 @@ Győződjön meg róla, hogy az eszköz elérhető, majd próbálkozzon újra.</
         <translation>Eszközök</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="214"/>
+        <location filename="../src/settingsdialog.cpp" line="215"/>
         <source>File Viewer</source>
         <translation>fájlmegjelenítő</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="218"/>
+        <location filename="../src/settingsdialog.cpp" line="219"/>
         <source>Use the internal file viewer</source>
         <translation>Használja a belső fájlmegjelenítőt</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="231"/>
+        <location filename="../src/settingsdialog.cpp" line="232"/>
         <source>Text Editor</source>
         <translation>szövegszerkesztő</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="242"/>
+        <location filename="../src/settingsdialog.cpp" line="243"/>
         <source>Console</source>
         <translation>konzol</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="253"/>
+        <location filename="../src/settingsdialog.cpp" line="254"/>
         <source>Compare Files</source>
         <translation>Fájlok összehasonlítása</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="271"/>
+        <location filename="../src/settingsdialog.cpp" line="272"/>
         <source>&amp;OK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="272"/>
+        <location filename="../src/settingsdialog.cpp" line="273"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Mégse</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="273"/>
+        <location filename="../src/settingsdialog.cpp" line="274"/>
         <source>&amp;Apply</source>
         <translation>&amp;Alkalmaz</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="337"/>
+        <location filename="../src/settingsdialog.cpp" line="338"/>
         <source>Warning</source>
         <translation>Figyelmeztetés</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="337"/>
+        <location filename="../src/settingsdialog.cpp" line="338"/>
         <source>Language settings will be applied when the application is restarted.</source>
         <translation>A nyelvi beállítások az alkalmazás újraindítása után kerülnek alkalmazásra.</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="378"/>
+        <location filename="../src/settingsdialog.cpp" line="379"/>
         <source>Select initial directory:</source>
         <translation>Válassza ki a kiindulási könyvtárat:</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="408"/>
+        <location filename="../src/settingsdialog.cpp" line="409"/>
         <source>Applications</source>
         <translation>Alkalmazások</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="408"/>
+        <location filename="../src/settingsdialog.cpp" line="409"/>
         <source>All Files</source>
         <translation>Összes fájl</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="410"/>
+        <location filename="../src/settingsdialog.cpp" line="411"/>
         <source>Select Tool</source>
         <translation>Eszköz kiválasztása</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="416"/>
+        <location filename="../src/settingsdialog.cpp" line="417"/>
         <source>System Default</source>
         <translation>Rendszer alapértelmezett</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="441"/>
+        <location filename="../src/settingsdialog.cpp" line="442"/>
         <source>Browse</source>
         <translation>Tallózás</translation>
     </message>

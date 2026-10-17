@@ -20,108 +20,108 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/application.cpp" line="103"/>
+        <location filename="../src/application.cpp" line="101"/>
         <source>Saladin %1</source>
         <translation>Saladin %1</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="104"/>
+        <location filename="../src/application.cpp" line="102"/>
         <source>Copyright &amp;copy; 2011-2017 Michał Męciński</source>
         <translation>Copyright &amp;copy; 2011-2017 Michał Męciński</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="105"/>
+        <location filename="../src/application.cpp" line="103"/>
         <source>Icons copyright &amp;copy; 2017 Łukasz Grabowski</source>
         <translation>Icons copyright &amp;copy; 2017 Łukasz Grabowski</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="108"/>
+        <location filename="../src/application.cpp" line="106"/>
         <source>Release Notes</source>
         <translation>发行说明</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="109"/>
+        <location filename="../src/application.cpp" line="107"/>
         <source>See what&apos;s new in this version of Saladin:</source>
         <translation>查看此版本 Saladin 的新增功能：</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="113"/>
+        <location filename="../src/application.cpp" line="111"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="114"/>
+        <location filename="../src/application.cpp" line="112"/>
         <source>Open the Saladin Quick Guide for help.</source>
         <translation>打开 Saladin 快速指南以获取帮助。</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="117"/>
-        <location filename="../src/application.cpp" line="188"/>
+        <location filename="../src/application.cpp" line="115"/>
+        <location filename="../src/application.cpp" line="186"/>
         <source>Latest Version</source>
         <translation>最新版本</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="118"/>
+        <location filename="../src/application.cpp" line="116"/>
         <source>Automatic checking for latest version is disabled. You can enable it in program settings.</source>
         <translation>已禁用自动检查最新版本。你可以在程序设置中启用此功能。</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="121"/>
+        <location filename="../src/application.cpp" line="119"/>
         <source>License</source>
         <translation>许可证</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="123"/>
+        <location filename="../src/application.cpp" line="121"/>
         <source>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</source>
         <translation>本程序是自由软件：你可以根据自由软件基金会发布的 GNU 通用公共许可证的条款（第 3 版或你选择的任何更高版本）重新发布和/或修改本程序。</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="129"/>
+        <location filename="../src/application.cpp" line="127"/>
         <source>About Saladin</source>
         <translation>关于 Saladin</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="135"/>
+        <location filename="../src/application.cpp" line="133"/>
         <source>&amp;Quick Guide</source>
         <translation>快速指南(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="148"/>
+        <location filename="../src/application.cpp" line="146"/>
         <source>&amp;Check Now</source>
         <translation>立即检查(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="195"/>
+        <location filename="../src/application.cpp" line="193"/>
         <source>Checking for latest version...</source>
         <translation>正在检查最新版本…</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="202"/>
+        <location filename="../src/application.cpp" line="200"/>
         <source>Checking for latest version failed.</source>
         <translation>检查最新版本失败。</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="204"/>
+        <location filename="../src/application.cpp" line="202"/>
         <source>&amp;Retry</source>
         <translation>重试(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="212"/>
+        <location filename="../src/application.cpp" line="210"/>
         <source>Your version of Saladin is up to date.</source>
         <translation>你的 Saladin 已是最新版本。</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="219"/>
+        <location filename="../src/application.cpp" line="217"/>
         <source>The latest version of Saladin is %1.</source>
         <translation>Saladin 的最新版本为 %1。</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="221"/>
+        <location filename="../src/application.cpp" line="219"/>
         <source>&amp;Release Notes</source>
         <translation>发行说明(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="224"/>
+        <location filename="../src/application.cpp" line="222"/>
         <source>Do&amp;wnload</source>
         <translation>下载(&amp;W)</translation>
     </message>
@@ -1621,137 +1621,142 @@ Make sure the device is available and try again.</source>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="145"/>
+        <source>Follow System</source>
+        <translation>跟随系统</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="146"/>
         <source>Classic</source>
         <translation>经典</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="146"/>
+        <location filename="../src/settingsdialog.cpp" line="147"/>
         <source>White</source>
         <translation>白色</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="147"/>
+        <location filename="../src/settingsdialog.cpp" line="148"/>
         <source>Dark</source>
         <translation>深色</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="154"/>
+        <location filename="../src/settingsdialog.cpp" line="155"/>
         <source>Fonts</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="158"/>
+        <location filename="../src/settingsdialog.cpp" line="159"/>
         <source>&amp;Binary view:</source>
         <translation>二进制视图(&amp;B)：</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="171"/>
-        <location filename="../src/settingsdialog.cpp" line="187"/>
+        <location filename="../src/settingsdialog.cpp" line="172"/>
+        <location filename="../src/settingsdialog.cpp" line="188"/>
         <source> pt</source>
         <translation> 磅</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="174"/>
+        <location filename="../src/settingsdialog.cpp" line="175"/>
         <source>&amp;Text view:</source>
         <translation>文本视图(&amp;T)：</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="192"/>
+        <location filename="../src/settingsdialog.cpp" line="193"/>
         <source>Misc. Options</source>
         <translation>其他选项</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="196"/>
+        <location filename="../src/settingsdialog.cpp" line="197"/>
         <source>Confirm &amp;Drag &amp;&amp; Drop operations</source>
         <translation>确认拖放操作(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="199"/>
+        <location filename="../src/settingsdialog.cpp" line="200"/>
         <source>Automatic Update</source>
         <translation>自动更新</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="203"/>
+        <location filename="../src/settingsdialog.cpp" line="204"/>
         <source>&amp;Enable automatic checking for latest version of Saladin</source>
         <translation>启用 Saladin 最新版本自动检查(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="214"/>
+        <location filename="../src/settingsdialog.cpp" line="215"/>
         <source>File Viewer</source>
         <translation>文件查看器</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="218"/>
+        <location filename="../src/settingsdialog.cpp" line="219"/>
         <source>Use the internal file viewer</source>
         <translation>使用内置文件查看器</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="231"/>
+        <location filename="../src/settingsdialog.cpp" line="232"/>
         <source>Text Editor</source>
         <translation>文本编辑器</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="242"/>
+        <location filename="../src/settingsdialog.cpp" line="243"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="253"/>
+        <location filename="../src/settingsdialog.cpp" line="254"/>
         <source>Compare Files</source>
         <translation>比较文件</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="271"/>
+        <location filename="../src/settingsdialog.cpp" line="272"/>
         <source>&amp;OK</source>
         <translation>确定(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="272"/>
+        <location filename="../src/settingsdialog.cpp" line="273"/>
         <source>&amp;Cancel</source>
         <translation>取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="273"/>
+        <location filename="../src/settingsdialog.cpp" line="274"/>
         <source>&amp;Apply</source>
         <translation>应用(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="337"/>
+        <location filename="../src/settingsdialog.cpp" line="338"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="337"/>
+        <location filename="../src/settingsdialog.cpp" line="338"/>
         <source>Language settings will be applied when the application is restarted.</source>
         <translation>语言设置将在应用程序重新启动后生效。</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="378"/>
+        <location filename="../src/settingsdialog.cpp" line="379"/>
         <source>Select initial directory:</source>
         <translation>选择初始目录：</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="408"/>
+        <location filename="../src/settingsdialog.cpp" line="409"/>
         <source>Applications</source>
         <translation>应用程序</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="408"/>
+        <location filename="../src/settingsdialog.cpp" line="409"/>
         <source>All Files</source>
         <translation>所有文件</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="410"/>
+        <location filename="../src/settingsdialog.cpp" line="411"/>
         <source>Select Tool</source>
         <translation>选择工具</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="416"/>
+        <location filename="../src/settingsdialog.cpp" line="417"/>
         <source>System Default</source>
         <translation>系统默认</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="441"/>
+        <location filename="../src/settingsdialog.cpp" line="442"/>
         <source>Browse</source>
         <translation>浏览</translation>
     </message>

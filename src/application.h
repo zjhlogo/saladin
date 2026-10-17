@@ -43,6 +43,9 @@ public:
     QString translationsPath() const { return m_translationsPath; }
     QString iconsPath() const;
 
+    // Color scheme currently in effect, taking the "Theme" setting into account.
+    bool isDarkTheme() const { return m_darkTheme; }
+
     QString locateDataFile(const QString& name);
     QString locateCacheFile(const QString& name);
     QString locateTempFile(const QString& name);
@@ -101,6 +104,9 @@ private:
     LocalSettings* m_settings;
 
     QString m_theme;
+
+    // Theme value the current style and palette were built for.
+    QString m_appliedTheme;
 
     bool m_darkTheme = false;
 

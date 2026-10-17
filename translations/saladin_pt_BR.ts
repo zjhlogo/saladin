@@ -20,108 +20,108 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/application.cpp" line="103"/>
+        <location filename="../src/application.cpp" line="101"/>
         <source>Saladin %1</source>
         <translation>Saladin %1</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="123"/>
+        <location filename="../src/application.cpp" line="121"/>
         <source>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</source>
         <translation>Este programa é software livre: você pode redistribuí-lo e / ou modificá-lo sob os termos da Licença Pública Geral GNU conforme publicada pela Free Software Foundation, tanto a versão 3 da Licença, ou (a seu critério) qualquer versão posterior.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="113"/>
+        <location filename="../src/application.cpp" line="111"/>
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="114"/>
+        <location filename="../src/application.cpp" line="112"/>
         <source>Open the Saladin Quick Guide for help.</source>
         <translation>Abrir o Guia rápido do Saladino para ajuda.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="117"/>
-        <location filename="../src/application.cpp" line="188"/>
+        <location filename="../src/application.cpp" line="115"/>
+        <location filename="../src/application.cpp" line="186"/>
         <source>Latest Version</source>
         <translation>Última Versão</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="118"/>
+        <location filename="../src/application.cpp" line="116"/>
         <source>Automatic checking for latest version is disabled. You can enable it in program settings.</source>
         <translation>A verificação automática de versão mais recente está desativada. Você pode habilitá-la nas configurações do programa.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="129"/>
+        <location filename="../src/application.cpp" line="127"/>
         <source>About Saladin</source>
         <translation>Sobre Saladin</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="135"/>
+        <location filename="../src/application.cpp" line="133"/>
         <source>&amp;Quick Guide</source>
         <translation>&amp;Guia Rápido</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="104"/>
+        <location filename="../src/application.cpp" line="102"/>
         <source>Copyright &amp;copy; 2011-2017 Michał Męciński</source>
         <translation>Direito autoral &amp;copy; 2011-2017 Michał Męciński</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="105"/>
+        <location filename="../src/application.cpp" line="103"/>
         <source>Icons copyright &amp;copy; 2017 Łukasz Grabowski</source>
         <translation>Ícones direito autoral &amp;copy; 2017 Łukasz Grabowski</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="108"/>
+        <location filename="../src/application.cpp" line="106"/>
         <source>Release Notes</source>
         <translation>Notas de versão</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="109"/>
+        <location filename="../src/application.cpp" line="107"/>
         <source>See what&apos;s new in this version of Saladin:</source>
         <translation>Veja o que há de novo nesta versão do Saladin:</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="121"/>
+        <location filename="../src/application.cpp" line="119"/>
         <source>License</source>
         <translation>Licença</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="148"/>
+        <location filename="../src/application.cpp" line="146"/>
         <source>&amp;Check Now</source>
         <translation>&amp;Verificar Agora</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="195"/>
+        <location filename="../src/application.cpp" line="193"/>
         <source>Checking for latest version...</source>
         <translation>Verificando versão mais recente ...</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="202"/>
+        <location filename="../src/application.cpp" line="200"/>
         <source>Checking for latest version failed.</source>
         <translation>A verificanção de versão mais recente falhou.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="204"/>
+        <location filename="../src/application.cpp" line="202"/>
         <source>&amp;Retry</source>
         <translation>&amp;Tentar Novamente</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="212"/>
+        <location filename="../src/application.cpp" line="210"/>
         <source>Your version of Saladin is up to date.</source>
         <translation>Sua versão do Saladino está atualizada.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="219"/>
+        <location filename="../src/application.cpp" line="217"/>
         <source>The latest version of Saladin is %1.</source>
         <translation>A última versão do Saladino é %1.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="221"/>
+        <location filename="../src/application.cpp" line="219"/>
         <source>&amp;Release Notes</source>
         <translation>&amp;Notas da Versão</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="224"/>
+        <location filename="../src/application.cpp" line="222"/>
         <source>Do&amp;wnload</source>
         <translation>Bai&amp;xar</translation>
     </message>
@@ -1618,57 +1618,62 @@ Verifique se o dispositivo está disponível e tente novamente.</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="145"/>
+        <source>Follow System</source>
+        <translation>Seguir o sistema</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="146"/>
         <source>Classic</source>
         <translation>Clássico</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="146"/>
+        <location filename="../src/settingsdialog.cpp" line="147"/>
         <source>White</source>
-        <translation>Gravar</translation>
+        <translation>Branco</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="147"/>
+        <location filename="../src/settingsdialog.cpp" line="148"/>
         <source>Dark</source>
         <translation>Escuro</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="154"/>
+        <location filename="../src/settingsdialog.cpp" line="155"/>
         <source>Fonts</source>
         <translation>Fontes</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="158"/>
+        <location filename="../src/settingsdialog.cpp" line="159"/>
         <source>&amp;Binary view:</source>
         <translation>Visão &amp;binária:</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="171"/>
-        <location filename="../src/settingsdialog.cpp" line="187"/>
+        <location filename="../src/settingsdialog.cpp" line="172"/>
+        <location filename="../src/settingsdialog.cpp" line="188"/>
         <source> pt</source>
         <translation> pt</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="174"/>
+        <location filename="../src/settingsdialog.cpp" line="175"/>
         <source>&amp;Text view:</source>
         <translation>Visão de &amp;texto:</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="192"/>
+        <location filename="../src/settingsdialog.cpp" line="193"/>
         <source>Misc. Options</source>
         <translation>Misc. Opções</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="196"/>
+        <location filename="../src/settingsdialog.cpp" line="197"/>
         <source>Confirm &amp;Drag &amp;&amp; Drop operations</source>
         <translation>Confirmar operações de &amp;Arrastar &amp;&amp; Soltar</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="199"/>
+        <location filename="../src/settingsdialog.cpp" line="200"/>
         <source>Automatic Update</source>
         <translation>Atualização Automática</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="203"/>
+        <location filename="../src/settingsdialog.cpp" line="204"/>
         <source>&amp;Enable automatic checking for latest version of Saladin</source>
         <translation>&amp;Ativar a verificação automática de versão mais recente do Saladin</translation>
     </message>
@@ -1678,82 +1683,82 @@ Verifique se o dispositivo está disponível e tente novamente.</translation>
         <translation>Ferramentas</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="214"/>
+        <location filename="../src/settingsdialog.cpp" line="215"/>
         <source>File Viewer</source>
         <translation>Visualizador de Arquivo</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="218"/>
+        <location filename="../src/settingsdialog.cpp" line="219"/>
         <source>Use the internal file viewer</source>
         <translation>Use o visualizador de arquivos internos</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="231"/>
+        <location filename="../src/settingsdialog.cpp" line="232"/>
         <source>Text Editor</source>
         <translation>Editor de Texto</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="242"/>
+        <location filename="../src/settingsdialog.cpp" line="243"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="253"/>
+        <location filename="../src/settingsdialog.cpp" line="254"/>
         <source>Compare Files</source>
         <translation>Comparar Arquivos</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="271"/>
+        <location filename="../src/settingsdialog.cpp" line="272"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="272"/>
+        <location filename="../src/settingsdialog.cpp" line="273"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Cancelar</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="273"/>
+        <location filename="../src/settingsdialog.cpp" line="274"/>
         <source>&amp;Apply</source>
         <translation>&amp;Aplicar</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="337"/>
+        <location filename="../src/settingsdialog.cpp" line="338"/>
         <source>Warning</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="337"/>
+        <location filename="../src/settingsdialog.cpp" line="338"/>
         <source>Language settings will be applied when the application is restarted.</source>
         <translation>Configurações de idioma serão aplicadas quando o aplicativo for reiniciado.</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="378"/>
+        <location filename="../src/settingsdialog.cpp" line="379"/>
         <source>Select initial directory:</source>
         <translation>Selecione o diretório inicial:</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="408"/>
+        <location filename="../src/settingsdialog.cpp" line="409"/>
         <source>Applications</source>
         <translation>Aplicações</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="408"/>
+        <location filename="../src/settingsdialog.cpp" line="409"/>
         <source>All Files</source>
         <translation>Todos os Arquivos</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="410"/>
+        <location filename="../src/settingsdialog.cpp" line="411"/>
         <source>Select Tool</source>
         <translation>Selecione Ferramentas</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="416"/>
+        <location filename="../src/settingsdialog.cpp" line="417"/>
         <source>System Default</source>
         <translation>Padrão do Sistema</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="441"/>
+        <location filename="../src/settingsdialog.cpp" line="442"/>
         <source>Browse</source>
         <translation>Procurar</translation>
     </message>

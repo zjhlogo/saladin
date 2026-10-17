@@ -9,7 +9,9 @@
  *
  * Dark theme detection now uses QStyleHints::colorScheme (Qt >= 6.5)
  * with the registry read kept as a fallback; see Application::initializePalette()
- * for the dark/light theme application and runtime following.
+ * for the dark/light theme application and runtime following. An explicit
+ * application theme ("Classic"/"White"/"Dark") overrides the system color
+ * scheme through setThemeOverride().
  *
  **/
 
@@ -23,11 +25,38 @@
 
 namespace winDark
 {
+    // -1: follow the system color scheme, 0: force light, 1: force dark.
+    // Set by Application::initializePalette() from the "Theme" setting.
+    static int s_themeOverride = -1;
+
+    /**
+     * @brief setThemeOverride
+     * @param mode -1 to follow the system color scheme, 0 to force the light
+     *             theme, 1 to force the dark theme
+     */
+    void setThemeOverride(int mode)
+    {
+        s_themeOverride = (mode < 0) ? -1 : (mode > 0 ? 1 : 0);
+    }
+
     /**
      * @brief isDarkTheme
-     * @return bool
+     * @return true when the dark theme is in effect, i.e. the theme selected
+     *         in the settings when it is explicit, the system color scheme
+     *         otherwise
      */
     bool isDarkTheme()
+    {
+        if (s_themeOverride >= 0) return s_themeOverride == 1;
+
+        return isSystemDarkTheme();
+    }
+
+    /**
+     * @brief isSystemDarkTheme
+     * @return true when the operating system uses the dark color scheme
+     */
+    bool isSystemDarkTheme()
     {
 #ifdef Q_OS_WIN
         // Qt >= 6.5 reports the system color scheme and tracks changes at runtime.

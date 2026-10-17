@@ -142,6 +142,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     appearanceLayout->addWidget(themeLabel, 0, 0);
 
     m_themeComboBox = new SeparatorComboBox(appearanceGroup);
+    m_themeComboBox->addItem(tr("Follow System"), "system");
     m_themeComboBox->addItem(tr("Classic"), "classic");
     m_themeComboBox->addItem(tr("White"), "white");
     m_themeComboBox->addItem(tr("Dark"), "dark");
