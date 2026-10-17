@@ -198,6 +198,12 @@ qt_add_executable(saladin WIN32
 
 target_include_directories(saladin PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
+# Keep the translation catalogs current when the application is built directly
+# (they are loaded from "<executable dir>/../translations" at runtime).
+if(TARGET saladin_sync_translations)
+    add_dependencies(saladin saladin_sync_translations)
+endif()
+
 target_precompile_headers(saladin PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/precompiled.h")
 
 target_link_libraries(saladin PRIVATE

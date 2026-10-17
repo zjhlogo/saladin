@@ -127,7 +127,7 @@ set(SALADIN_QT_MINGW_DLLS
 # Translations
 # ---------------------------------------------------------------------------
 
-set(SALADIN_LANGUAGES de es hu pl pt_BR ru)
+set(SALADIN_LANGUAGES de es hu pl pt_BR ru zh_CN)
 
 set(SALADIN_TS_FILES "")
 foreach(lang IN LISTS SALADIN_LANGUAGES)
@@ -145,6 +145,21 @@ if(TARGET Qt6::lrelease)
         QM_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/translations"
         QM_FILES_OUTPUT_VARIABLE SALADIN_QM_FILES
         LRELEASE_TARGET saladin_lrelease)
+
+    # lrelease writes the catalogs into the build tree, but the application
+    # loads them from "<executable dir>/../translations" (see
+    # Application::initializeDefaultPaths), which with this project's
+    # in-source-tree output layout is the translations/ directory below the
+    # source tree. Copy the generated catalogs back so the running application
+    # never keeps reading a stale .qm file.
+    add_custom_target(saladin_sync_translations ALL
+        COMMAND "${CMAKE_COMMAND}"
+            "-DQM_BUILD_DIR=${CMAKE_BINARY_DIR}/translations"
+            "-DQM_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}/translations"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SyncTranslations.cmake"
+        COMMENT "Syncing translation catalogs to the source tree"
+        VERBATIM)
+    add_dependencies(saladin_sync_translations saladin_lrelease)
 else()
     # No Linguist tools available - fall back to the .qm files in the source tree.
     set(SALADIN_QM_FILES "")

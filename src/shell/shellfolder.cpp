@@ -785,23 +785,69 @@ ShellItem ShellFolder::childItem(const QString& name)
     return result;
 }
 
+// Formats the error code reported by ShellExecuteEx for display to the user. The shell
+// returns SE_ERR_ACCESSDENIED (ERROR_ACCESS_DENIED) for many unrelated failures, so the
+// numeric code is always included.
+static QString shellExecuteErrorText(DWORD error)
+{
+    if (error == 0) return QCoreApplication::translate("ShellFolder", "The system did not report a reason.");
+
+    const QString code = QStringLiteral("0x%1").arg(error, 8, 16, QLatin1Char('0'));
+
+    wchar_t* message = nullptr;
+    if (FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                       nullptr, error, 0, (LPWSTR)&message, 0, nullptr) == 0 || message == nullptr)
+    {
+        return code;
+    }
+
+    const QString text = QString::fromWCharArray(message).trimmed();
+    LocalFree(message);
+
+    return text.isEmpty() ? code : QStringLiteral("%1 (%2)").arg(text, code);
+}
+
+// Returns the working directory to pass to ShellExecuteEx. lpDirectory is used verbatim and
+// must be a real directory: virtual folders (This PC for example) have paths in the "::{GUID}"
+// form, and a NULL value makes the shell fall back to the current working directory of the
+// process, which makes the call fail when that directory is no longer available.
+// The returned pointer refers to 'directory', which must outlive the call.
+static LPCWSTR shellExecuteDirectory(QString& directory, const QString& path)
+{
+    directory = QDir::toNativeSeparators(path);
+
+    return QFileInfo(directory).isDir() ? (LPCWSTR)directory.utf16() : nullptr;
+}
+
 bool ShellFolder::executeItem(const ShellItem& item)
 {
     LPITEMIDLIST absolutePidl = ILCombine(d->m_pidl, item.d->m_pidl);
 
+    QString directory;
+
     SHELLEXECUTEINFO info = {0};
     info.cbSize = sizeof(info);
-    info.fMask = SEE_MASK_IDLIST;
+    // SEE_MASK_FLAG_NO_UI keeps the shell from showing its own, misleading error dialog;
+    // the failure is reported below instead.
+    info.fMask = SEE_MASK_IDLIST | SEE_MASK_FLAG_NO_UI;
     info.hwnd = (HWND)parent()->effectiveWinId();
     info.lpVerb = nullptr;
     info.lpParameters = nullptr;
-    info.lpDirectory = (LPCWSTR)d->m_path.utf16();
+    info.lpDirectory = shellExecuteDirectory(directory, d->m_path);
     info.nShow = SW_SHOWNORMAL;
     info.lpIDList = absolutePidl;
 
     bool result = ShellExecuteEx(&info);
+    DWORD error = result ? ERROR_SUCCESS : GetLastError();
 
     CoTaskMemFree(absolutePidl);
+
+    if (!result)
+    {
+        qWarning("ShellFolder::executeItem: ShellExecuteEx failed for '%s' (error %lu)", qPrintable(item.name()), (unsigned long)error);
+
+        QMessageBox::warning(parent(), tr("Cannot open item"), tr("Unable to open '%1'.\n\n%2").arg(item.name(), shellExecuteErrorText(error)));
+    }
 
     return result;
 }
@@ -855,17 +901,35 @@ bool ShellFolder::search()
 
 bool ShellFolder::explore()
 {
+    QString directory;
+
     SHELLEXECUTEINFO info = {0};
     info.cbSize = sizeof(info);
-    info.fMask = SEE_MASK_IDLIST;
+    // SEE_MASK_FLAG_NO_UI keeps the shell from showing its own, misleading error dialog;
+    // the failure is reported below instead.
+    info.fMask = SEE_MASK_IDLIST | SEE_MASK_FLAG_NO_UI;
     info.hwnd = (HWND)parent()->effectiveWinId();
     info.lpVerb = nullptr;
     info.lpParameters = nullptr;
-    info.lpDirectory = nullptr;
+    info.lpDirectory = shellExecuteDirectory(directory, d->m_path);
     info.nShow = SW_SHOWNORMAL;
     info.lpIDList = d->m_pidl;
 
-    return ShellExecuteEx(&info);
+    bool result = ShellExecuteEx(&info);
+    DWORD error = result ? ERROR_SUCCESS : GetLastError();
+
+    if (!result)
+    {
+        // Fall back to the context menu handler of the shell, which is already used for the
+        // other verbs and also works for folders without a filesystem path.
+        if (invokeCommand("explore")) return true;
+
+        qWarning("ShellFolder::explore: ShellExecuteEx failed for '%s' (error %lu)", qPrintable(d->m_path), (unsigned long)error);
+
+        QMessageBox::warning(parent(), tr("Cannot explore folder"), tr("Unable to open the folder in Windows Explorer.\n\n%1").arg(shellExecuteErrorText(error)));
+    }
+
+    return result;
 }
 
 QString ShellFolder::toolTip(const ShellItem& item)

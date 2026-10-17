@@ -34,6 +34,7 @@ cmake --build build --parallel
 ### 注意事项
 
 - **不要用 Ninja 生成器跑在 DSH 工作区沙箱内——会挂起**（见 `CMakeLists.txt` 头部注释）。沙箱环境一律使用 Visual Studio 生成器。
+- **工作区完整性标签（会让 shell 集成静默失效）**：会话工作区根目录会被 DSH 沙箱标成 `Low` 完整性（`(OI)(CI)(NW)`），其中新建的文件继承 `Low` 标签。`debug\`、`release\` 下的 `saladin.exe` 一旦是 `Low` 标签，启动出来的进程就是 Low 完整性，shell 集成（打开项目、右键菜单、`ShellExecuteEx`）会全部失败并返回 `ERROR_ACCESS_DENIED (5)`（表现为"Windows 无法访问指定设备、路径或文件"），同时触发 SmartScreen "无法识别的应用" 弹窗。构建产物目录必须保持 Medium：`icacls <目录> /setintegritylevel "(OI)(CI)Medium" /T /C`，单个文件用 `icacls <exe> /setintegritylevel Medium`。注意改成 Medium 后，沙箱内的低权限 shell 将无法再写入这些目录（需要由沙箱构建时除外）。
 - 可执行文件输出在**源码树内**（历史 qmake 布局）：Release/RelWithDebInfo/MinSizeRel → `release\saladin.exe`，Debug → `debug\saladin.exe`。
 - 每次成功链接后，POST_BUILD 步骤（`cmake/DeployQtRuntime.cmake`）自动把 Qt 运行时 DLL 和插件复制到可执行文件旁，`release/` 与 `debug/` 下的 exe 可直接启动。用 `-DSALADIN_DEPLOY_QT_RUNTIME=OFF` 可禁用。
 - VC++ 运行库**不会**被复制；干净机器上需另装 VC++ 可再发行组件包。

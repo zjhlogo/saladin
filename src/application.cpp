@@ -304,21 +304,35 @@ bool Application::loadTranslation(const QString& name, bool tryQtDir)
 {
     QString fullName = name + "_" + QLocale().name();
 
-    QTranslator* translator = new QTranslator(this);
+    QStringList paths;
+    paths.append(m_translationsPath);
+    if (tryQtDir) paths.append(QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 
-    if (translator->load(fullName, m_translationsPath))
+    foreach (QString path, paths)
     {
+        QTranslator* translator = new QTranslator(this);
+
+        if (!translator->load(fullName, path))
+        {
+            delete translator;
+            continue;
+        }
+
+        // A catalog may load successfully and still contain no messages, e.g. a
+        // stale .qm file compiled from an empty .ts. Installing it would leave
+        // the user interface in English without any visible error, so treat it
+        // as a missing translation and keep looking.
+        if (translator->isEmpty())
+        {
+            qWarning("Translation catalog %s in %s contains no messages", qPrintable(fullName), qPrintable(path));
+            delete translator;
+            continue;
+        }
+
         installTranslator(translator);
         return true;
     }
 
-    if (tryQtDir && translator->load(fullName, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
-    {
-        installTranslator(translator);
-        return true;
-    }
-
-    delete translator;
     return false;
 }
 
