@@ -11,7 +11,7 @@
 ### 环境要求
 
 - Windows 10+，**CMake 3.21+**
-- **Qt 6.6+**：Core、Gui、Widgets、Network、Xml，且需要**私有头文件**（构建链接 `Qt6::CorePrivate` 等）
+- **Qt 6.6+**：Core、Gui、Widgets、Network、Xml、Svg，且需要**私有头文件**（构建链接 `Qt6::CorePrivate` 等）
 - 编译器：**MSVC**（Visual Studio 2022+）
 
 ### 常用命令（pwsh 语法）
@@ -43,8 +43,10 @@ src/                  应用源码（目标 saladin）
   resources/          XML UI 布局（*.xml）与 resources.qrc
   icons/ + icons/dark 明暗两套图标，各自 .qrc
   guide/              多语言快速指南 HTML + guide.qrc
+  themes/qt-material/ Qt-Material 主题：生成的 QSS/指示器 SVG + themes.qrc、手工覆盖样式 saladin.qss
 translations/         saladin_*.ts / *.qm、locale.ini
 cmake/                DeployQtRuntime.cmake
+tools/                开发期辅助脚本（如 Qt-Material 资源生成），不参与构建
 ```
 
 ## 代码约定

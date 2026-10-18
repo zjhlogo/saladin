@@ -20,6 +20,8 @@
 #include "searchhelper.h"
 #include "utils/iconloader.h"
 
+#include <QApplication>
+
 #include <algorithm>
 
 SearchItemModel::SearchItemModel(QObject* parent)
@@ -366,9 +368,9 @@ QVariant SearchItemModel::data(const QModelIndex& index, int role /*= Qt::Displa
         {
             const ShellItem& item = m_items.at(row).m_item;
 
-            if (item.attributes().testFlag(ShellItem::Hidden)) return QColor(128, 128, 128);
+            if (item.attributes().testFlag(ShellItem::Hidden)) return QApplication::palette().color(QPalette::Disabled, QPalette::Text);
 
-            if (item.attributes().testFlag(ShellItem::Compressed)) return QColor(0, 0, 128);
+            if (item.attributes().testFlag(ShellItem::Compressed)) return QApplication::palette().color(QPalette::Link);
         }
     }
 

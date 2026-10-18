@@ -97,21 +97,9 @@ void TextEdit::resizeEvent(QResizeEvent* e)
 
 void TextEdit::lineNumberAreaPaintEvent(QPaintEvent* e)
 {
-    // The theme in effect, not the raw "Theme" setting: with "Follow System"
-    // the dark palette is used when Windows itself is dark.
-    QColor background;
-    QColor foreground;
-
-    if (ThemeHelper::getAppTheme() == ThemeHelper::AppTheme::Dark)
-    {
-        background = QColor(16, 16, 16);
-        foreground = QColor(128, 128, 128);
-    }
-    else
-    {
-        background = QColor(228, 228, 228);
-        foreground = QColor(128, 128, 128);
-    }
+    // Follow the application palette so the gutter matches the theme.
+    const QColor background = palette().color(QPalette::AlternateBase);
+    const QColor foreground = palette().color(QPalette::Disabled, QPalette::Text);
 
     QPainter painter(m_lineNumberArea);
     painter.fillRect(e->rect(), background);

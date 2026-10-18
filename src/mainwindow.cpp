@@ -539,8 +539,6 @@ bool MainWindow::eventFilter(QObject* object, QEvent* e)
 void MainWindow::changeEvent(QEvent* e)
 {
     QMainWindow::changeEvent(e);
-
-    if (e->type() == QEvent::ThemeChange) QTimer::singleShot(100, g_application, SLOT(updateTheme()));
 }
 
 void MainWindow::setSourcePane(int index)

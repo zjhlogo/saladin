@@ -67,8 +67,6 @@ private:
 
     void initializeSettings();
 
-    void initializePalette(ThemeHelper::AppTheme theme);
-
     bool checkAccess(const QString& path);
 
     void loadBookmarks();

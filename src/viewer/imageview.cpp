@@ -93,7 +93,7 @@ ImageView::ImageView(QObject* parent, QWidget* parentWidget)
     m_scroll->setWidgetResizable(true);
 
     QPalette scrollPalette = parentWidget->palette();
-    scrollPalette.setColor(QPalette::Window, QColor::fromRgb(255, 255, 255));
+    scrollPalette.setColor(QPalette::Window, parentWidget->palette().color(QPalette::Base));
     m_scroll->setPalette(scrollPalette);
 
     m_label = new ImageLabel(m_scroll);

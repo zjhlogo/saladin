@@ -1,0 +1,207 @@
+/*  ------------------------------------------------------------------------  */
+/* Saladin overrides for the Qt-Material stylesheet.
+/*
+/*  This file is appended to dark_teal.qss / light_teal.qss at runtime by
+/*  ThemeHelper. The @PRIMARY@, @SECONDARY_LIGHT@, ... placeholders are
+/*  replaced with the colors of the active theme (see ThemeHelper::styleSheet()).
+/*
+/*  Qt-Material is designed for generic forms: its tool buttons, item views and
+/*  text edits are much taller and wider than a dual-pane file manager can
+/*  afford, and a few of its colors assume generic forms as well. The geometry
+/*  and colors that break Saladin are reset here; the remaining Material
+/*  colors, borders and hover states stay in effect.
+/*  ------------------------------------------------------------------------  */
+
+/*  ------------------------------------------------------------------------  */
+/*  Tool buttons (toolbar, drive bar, auxiliary buttons, dialog buttons)  */
+
+QToolButton,
+QToolButton:hover,
+QToolButton:pressed,
+QToolButton:checked,
+QToolButton:disabled {
+  height: auto;
+  min-height: 0px;
+  margin: 0px;
+  padding: 2px;
+  border: 0px;
+}
+
+QToolButton {
+  background-color: transparent;
+}
+
+/*  ------------------------------------------------------------------------  */
+/*  Tab bar  */
+
+QTabBar::tab {
+  height: auto;
+  min-height: 20px;
+  padding: 2px 8px;
+}
+
+/*  ------------------------------------------------------------------------  */
+/*  Inputs  */
+
+QLineEdit,
+QAbstractSpinBox,
+QComboBox,
+QDateTimeEdit {
+  height: auto;
+  padding: 2px 6px;
+}
+
+QLineEdit:focus,
+QAbstractSpinBox:focus,
+QComboBox:focus,
+QDateTimeEdit:focus,
+QLineEdit:disabled,
+QAbstractSpinBox:disabled,
+QComboBox:disabled,
+QDateTimeEdit:disabled {
+  height: auto;
+  padding: 2px 6px;
+}
+
+/*  Qt-Material paints input text with the primary text color, which Saladin
+    pins to black so the text drawn on the bright accent stays readable. On the
+    dark color scheme that leaves every input (path bar, dialogs, combo and
+    spin boxes) black on a near-black field, so use the theme's regular text
+    color instead. The focused (accent) and disabled colors still win, because
+    their pseudo-class selectors are more specific.  */
+QLineEdit,
+QAbstractSpinBox,
+QComboBox,
+QDateTimeEdit {
+  color: @SECONDARY_TEXT@;
+}
+
+QCheckBox,
+QRadioButton {
+  height: auto;
+  min-height: 18px;
+  spacing: 6px;
+}
+
+QCheckBox::indicator,
+QRadioButton::indicator,
+QMenu::indicator,
+QListView::indicator,
+QTableWidget::indicator {
+  width: 18px;
+  height: 18px;
+}
+
+/*  ------------------------------------------------------------------------  */
+/*  Item views and headers  */
+
+QTreeView,
+QListView,
+QTableView {
+  height: auto;
+  padding: 0px;
+  border: 0px;
+  border-radius: 0px;
+}
+
+QTreeView QLineEdit,
+QListView QLineEdit,
+QTableView QLineEdit {
+  height: auto;
+  padding: 2px;
+}
+
+QHeaderView::section {
+  height: auto;
+  padding: 2px 6px;
+}
+
+QTreeView::item,
+QListView::item,
+QTableView::item {
+  padding: 1px;
+}
+
+/*  Qt-Material paints focused selections with the solid accent color; use the
+    on-accent text color there so the text stays readable.  */
+QTreeView::item:selected:focus,
+QListView::item:selected:focus,
+QTableView::item:selected:focus {
+  color: @PRIMARY_TEXT@;
+  selection-color: @PRIMARY_TEXT@;
+}
+
+/*  ------------------------------------------------------------------------  */
+/*  Menus  */
+
+QMenuBar::item {
+  height: auto;
+  padding: 4px 8px;
+}
+
+QMenu::item {
+  height: auto;
+  padding: 4px 24px 4px 8px;
+  border: 0px;
+}
+
+/*  ------------------------------------------------------------------------  */
+/*  Group boxes (settings dialog)  */
+
+QGroupBox {
+  padding: 6px;
+  padding-top: 24px;
+}
+
+/*  ------------------------------------------------------------------------  */
+/*  Viewers  */
+
+QPlainTextEdit {
+  padding: 2px 4px;
+  border: 1px solid @SECONDARY_LIGHT@;
+  border-radius: 0px;
+}
+
+/*  The quick guide is plain HTML with light table cells; keep it readable in
+    both color schemes by rendering it as a white document.  */
+QTextBrowser {
+  background-color: #ffffff;
+  color: #000000;
+  selection-background-color: @PRIMARY@;
+  selection-color: @PRIMARY_TEXT@;
+}
+
+/*  ------------------------------------------------------------------------  */
+/*  Dialog tool buttons: Qt-Material paints them as solid accent blocks  */
+
+QDialog QToolButton,
+QDialog QToolButton:hover,
+QDialog QToolButton:pressed,
+QDialog QToolButton:checked {
+  background-color: transparent;
+  color: @SECONDARY_TEXT@;
+  height: auto;
+  margin: 0px;
+  padding: 2px;
+  border: 0px;
+}
+
+/*  ------------------------------------------------------------------------  */
+/*  Misc  */
+
+QStatusBar::item {
+  border: 0px;
+}
+
+QToolTip {
+  color: @SECONDARY_TEXT@;
+  background-color: @SECONDARY_LIGHT@;
+  border: 1px solid @SECONDARY@;
+  border-radius: 2px;
+  padding: 2px 4px;
+}
+
+QMainWindow::separator,
+QSplitter::handle {
+  background-color: @SECONDARY_LIGHT@;
+}

@@ -11,7 +11,7 @@ Saladin 由 Michał Męciński 创建（2011-2017）。本仓库包含对原始�
 - **内建查看器** —— 支持编码检测的文本查看、带跳转功能的二进制/十六进制视图，以及图像查看器（缩放、旋转、全屏）。
 - **工具** —— 文件搜索、支持掩码和正则表达式的批量重命名、ZIP 打包、FTP 浏览、大小统计、文件与目录比较，以及可配置的外部工具（编辑器、控制台、diff、查看器）。
 - **书签与历史记录**，方便访问常用位置。
-- **明暗主题**，包括深色图标集和深色标题栏。
+- **明暗主题**，基于 [qt-material](https://github.com/dunderlab/qt-material)（BSD-2-Clause）样式表，含深色图标集；可在设置中跟随系统或强制明暗。
 - **多语言翻译**：德语、英语、西班牙语、匈牙利语、波兰语、巴西葡萄牙语、俄语。
 
 内建的**快速指南**（帮助 → 快速指南）介绍了所有功能、键盘快捷键、通配符、重命名掩码和正则表达式。
@@ -21,7 +21,7 @@ Saladin 由 Michał Męciński 创建（2011-2017）。本仓库包含对原始�
 ### 环境要求
 
 - **Windows** 10 或更高版本
-- **Qt 6.6+**，包含 *Core、Gui、Widgets、Network、Xml* 模块 —— 包括开发头文件（构建需要 Qt 私有头文件）
+- **Qt 6.6+**，包含 *Core、Gui、Widgets、Network、Xml、Svg* 模块 —— 包括开发头文件（构建需要 Qt 私有头文件）
 - **CMake 3.21+**
 - 编译器：**MSVC**（Visual Studio 2022 或更高版本）或 **MinGW-w64**
 
@@ -57,6 +57,14 @@ cmake --install build --config Release
 
 这会把 `bin/` 和 `translations/` 安装到配置的前缀目录。
 
+## 主题
+
+界面外观由 [qt-material](https://github.com/dunderlab/qt-material) 的 `dark_teal` / `light_teal` 样式表提供（见 `src/themes/qt-material/`）：`Dark` 始终使用深色主题，`Light` 始终使用浅色主题，`Follow System` 跟随 Windows 的明暗设置并在运行时自动切换。
+
+- 主题颜色定义在 `src/themes/qt-material/themes/*.xml`，[src/ThemeHelper.cpp](src/ThemeHelper.cpp) 在运行时据此构建 `QPalette`，并加载对应的 `.qss` 与紧凑化覆盖样式 `saladin.qss`。
+- 生成产物（QSS、指示器 SVG、`themes.qrc`）已提交到仓库，**正常构建不需要 Python**。
+- 需要更换主色或升级 qt-material 时，按 [src/themes/qt-material/README.md](src/themes/qt-material/README.md) 重新生成资源。
+
 ## 翻译
 
 可翻译字符串位于 `translations/saladin_*.ts`。安装了 Qt *Linguist* 工具时会自动生成编译后的 `.qm` 文件（目标 `saladin_lrelease`；否则使用仓库中已提交的 `.qm` 文件）。要新增语言，请新建 `.ts` 文件，并在 `SALADIN_LANGUAGES`（`CMakeLists.txt`）和 `translations/locale.ini` 中注册。
@@ -69,3 +77,4 @@ Saladin 是自由软件：您可以根据自由软件基金会发布的 **GNU �
 - 版权所有 © 2011-2017 Michał Męciński
 - 图标版权所有 © 2017 Łukasz Grabowski
 - `src/xmlui/` 是内置的 BSD 许可 XML UI 库 —— 参见 `src/xmlui/README`
+- `src/themes/qt-material/` 包含 [qt-material](https://github.com/dunderlab/qt-material) 的 BSD-2-Clause 样式表与图标资源 —— 参见 `src/themes/qt-material/LICENSE`

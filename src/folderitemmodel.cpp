@@ -19,6 +19,8 @@
 #include "folderitemmodel.h"
 #include "utils/iconloader.h"
 
+#include <QApplication>
+
 #include <algorithm>
 
 class ShellItemLessThan
@@ -630,9 +632,9 @@ QVariant FolderItemModel::data(const QModelIndex& index, int role /*= Qt::Displa
 
             if (item.isSelected()) return QColor(255, 0, 0);
 
-            if (item.attributes().testFlag(ShellItem::Hidden)) return QColor(128, 128, 128);
+            if (item.attributes().testFlag(ShellItem::Hidden)) return QApplication::palette().color(QPalette::Disabled, QPalette::Text);
 
-            if (item.attributes().testFlag(ShellItem::Compressed)) return QColor(0, 0, 128);
+            if (item.attributes().testFlag(ShellItem::Compressed)) return QApplication::palette().color(QPalette::Link);
         }
     }
 

@@ -42,12 +42,8 @@ Application::Application(int& argc, char** argv)
 
     // The theme selected in the settings is authoritative: "light" always use the light palette, "dark" always uses the dark one and "system" follows the
     // Windows color scheme. Anything else (e.g. a missing value) is treated as "system".
-    QString settingTheme = m_settings->value("Theme").toString();
-    auto finalTheme = ThemeHelper::calculateAppTheme(settingTheme);
-    ThemeHelper::setAppTheme(finalTheme);
-    initializePalette(finalTheme);
-
-    setWindowIcon(IconLoader::icon("saladin"));
+    auto finalTheme = ThemeHelper::calculateAppTheme(m_settings->value("Theme").toString());
+    updateTheme(finalTheme);
 
     // Follow the system light/dark color scheme while the application is running.
     connect(styleHints(), &QStyleHints::colorSchemeChanged, this, &Application::updateColorScheme);
@@ -79,6 +75,10 @@ Application::~Application()
     mainWindow = nullptr;
 
     delete m_updateSection;
+
+    // LocalSettings emits settingsChanged() from its destructor; that must not
+    // re-apply the theme while the application is shutting down.
+    if (m_settings) disconnect(m_settings, nullptr, this, nullptr);
 
     delete m_settings;
     m_settings = nullptr;
@@ -260,20 +260,24 @@ static void updatePalette(QWidget* widget, const QPalette& palette)
 void Application::settingsChanged()
 {
     m_updateClient->setAutoUpdate(m_settings->value("AutoUpdate").toBool());
-    QString settingTheme = m_settings->value("Theme").toString();
-    auto finalTheme = ThemeHelper::calculateAppTheme(settingTheme);
-    ThemeHelper::setAppTheme(finalTheme);
-    updateTheme(finalTheme);
+
+    // Applying the stylesheet is comparatively expensive, so only do it when
+    // the theme actually changed.
+    auto finalTheme = ThemeHelper::calculateAppTheme(m_settings->value("Theme").toString());
+    if (finalTheme != m_appliedTheme) updateTheme(finalTheme);
 }
 
 void Application::updateTheme(ThemeHelper::AppTheme theme)
 {
-    initializePalette(theme);
+    ThemeHelper::applyTheme(theme);
+    m_appliedTheme = theme;
 
     foreach (QWidget* widget, topLevelWidgets())
         updatePalette(widget, palette());
 
     QPixmapCache::clear();
+
+    setWindowIcon(IconLoader::icon("saladin"));
 
     emit themeChanged();
 
@@ -394,29 +398,16 @@ void Application::initializeSettings()
     }
 }
 
-void Application::initializePalette(ThemeHelper::AppTheme theme)
-{
-    // Windows created later (dialogs, viewers) ask ThemeHelper::getCurrentTheme() for their title bars, so let it report the theme in effect instead of the raw
-    // system color scheme.
-    if (ThemeHelper::getAppTheme() == ThemeHelper::AppTheme::Dark)
-    {
-        setStyle("fusion");
-    }
-    else
-    {
-        setStyle("windows");
-    }
-
-    m_appliedTheme = ThemeHelper::getAppTheme();
-}
-
 void Application::updateColorScheme()
 {
-    if (m_appliedTheme == ThemeHelper::getAppTheme()) return;
+    // Resolving the setting again keeps an explicit Light/Dark choice in
+    // effect; only "Follow System" yields a different theme here.
+    auto finalTheme = ThemeHelper::calculateAppTheme(m_settings->value("Theme").toString());
+    if (finalTheme == m_appliedTheme) return;
 
     // Re-apply the palette, propagate it to all widgets, clear the pixmap cache
     // and notify the windows so they can reload their theme-dependent resources.
-    updateTheme(ThemeHelper::getAppTheme());
+    updateTheme(finalTheme);
 }
 
 QString Application::locateDataFile(const QString& name)

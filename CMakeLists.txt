@@ -45,7 +45,7 @@ enable_language(RC)
 # ---------------------------------------------------------------------------
 
 find_package(Qt6 6.6 REQUIRED COMPONENTS
-    Core Gui Widgets Network Xml
+    Core Gui Widgets Network Xml Svg
     CorePrivate GuiPrivate WidgetsPrivate)
 
 # Enables AUTOMOC and AUTOUIC and selects a suitable C++ standard.
@@ -100,7 +100,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL     "${CMAKE_SOURCE_DIR}/release")
 option(SALADIN_DEPLOY_QT_RUNTIME "Copy Qt runtime files next to the executable after building" ON)
 
 set(SALADIN_QT_MODULES
-    Core Gui Widgets Network Xml)
+    Core Gui Widgets Network Xml Svg)
 
 # Runtime plugins, given as paths relative to the Qt plugins directory and
 # without extension. The deploy script copies each <path>[d].dll that exists
@@ -112,6 +112,7 @@ set(SALADIN_QT_PLUGINS
     imageformats/qgif
     imageformats/qico
     imageformats/qjpeg
+    imageformats/qsvg
     imageformats/qtiff
     imageformats/qwebp
     tls/qschannelbackend

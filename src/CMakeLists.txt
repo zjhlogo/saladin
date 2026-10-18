@@ -186,6 +186,7 @@ set(SALADIN_RESOURCES
     icons/icons.qrc
     icons/dark/dark.qrc
     resources/resources.qrc
+    themes/qt-material/themes.qrc
 )
 
 # --- target ----------------------------------------------------------------
@@ -212,6 +213,7 @@ target_link_libraries(saladin PRIVATE
     Qt6::Widgets
     Qt6::Network
     Qt6::Xml
+    Qt6::Svg
     Qt6::CorePrivate
     Qt6::GuiPrivate
     Qt6::WidgetsPrivate
