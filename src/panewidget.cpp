@@ -1,20 +1,6 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file panewidget.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "panewidget.h"
 #include "application.h"
@@ -40,7 +26,7 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
     : QWidget(parent)
     , m_location(location)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto layout = new QVBoxLayout(this);
     layout->setSpacing(0);
     layout->setContentsMargins(0, 0, 0, 0);
 
@@ -71,14 +57,13 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
     connect(m_tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     connect(m_tabBar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(tabDoubleClicked(int)));
 
-    QHBoxLayout* editLayout = new QHBoxLayout();
+    auto editLayout = new QHBoxLayout();
 
-    QFrame* editFrame = new QFrame(this);
-    // editFrame->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    auto editFrame = new QFrame(this);
+    editFrame->setProperty("frameless", true);
     editLayout->addWidget(editFrame);
-    // editLayout->addSpacing(3);
 
-    QHBoxLayout* innerLayout = new QHBoxLayout(editFrame);
+    auto innerLayout = new QHBoxLayout(editFrame);
     innerLayout->setContentsMargins(0, 0, 0, 0);
 
     m_edit = new PathLineEditor(editFrame);
@@ -132,7 +117,7 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
     m_model = new FolderItemModel(this);
     m_view->setModel(m_model);
 
-    FolderItemDelegate* itemDelegate = new FolderItemDelegate(this);
+    auto itemDelegate = new FolderItemDelegate(this);
     m_view->setItemDelegate(itemDelegate);
 
     m_view->setSortingEnabled(true);
@@ -144,7 +129,7 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
 
     connect(m_renameTimer, SIGNAL(timeout()), this, SLOT(renameTimeout()));
 
-    QStatusBar* status = new QStatusBar(this);
+    auto status = new QStatusBar(this);
     status->setSizeGripEnabled(false);
     layout->addWidget(status);
 
@@ -830,7 +815,7 @@ void PaneWidget::setDirectory(const QString& path)
     }
     else
     {
-        ShellFolder* folder = new ShellFolder(path, this);
+        auto folder = new ShellFolder(path, this);
         if (folder->isValid())
         {
             setFolder(folder);
@@ -1075,7 +1060,7 @@ void PaneWidget::renameCurrent()
         m_view->edit(index);
 
         QWidget* editor = m_view->indexWidget(index);
-        if (QLineEdit* lineEdit = qobject_cast<QLineEdit*>(editor))
+        if (auto lineEdit = qobject_cast<QLineEdit*>(editor))
         {
             QString text = lineEdit->text();
             int pos = text.lastIndexOf('.');
@@ -1132,7 +1117,7 @@ void PaneWidget::setHistoryIndex(int index)
 
     m_historyIndex = index;
 
-    ShellFolder* folder = new ShellFolder(m_history.at(index), this);
+    auto folder = new ShellFolder(m_history.at(index), this);
     if (folder->isValid())
     {
         setFolder(folder);

@@ -185,6 +185,7 @@ set(SALADIN_RESOURCES
     guide/guide.qrc
     icons/icons.qrc
     icons/dark/dark.qrc
+    icons/material/material.qrc
     resources/resources.qrc
     themes/qt-material/themes.qrc
 )

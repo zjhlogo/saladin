@@ -11,6 +11,19 @@
 #include "xmlui/gradientwidget.h"
 #include "xmlui/toolstrip.h"
 
+#include <QAbstractItemView>
+
+// QFontComboBox rebuilds its family model when the writing system and the font
+// filters are applied, but its popup view keeps the item layout of the initial,
+// still unfiltered family list. That stale layout makes the drop-down as tall as
+// the whole font list and lets it be scrolled past the last family, which leaves
+// a large empty area below the items. Reset the view once the list is final so
+// the popup is laid out again with the filtered families.
+static void resetPopupLayout(QFontComboBox* combo)
+{
+    if (QAbstractItemView* view = combo->view()) view->reset();
+}
+
 SettingsDialog::SettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -142,6 +155,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_binaryFontComboBox->setEditable(false);
     m_binaryFontComboBox->setWritingSystem(QFontDatabase::Latin);
     m_binaryFontComboBox->setFontFilters(QFontComboBox::ScalableFonts | QFontComboBox::MonospacedFonts);
+    resetPopupLayout(m_binaryFontComboBox);
     fontsLayout->addWidget(m_binaryFontComboBox, 0, 1);
 
     binaryLabel->setBuddy(m_binaryFontComboBox);
@@ -158,6 +172,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_textFontComboBox->setEditable(false);
     m_textFontComboBox->setWritingSystem(QFontDatabase::Latin);
     m_textFontComboBox->setFontFilters(QFontComboBox::ScalableFonts);
+    resetPopupLayout(m_textFontComboBox);
     fontsLayout->addWidget(m_textFontComboBox, 1, 1);
 
     textLabel->setBuddy(m_textFontComboBox);

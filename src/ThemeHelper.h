@@ -59,6 +59,12 @@ public:
     // Installs the Fusion base style, the palette and the stylesheet.
     static void applyTheme(AppTheme appTheme);
 
+    // Theme color of the monochrome Material Symbols action icons, and the
+    // dimmed variant used for their QIcon::Disabled pixmaps.
+    static QColor iconColor();
+    static QColor disabledIconColor();
+
+    // PNG icon sets used by icons that have no Material counterpart.
     static QString iconsPath();
 
     static void setAppTheme(AppTheme appTheme) { m_appTheme = appTheme; }

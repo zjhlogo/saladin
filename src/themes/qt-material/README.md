@@ -13,6 +13,8 @@
 | `<theme>/{primary,active,disabled}/*.svg` | 复选框、单选框、下拉箭头、树展开箭头等指示器图标 |
 | `themes.qrc` | Qt 资源清单，把上述文件编入可执行文件 |
 
+qt-material **不提供**工具栏/菜单/动作图标（上游只带样式表、字体与上面这些控件指示器 SVG）；Saladin 的动作图标使用同一设计语言的 [Material Symbols](../icons/material/README.md)。
+
 主题与 Saladin 选项的对应关系：
 
 - `Dark` → `dark_teal`

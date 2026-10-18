@@ -47,22 +47,22 @@ MainWindow::MainWindow()
     setAction("configure", action);
 
     action = new QAction(tr("Close Tab"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_W));
     connect(action, SIGNAL(triggered()), this, SLOT(closeTab()));
     setAction("closeTab", action);
 
     action = new QAction(tr("Duplicate Tab"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_T));
     connect(action, SIGNAL(triggered()), this, SLOT(duplicateTab()));
     setAction("duplicateTab", action);
 
     action = new QAction(tr("Paste"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_V));
     connect(action, SIGNAL(triggered()), this, SLOT(paste()));
     setAction("paste", action);
 
     action = new QAction(tr("Cut"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_X));
     connect(action, SIGNAL(triggered()), this, SLOT(cut()));
     setAction("cut", action);
 
@@ -70,27 +70,27 @@ MainWindow::MainWindow()
     setAction("popupEditCopy", action);
 
     action = new QAction(tr("Copy Files"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_C));
     connect(action, SIGNAL(triggered()), this, SLOT(copy()));
     setAction("copy", action);
 
     action = new QAction(tr("Copy File Names"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_1));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_1));
     connect(action, SIGNAL(triggered()), this, SLOT(copyNames()));
     setAction("copyNames", action);
 
     action = new QAction(tr("Copy File Paths"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_2));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_2));
     connect(action, SIGNAL(triggered()), this, SLOT(copyPaths()));
     setAction("copyPaths", action);
 
     action = new QAction(tr("Copy File Paths Recursive"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_3));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_3));
     connect(action, SIGNAL(triggered()), this, SLOT(copyPathsRecursive()));
     setAction("copyPathsRecursive", action);
 
     action = new QAction(tr("Refresh"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_R));
     connect(action, SIGNAL(triggered()), this, SLOT(refresh()));
     setAction("refresh", action);
 
@@ -99,29 +99,29 @@ MainWindow::MainWindow()
     setAction("refreshDrives", action);
 
     action = new QAction(tr("View Hidden Files"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_H));
     action->setIconText(tr("Hidden"));
     action->setCheckable(true);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(viewHidden(bool)));
     setAction("viewHidden", action);
 
     action = new QAction(tr("Same Directory"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_E));
     connect(action, SIGNAL(triggered()), this, SLOT(viewSameDirectory()));
     setAction("viewSameDirectory", action);
 
     action = new QAction(tr("Swap Panels"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_U));
     connect(action, SIGNAL(triggered()), this, SLOT(swapPanes()));
     setAction("swapPanes", action);
 
     action = new QAction(tr("Home Directory"), this);
-    action->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Home));
+    action->setShortcut(QKeySequence(Qt::ALT | Qt::Key_Home));
     connect(action, SIGNAL(triggered()), this, SLOT(openHome()));
     setAction("openHome", action);
 
     action = new QAction(tr("Root Directory"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Backslash));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Backslash));
     connect(action, SIGNAL(triggered()), this, SLOT(openRoot()));
     setAction("openRoot", action);
 
@@ -138,17 +138,17 @@ MainWindow::MainWindow()
     setAction("copyToLeftPane", action);
 
     action = new QAction(tr("Select Mask..."), this);
-    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_Plus) << QKeySequence(Qt::CTRL + Qt::Key_Equal));
+    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL | Qt::Key_Plus) << QKeySequence(Qt::CTRL | Qt::Key_Equal));
     connect(action, SIGNAL(triggered()), this, SLOT(selectMask()));
     setAction("selectMask", action);
 
     action = new QAction(tr("Select All"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_A));
     connect(action, SIGNAL(triggered()), this, SLOT(selectAll()));
     setAction("selectAll", action);
 
     action = new QAction(tr("Unselect Mask..."), this);
-    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_Minus) << QKeySequence(Qt::CTRL + Qt::Key_Underscore));
+    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL | Qt::Key_Minus) << QKeySequence(Qt::CTRL | Qt::Key_Underscore));
     connect(action, SIGNAL(triggered()), this, SLOT(unselectMask()));
     setAction("unselectMask", action);
 
@@ -158,7 +158,7 @@ MainWindow::MainWindow()
     setAction("unselectAll", action);
 
     action = new QAction(tr("Invert Selection"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
     connect(action, SIGNAL(triggered()), this, SLOT(invertSelection()));
     setAction("invertSelection", action);
 
@@ -178,7 +178,7 @@ MainWindow::MainWindow()
     setAction("viewCurrent", action);
 
     action = new QAction(tr("View Selected Files"), this);
-    action->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F3));
+    action->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_F3));
     connect(action, SIGNAL(triggered()), this, SLOT(viewSelected()));
     setAction("viewSelected", action);
 
@@ -192,7 +192,7 @@ MainWindow::MainWindow()
     setAction("editCurrent", action);
 
     action = new QAction(tr("Create File..."), this);
-    action->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F4));
+    action->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_F4));
     connect(action, SIGNAL(triggered()), this, SLOT(editNew()));
     setAction("editNew", action);
 
@@ -206,7 +206,7 @@ MainWindow::MainWindow()
     setAction("copySelected", action);
 
     action = new QAction(tr("Clone In Source Directory..."), this);
-    action->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F5));
+    action->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_F5));
     connect(action, SIGNAL(triggered()), this, SLOT(cloneSelected()));
     setAction("cloneSelected", action);
 
@@ -220,7 +220,7 @@ MainWindow::MainWindow()
     setAction("moveSelected", action);
 
     action = new QAction(tr("Rename In Source Directory..."), this);
-    action->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F6));
+    action->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_F6));
     connect(action, SIGNAL(triggered()), this, SLOT(renameSelected()));
     setAction("renameSelected", action);
 
@@ -240,7 +240,7 @@ MainWindow::MainWindow()
     setAction("moveToTrashCan", action);
 
     action = new QAction(tr("Delete Permanently"), this);
-    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::SHIFT + Qt::Key_F8) << QKeySequence(Qt::SHIFT + Qt::Key_Delete));
+    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::SHIFT | Qt::Key_F8) << QKeySequence(Qt::SHIFT | Qt::Key_Delete));
     connect(action, SIGNAL(triggered()), this, SLOT(deleteSelected()));
     setAction("deleteSelected", action);
 
@@ -251,7 +251,7 @@ MainWindow::MainWindow()
     setAction("openTerminal", action);
 
     action = new QAction(tr("Pack..."), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_P));
     connect(action, SIGNAL(triggered()), this, SLOT(packToZip()));
     setAction("packToZip", action);
 
@@ -259,7 +259,7 @@ MainWindow::MainWindow()
     setAction("popupOpen", action);
 
     action = new QAction(tr("Open Directory"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
     connect(action, SIGNAL(triggered()), this, SLOT(openDirectory()));
     setAction("openDirectory", action);
 
@@ -269,12 +269,12 @@ MainWindow::MainWindow()
     setAction("browse", action);
 
     action = new QAction(tr("Connect To FTP..."), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_F));
     connect(action, SIGNAL(triggered()), this, SLOT(openFtpSite()));
     setAction("openFtpSite", action);
 
     action = new QAction(tr("Calculate Size"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
     action->setIconText(tr("Size"));
     connect(action, SIGNAL(triggered()), this, SLOT(calculateSize()));
     setAction("calculateSize", action);
@@ -283,7 +283,7 @@ MainWindow::MainWindow()
     setAction("popupCompare", action);
 
     action = new QAction(tr("Compare Files"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
     connect(action, SIGNAL(triggered()), this, SLOT(compareFiles()));
     setAction("compareFiles", action);
 
@@ -293,7 +293,7 @@ MainWindow::MainWindow()
     setAction("compareDirectories", action);
 
     action = new QAction(tr("Search..."), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
     connect(action, SIGNAL(triggered()), this, SLOT(search()));
     setAction("search", action);
 
@@ -303,12 +303,12 @@ MainWindow::MainWindow()
     setAction("explore", action);
 
     action = new QAction(tr("History"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_G));
     connect(action, SIGNAL(triggered()), this, SLOT(showHistory()));
     setAction("showHistory", action);
 
     action = new QAction(tr("Bookmarks"), this);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
     connect(action, SIGNAL(triggered()), this, SLOT(showBookmarks()));
     setAction("showBookmarks", action);
 
@@ -333,8 +333,8 @@ MainWindow::MainWindow()
 
     connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
-    setTitle("sectionPanels", tr("Panels"));
-    setTitle("sectionSelect", tr("Select"));
+    // setTitle("sectionPanels", tr("Panels"));
+    // setTitle("sectionSelect", tr("Select"));
 
     setPopupMenu("popupView", "menuView", "viewCurrent");
     setPopupMenu("popupEdit", "menuEdit", "editCurrent");
@@ -357,19 +357,19 @@ MainWindow::MainWindow()
 
     QShortcut* shortcut;
 
-    shortcut = new QShortcut(Qt::ALT + Qt::Key_F1, this);
+    shortcut = new QShortcut(Qt::ALT | Qt::Key_F1, this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(showDrivesMenu1()));
 
-    shortcut = new QShortcut(Qt::ALT + Qt::Key_F2, this);
+    shortcut = new QShortcut(Qt::ALT | Qt::Key_F2, this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(showDrivesMenu2()));
 
-    shortcut = new QShortcut(Qt::ALT + Qt::Key_Return, this);
+    shortcut = new QShortcut(Qt::ALT | Qt::Key_Return, this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(showProperties()));
 
-    shortcut = new QShortcut(Qt::CTRL + Qt::Key_Right, this);
+    shortcut = new QShortcut(Qt::CTRL | Qt::Key_Right, this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(openInRightPanel()));
 
-    shortcut = new QShortcut(Qt::CTRL + Qt::Key_Left, this);
+    shortcut = new QShortcut(Qt::CTRL | Qt::Key_Left, this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(openInLeftPanel()));
 
     auto widget = new QWidget(this);

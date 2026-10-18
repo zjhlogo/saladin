@@ -100,6 +100,20 @@ QDateTimeEdit {
   color: @SECONDARY_TEXT@;
 }
 
+/*  Combo box drop-down. Qt matches the items of a combo popup with
+    "QComboBox::item" (a "QComboBox QAbstractItemView::item" rule does not
+    apply), and Qt-Material gives that sub-control "height: 28px" plus an 8px
+    transparent border on every side, i.e. a 44px row. As with the tab bar,
+    "height" is a sub-control property that must be replaced instead of
+    cleared; the padding keeps the text inset that the transparent border used
+    to provide, so the popup rows end up the same compact 22px as the rest of
+    the UI.  */
+QComboBox::item {
+  height: 20px;
+  border: 0px;
+  padding: 1px 8px;
+}
+
 QCheckBox,
 QRadioButton {
   height: 20px;
@@ -126,6 +140,16 @@ QTableView {
   padding: 0px;
   border: 0px;
   border-radius: 0px;
+}
+
+/*  Qt-Material paints every plain QListView black ("QListView, QComboBox
+    { color: #000000 }"), and the pop-up of a combo box is a QListView whose
+    items - QFontComboBox draws the family name with the view's text color -
+    therefore turned black on the dark pop-up background. The QComboBox rules
+    below cannot fix that: they only match the combo box itself, not its view.  */
+QListView,
+QComboBox QAbstractItemView {
+  color: @SECONDARY_TEXT@;
 }
 
 QTreeView QLineEdit,

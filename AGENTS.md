@@ -41,7 +41,8 @@ src/                  应用源码（目标 saladin）
   xmlui/              BSD 许可的 XML UI 库（勿混入 GPL 头，见其 README）
   custom_widgets/     通用自绘控件
   resources/          XML UI 布局（*.xml）与 resources.qrc
-  icons/ + icons/dark 明暗两套图标，各自 .qrc
+  icons/material/     Material Symbols 单色 SVG 图标（工具栏/菜单/对话框），material.qrc
+  icons/ + icons/dark 仅保留程序图标 saladin-*.png，各自 .qrc
   guide/              多语言快速指南 HTML + guide.qrc
   themes/qt-material/ Qt-Material 主题：生成的 QSS/指示器 SVG + themes.qrc、手工覆盖样式 saladin.qss
 translations/         saladin_*.ts / *.qm、locale.ini
@@ -54,7 +55,7 @@ tools/                开发期辅助脚本（如 Qt-Material 资源生成），
 - **新源文件**必须登记到 `src/CMakeLists.txt`：源码加进 `SALADIN_SOURCES`，头文件加进 `SALADIN_HEADERS`，放在对应分组注释（`--- shell/ ---` 等）之下；新 `.qrc` 加进 `SALADIN_RESOURCES`。
 - **moc/uic/rcc**：工程开启 AUTOMOC/AUTOUIC/AUTORCC。含 `Q_OBJECT` 的头必须已在 `SALADIN_HEADERS` 中列出才会被 moc 处理。
 - **UI 构建**：菜单/工具条/动作由 XML（`src/resources/*.xml`）+ `xmlui` 库生成，不是 Qt Designer `.ui` 文件；改 UI 通常是"XML + 对应类"两处配合。
-- **图标**：新增图标需同时提供亮/暗两套（`src/icons`、`src/icons/dark`）并在相应 `.qrc` 注册。
+- **图标**：工具栏/菜单/对话框图标是 `src/icons/material/` 下的 Material Symbols 单色 SVG（与 Qt-Material 的 Material Design 风格一致），运行时由 `IconLoader` 按当前主题文字色着色，**一套即可覆盖明暗主题**。文件名就是 `IconLoader::icon("...")` 用的图标名；新增或替换图标时改 `tools/generate_material_icons.py` 里的 `MAPPING` 并重新生成，详见 `src/icons/material/README.md`。`src/icons`、`src/icons/dark` 只保留程序图标 `saladin-*.png`。
 - **翻译**：用户可见字符串一律 `tr()`。新增语言：新建 `translations/saladin_<lang>.ts`，注册到 `SALADIN_LANGUAGES`（`CMakeLists.txt`）与 `translations/locale.ini`。更新译文后构建 `saladin_lrelease` 目标（或整目标 `release_translations`）重新生成 `.qm`。
 - **文件命名**：`snake_case.cpp/.h`（`custom_widgets/PathLineEditor.*` 为历史例外）；类名 PascalCase。
 - **shell/ 子系统**：大量 COM 对象与 PIDL 手工生命周期管理，修改时注意 AddRef/Release 配对与 `::CoTaskMemFree` 的使用。

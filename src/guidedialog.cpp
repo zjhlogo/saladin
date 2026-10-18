@@ -130,8 +130,8 @@ void GuideDialog::updateActions()
 
 void GuideDialog::loadIcons()
 {
-    action("goBack")->setIcon(IconLoader::icon("find-previous"));
-    action("goForward")->setIcon(IconLoader::icon("find-next"));
+    action("goBack")->setIcon(IconLoader::icon("arrow-left"));
+    action("goForward")->setIcon(IconLoader::icon("arrow-right"));
     action("goHome")->setIcon(IconLoader::icon("home"));
 
     m_promptPixmap->setPixmap(IconLoader::pixmap("help", 22));

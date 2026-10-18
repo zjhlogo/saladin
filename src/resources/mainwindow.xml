@@ -12,19 +12,15 @@
       <action id="viewHidden"/>
     </section>
     <section id="sectionPanels">
-      <row>
-        <action id="viewSameDirectory"/>
-        <action id="swapPanes"/>
-      </row>
+      <action id="viewSameDirectory"/>
+      <action id="swapPanes"/>
     </section>
     <section id="sectionSelect">
-      <row>
-        <action id="selectMask"/>
-        <action id="selectAll"/>
-        <action id="unselectAll"/>
-        <action id="unselectMask"/>
-        <action id="invertSelection"/>
-      </row>
+      <action id="selectMask"/>
+      <action id="selectAll"/>
+      <action id="unselectAll"/>
+      <action id="unselectMask"/>
+      <action id="invertSelection"/>
     </section>
     <section id="sectionFunctions" uniform="1">
       <action id="renameCurrent"/>

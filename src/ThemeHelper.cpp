@@ -146,7 +146,17 @@ ThemeHelper::Colors ThemeHelper::loadColors(AppTheme theme)
 
 ThemeHelper::Colors ThemeHelper::colors(AppTheme theme)
 {
-    return loadColors(theme);
+    // The theme XML files are resources, so parsing them once per theme is
+    // enough; the icon loader asks for the colors for every icon it creates.
+    static QHash<int, Colors> cache;
+
+    const auto cached = cache.constFind(static_cast<int>(theme));
+    if (cached != cache.constEnd()) return cached.value();
+
+    const Colors value = loadColors(theme);
+    cache.insert(static_cast<int>(theme), value);
+
+    return value;
 }
 
 QPalette ThemeHelper::palette(AppTheme theme)
@@ -271,4 +281,19 @@ QString ThemeHelper::iconsPath()
 {
     // The dark icon set is drawn for dark backgrounds and vice versa.
     return m_appTheme == AppTheme::Dark ? ":/icons/dark" : ":/icons";
+}
+
+QColor ThemeHelper::iconColor()
+{
+    // Material Symbols are tinted with the regular text color, so they follow
+    // the Qt-Material stylesheet exactly (and stay readable on both themes).
+    return colors(m_appTheme).secondaryText;
+}
+
+QColor ThemeHelper::disabledIconColor()
+{
+    // Same blend as the palette's disabled text, so a disabled toolbar button
+    // and its icon fade together.
+    const Colors themeColors = colors(m_appTheme);
+    return blendedColor(themeColors.secondaryText, themeColors.secondaryDark, 0.4);
 }
