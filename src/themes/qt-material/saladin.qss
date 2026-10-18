@@ -20,7 +20,7 @@ QToolButton:hover,
 QToolButton:pressed,
 QToolButton:checked,
 QToolButton:disabled {
-  height: auto;
+  height: 20px;
   min-height: 0px;
   margin: 0px;
   padding: 2px;
@@ -34,32 +34,56 @@ QToolButton {
 /*  ------------------------------------------------------------------------  */
 /*  Tab bar  */
 
-QTabBar::tab {
-  height: auto;
-  min-height: 20px;
+/*  Qt-Material sets "height: 28px" on QTabBar::tab:top. As with the header
+    sections below, "height" is a sub-control property that cannot be undone by
+    "height: auto", so the compact height is spelled out here (the :top
+    selector keeps the same specificity as the Qt-Material rule).  */
+QTabBar::tab,
+QTabBar::tab:top {
+  height: 20px;
+  min-height: 0px;
+  max-height: 24px;
   padding: 2px 8px;
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  Inputs  */
 
+/*  Qt-Material gives QLineEdit and QComboBox "height: 32px", which made the
+    path bar almost twice as tall as the rest of the pane chrome. "height: auto"
+    does not reset it, so use explicit bounds; min/max-height are always applied
+    to widgets.  */
 QLineEdit,
+QComboBox {
+  height: 20px;
+  min-height: 0px;
+  max-height: 22px;
+  padding: 2px 0px;
+}
+
+/*  Spin boxes keep their taller box: their two stacked arrow buttons are 20px
+    images and need the room.  */
 QAbstractSpinBox,
-QComboBox,
 QDateTimeEdit {
-  height: auto;
+  height: 20px;
   padding: 2px 6px;
 }
 
 QLineEdit:focus,
-QAbstractSpinBox:focus,
 QComboBox:focus,
-QDateTimeEdit:focus,
 QLineEdit:disabled,
+QComboBox:disabled {
+  height: 20px;
+  min-height: 0px;
+  max-height: 22px;
+  padding: 2px 6px;
+}
+
+QAbstractSpinBox:focus,
+QDateTimeEdit:focus,
 QAbstractSpinBox:disabled,
-QComboBox:disabled,
 QDateTimeEdit:disabled {
-  height: auto;
+  height: 20px;
   padding: 2px 6px;
 }
 
@@ -78,7 +102,7 @@ QDateTimeEdit {
 
 QCheckBox,
 QRadioButton {
-  height: auto;
+  height: 20px;
   min-height: 18px;
   spacing: 6px;
 }
@@ -98,7 +122,7 @@ QTableWidget::indicator {
 QTreeView,
 QListView,
 QTableView {
-  height: auto;
+  height: 20px;
   padding: 0px;
   border: 0px;
   border-radius: 0px;
@@ -107,19 +131,28 @@ QTableView {
 QTreeView QLineEdit,
 QListView QLineEdit,
 QTableView QLineEdit {
-  height: auto;
+  height: 20px;
   padding: 2px;
 }
 
+/*  Qt-Material sets an explicit 36px height on header sections. Unlike
+    min-width/min-height, "height" is a sub-control property and is applied as
+    given, so it must be replaced by a concrete compact value: the section ends
+    up at this height plus the vertical padding and the bottom border.  */
 QHeaderView::section {
-  height: auto;
-  padding: 2px 6px;
+  height: 20px;
+  padding: 0px 6px;
 }
 
+/*  Qt-Material's 32px min-height is what makes every row of the file list
+    almost twice as tall as a dual-pane file manager needs. Clearing it lets a
+    row shrink to its natural height (icon/text plus the 1px padding), so the
+    rows also follow the font and DPI instead of a fixed pixel size.  */
 QTreeView::item,
 QListView::item,
 QTableView::item {
   padding: 1px;
+  min-height: 0px;
 }
 
 /*  Qt-Material paints focused selections with the solid accent color; use the
@@ -135,12 +168,12 @@ QTableView::item:selected:focus {
 /*  Menus  */
 
 QMenuBar::item {
-  height: auto;
+  height: 20px;
   padding: 4px 8px;
 }
 
 QMenu::item {
-  height: auto;
+  height: 20px;
   padding: 4px 24px 4px 8px;
   border: 0px;
 }
