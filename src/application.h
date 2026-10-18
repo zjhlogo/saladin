@@ -5,7 +5,7 @@
 #pragma once
 
 #include "bookmark.h"
-#include "themehelper.h"
+#include "utils/theme_helper.h"
 
 #include <QApplication>
 

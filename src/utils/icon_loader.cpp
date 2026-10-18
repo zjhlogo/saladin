@@ -1,9 +1,9 @@
-// \file iconloader.cpp
+// \file icon_loader.cpp
 // \author zhangjianhua
 // \date 2026/10/18
 
-#include "iconloader.h"
-#include "ThemeHelper.h"
+#include "icon_loader.h"
+#include "theme_helper.h"
 
 #include <QApplication>
 #include <QFile>
@@ -14,7 +14,7 @@
 
 namespace
 {
-    constexpr int kIconSizes[] = {16, 22, 32, 48};
+    constexpr int K_ICON_SIZES[] = {16, 22, 32, 48};
 
     // Material Symbols are monochrome SVGs (see tools/generate_material_icons.py)
     // tinted with the active theme color, so a single set covers both the light
@@ -89,7 +89,7 @@ QPixmap IconLoader::pixmap(const QString& name, int size)
     return pixmap;
 }
 
-QPixmap IconLoader::overlayedPixmap(const QString& name, const QString& overlay, int size)
+QPixmap IconLoader::overlaidPixmap(const QString& name, const QString& overlay, int size)
 {
     QString key = QStringLiteral("overlayed:%1:%2:%3").arg(name).arg(overlay).arg(size);
 
@@ -114,7 +114,7 @@ QPixmap IconLoader::overlayedPixmap(const QString& name, const QString& overlay,
     return resultPixmap;
 }
 
-QPixmap IconLoader::overlayedPixmap(const QString& name, const QString& overlay1, const QString& overlay2, int size)
+QPixmap IconLoader::overlaidPixmap(const QString& name, const QString& overlay1, const QString& overlay2, int size)
 {
     QString key = QStringLiteral("overlayed2:%1:%2:%3:%4").arg(name).arg(overlay1).arg(overlay2).arg(size);
 
@@ -152,7 +152,7 @@ QIcon IconLoader::icon(const QString& name)
 
         // One pixmap per size is enough: on high-DPI screens QIcon picks the
         // next larger size, which is exactly what the toolbar asks for.
-        for (int size : kIconSizes)
+        for (int size : K_ICON_SIZES)
         {
             icon.addPixmap(renderMaterialIcon(name, size, normal, 1.0), QIcon::Normal);
             icon.addPixmap(renderMaterialIcon(name, size, disabled, 1.0), QIcon::Disabled);
@@ -161,7 +161,7 @@ QIcon IconLoader::icon(const QString& name)
         return icon;
     }
 
-    for (int size : kIconSizes)
+    for (int size : K_ICON_SIZES)
     {
         QString path = pngIconPath(name, size);
 
@@ -171,16 +171,16 @@ QIcon IconLoader::icon(const QString& name)
     return icon;
 }
 
-QIcon IconLoader::overlayedIcon(const QString& name, const QString& overlay)
+QIcon IconLoader::overlaidIcon(const QString& name, const QString& overlay)
 {
     QIcon icon;
 
-    for (int size : kIconSizes)
+    for (int size : K_ICON_SIZES)
     {
         QString imagePath = pngIconPath(name, size);
         QString overlayPath = pngIconPath(overlay, size);
 
-        if (QFile::exists(imagePath) && QFile::exists(overlayPath)) icon.addPixmap(overlayedPixmap(name, overlay, size));
+        if (QFile::exists(imagePath) && QFile::exists(overlayPath)) icon.addPixmap(overlaidPixmap(name, overlay, size));
     }
 
     return icon;

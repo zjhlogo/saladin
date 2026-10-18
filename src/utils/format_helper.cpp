@@ -1,24 +1,10 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file format_helper.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
-#include "formathelper.h"
+#include "format_helper.h"
 #include "shell/streamdevice.h"
-#include "utils/textencoding.h"
+#include "utils/text_encoding.h"
 
 bool FormatHelper::checkImage(StreamDevice& file, bool force, QByteArray& format)
 {
@@ -53,8 +39,8 @@ static bool checkUtf16(const QByteArray& header, QByteArray& format)
 
     for (int i = 0; i < header.length(); i += 2)
     {
-        uchar lo = (uchar)header.at(i);
-        uchar hi = (uchar)header.at(i + 1);
+        uchar lo = static_cast<uchar>(header.at(i));
+        uchar hi = static_cast<uchar>(header.at(i + 1));
 
         if (lo == 0 && hi == 0 || lo == 255 && hi == 255) return false;
 
@@ -93,7 +79,7 @@ static bool checkBinary(const QByteArray& header)
 {
     for (int i = 0; i < header.length(); i++)
     {
-        uchar ch = (uchar)header.at(i);
+        uchar ch = static_cast<uchar>(header.at(i));
         if (ch < 9 || ch > 13 && ch < 32) return true;
     }
 

@@ -19,8 +19,8 @@
 #include "binaryview.h"
 #include "application.h"
 #include "binaryloader.h"
-#include "utils/iconloader.h"
-#include "utils/localsettings.h"
+#include "utils/icon_loader.h"
+#include "utils/local_settings.h"
 #include "viewer/textedit.h"
 #include "xmlui/builder.h"
 

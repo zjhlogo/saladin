@@ -19,7 +19,7 @@
 #include "viewmanager.h"
 #include "shell/shellpidl.h"
 #include "shell/streamdevice.h"
-#include "utils/formathelper.h"
+#include "utils/format_helper.h"
 #include "viewer/viewerwindow.h"
 
 class ViewItem

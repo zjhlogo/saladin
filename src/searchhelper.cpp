@@ -17,8 +17,8 @@
  **************************************************************************/
 
 #include "searchhelper.h"
-#include "utils/formathelper.h"
-#include "utils/textencoding.h"
+#include "utils/format_helper.h"
+#include "utils/text_encoding.h"
 
 SearchHelper::SearchHelper(const QString& pattern, Qt::CaseSensitivity cs)
     : m_matcher(pattern, cs)

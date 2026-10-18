@@ -30,11 +30,11 @@
 
 #if !defined(XMLUI_NO_STYLE_WINDOWS)
 
-#    include "aboutbox.h"
+#    include "about_box.h"
 #    include "application.h"
 #    include "gradientwidget.h"
 #    include "toolstrip.h"
-#    include "utils/localsettings.h"
+#    include "utils/local_settings.h"
 
 #    include <QAbstractButton>
 #    include <QApplication>

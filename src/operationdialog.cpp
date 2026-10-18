@@ -4,7 +4,7 @@
 
 #include "operationdialog.h"
 #include "multirenamewidget.h"
-#include "utils/iconloader.h"
+#include "utils/icon_loader.h"
 #include "xmlui/gradientwidget.h"
 
 OperationDialog::OperationDialog(Flags flags, QWidget* parent)

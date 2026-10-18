@@ -1,11 +1,11 @@
-// \file bookmarksdialog.cpp
+// \file bookmarks_dialog.cpp
 // \author zhangjianhua
 // \date 2026/10/18
 
-#include "bookmarksdialog.h"
 #include "application.h"
+#include "bookmarks_dialog.h"
 #include "operationdialog.h"
-#include "utils/iconloader.h"
+#include "utils/icon_loader.h"
 #include "xmlui/builder.h"
 #include "xmlui/gradientwidget.h"
 #include "xmlui/toolstrip.h"

@@ -1,10 +1,10 @@
-// \file aboutbox.cpp
+// \file about_box.cpp
 // \author zhangjianhua
 // \date 2026/10/18
 
-#include "aboutbox.h"
+#include "about_box.h"
 #include "application.h"
-#include "utils/iconloader.h"
+#include "utils/icon_loader.h"
 #include "xmlui/gradientwidget.h"
 
 #include <QScreen>

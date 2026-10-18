@@ -21,7 +21,7 @@
 #include "mainwindow.h"
 #include "shell/shelldropdata.h"
 #include "shell/shellfolder.h"
-#include "utils/localsettings.h"
+#include "utils/local_settings.h"
 
 #include <algorithm>
 

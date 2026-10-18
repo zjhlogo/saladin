@@ -18,7 +18,7 @@
 
 #include "textloader.h"
 #include "shell/streamdevice.h"
-#include "utils/textencoding.h"
+#include "utils/text_encoding.h"
 
 TextLoader::TextLoader(const ShellPidl& pidl, const QByteArray& format)
     : m_pidl(pidl)

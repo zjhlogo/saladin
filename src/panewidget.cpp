@@ -4,7 +4,6 @@
 
 #include "panewidget.h"
 #include "application.h"
-#include "custom_widgets/PathLineEditor.h"
 #include "drivestripmanager.h"
 #include "folderitemdelegate.h"
 #include "folderitemmodel.h"
@@ -15,9 +14,10 @@
 #include "shell/shellfolder.h"
 #include "shell/shellitem.h"
 #include "shell/shellpidl.h"
-#include "utils/elidedlabel.h"
-#include "utils/iconloader.h"
-#include "utils/localsettings.h"
+#include "utils/path_line_editor.h"
+#include "utils/elided_label.h"
+#include "utils/icon_loader.h"
+#include "utils/local_settings.h"
 #include "xmlui/builder.h"
 
 #include <algorithm>

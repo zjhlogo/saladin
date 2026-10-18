@@ -3,16 +3,15 @@
 // \date 2026/10/18
 
 #include "application.h"
-#include "ThemeHelper.h"
-#include "aboutbox.h"
+#include "about_box.h"
 #include "guidedialog.h"
 #include "mainwindow.h"
 #include "shell/shellfolder.h"
 #include "shell/shellpidl.h"
-#include "utils/dataserializer.h"
-#include "utils/iconloader.h"
-#include "utils/localsettings.h"
-#include "utils/updateclient.h"
+#include "utils/data_serializer.h"
+#include "utils/icon_loader.h"
+#include "utils/local_settings.h"
+#include "utils/update_client.h"
 #include "xmlui/windowsstyle.h"
 
 Application* g_application = nullptr;

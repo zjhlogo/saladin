@@ -18,10 +18,9 @@
 
 #include "searchitemmodel.h"
 #include "searchhelper.h"
-#include "utils/iconloader.h"
+#include "utils/icon_loader.h"
 
 #include <QApplication>
-
 #include <algorithm>
 
 SearchItemModel::SearchItemModel(QObject* parent)

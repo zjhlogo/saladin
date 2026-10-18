@@ -1,4 +1,4 @@
-// \file ThemeHelper.h
+// \file theme_helper.h
 // \author zhangjianhua
 // \date 2026/10/18
 

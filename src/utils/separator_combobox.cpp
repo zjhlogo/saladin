@@ -1,34 +1,16 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file separator_combobox.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
-#include "separatorcombobox.h"
+#include "separator_combobox.h"
 
-#include <QItemDelegate>
-#include <QKeyEvent>
-#include <QListView>
 #include <QPainter>
 #include <QStandardItem>
-#include <QStandardItemModel>
 
 class SeparatorItemDelegate : public QAbstractItemDelegate
 {
 public:
-    static const int ItemTypeRole = Qt::UserRole + 1;
+    static constexpr int ITEM_TYPE_ROLE = Qt::UserRole + 1;
 
     enum ItemType
     {
@@ -45,13 +27,12 @@ public:
     {
     }
 
-    ~SeparatorItemDelegate() {}
+    ~SeparatorItemDelegate() override = default;
 
 public: // overrides
-    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
-        int type = index.data(ItemTypeRole).toInt();
-        switch (type)
+        switch (index.data(ITEM_TYPE_ROLE).toInt())
         {
         case SeparatorItem:
         {
@@ -88,17 +69,17 @@ public: // overrides
         }
     }
 
-    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
         QSize size = m_delegate->sizeHint(option, index);
 
-        int type = index.data(ItemTypeRole).toInt();
+        int type = index.data(ITEM_TYPE_ROLE).toInt();
         if (type == SeparatorItem) size.setHeight(5);
         return size;
     }
 
 private:
-    QAbstractItemDelegate* m_delegate;
+    QAbstractItemDelegate* m_delegate{};
 };
 
 SeparatorComboBox::SeparatorComboBox(QWidget* parent)
@@ -110,40 +91,38 @@ SeparatorComboBox::SeparatorComboBox(QWidget* parent)
     setItemDelegate(new SeparatorItemDelegate(this, delegate));
 }
 
-SeparatorComboBox::~SeparatorComboBox()
-{
-}
+SeparatorComboBox::~SeparatorComboBox() = default;
 
-void SeparatorComboBox::addSeparator()
+void SeparatorComboBox::addSeparator() const
 {
-    QStandardItem* item = new QStandardItem(QString());
+    auto item = new QStandardItem(QString());
     item->setFlags(item->flags() & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
-    item->setData(SeparatorItemDelegate::SeparatorItem, SeparatorItemDelegate::ItemTypeRole);
+    item->setData(SeparatorItemDelegate::SeparatorItem, SeparatorItemDelegate::ITEM_TYPE_ROLE);
 
-    QStandardItemModel* itemModel = (QStandardItemModel*)model();
+    auto itemModel = dynamic_cast<QStandardItemModel*>(model());
     itemModel->appendRow(item);
 }
 
-void SeparatorComboBox::addParentItem(const QString& text)
+void SeparatorComboBox::addParentItem(const QString& text) const
 {
-    QStandardItem* item = new QStandardItem(text);
+    auto item = new QStandardItem(text);
     item->setFlags(item->flags() & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
-    item->setData(SeparatorItemDelegate::ParentItem, SeparatorItemDelegate::ItemTypeRole);
+    item->setData(SeparatorItemDelegate::ParentItem, SeparatorItemDelegate::ITEM_TYPE_ROLE);
 
     QFont font = item->font();
     font.setBold(true);
     item->setFont(font);
 
-    QStandardItemModel* itemModel = (QStandardItemModel*)model();
+    auto itemModel = dynamic_cast<QStandardItemModel*>(model());
     itemModel->appendRow(item);
 }
 
-void SeparatorComboBox::addChildItem(const QString& text, const QVariant& data /*= QVariant()*/)
+void SeparatorComboBox::addChildItem(const QString& text, const QVariant& data /*= QVariant()*/) const
 {
-    QStandardItem* item = new QStandardItem(text + QLatin1String("    "));
+    auto item = new QStandardItem(text + QLatin1String("    "));
     item->setData(data, Qt::UserRole);
-    item->setData(SeparatorItemDelegate::ChildItem, SeparatorItemDelegate::ItemTypeRole);
+    item->setData(SeparatorItemDelegate::ChildItem, SeparatorItemDelegate::ITEM_TYPE_ROLE);
 
-    QStandardItemModel* itemModel = (QStandardItemModel*)model();
+    auto itemModel = dynamic_cast<QStandardItemModel*>(model());
     itemModel->appendRow(item);
 }

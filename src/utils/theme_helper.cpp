@@ -1,8 +1,8 @@
-// \file ThemeHelper.cpp
+// \file theme_helper.cpp
 // \author zhangjianhua
 // \date 2026/10/18
 
-#include "ThemeHelper.h"
+#include "theme_helper.h"
 
 #include <QApplication>
 #include <QDomDocument>
@@ -13,13 +13,11 @@
 #include <QStyleFactory>
 #include <QStyleHints>
 
-#include <utility>
-
 namespace
 {
-    const char* const kStylesheetPath = ":/themes/qt-material/%1.qss";
-    const char* const kThemeXmlPath = ":/themes/qt-material/themes/%1.xml";
-    const char* const kOverridesPath = ":/themes/qt-material/saladin.qss";
+    constexpr auto K_STYLESHEET_PATH = ":/themes/qt-material/%1.qss";
+    constexpr auto K_THEME_XML_PATH = ":/themes/qt-material/themes/%1.xml";
+    constexpr auto K_OVERRIDES_PATH = ":/themes/qt-material/saladin.qss";
 
     ThemeHelper::Colors darkFallbackColors()
     {
@@ -54,7 +52,7 @@ namespace
         const double red = alpha * source.red() + (1.0 - alpha) * destination.red();
         const double green = alpha * source.green() + (1.0 - alpha) * destination.green();
         const double blue = alpha * source.blue() + (1.0 - alpha) * destination.blue();
-        return QColor(int(red + 0.5), int(green + 0.5), int(blue + 0.5));
+        return {static_cast<int>(0.5 + red), static_cast<int>(0.5 + green), static_cast<int>(0.5 + blue)};
     }
 } // namespace
 
@@ -73,7 +71,7 @@ bool ThemeHelper::isSystemDarkTheme()
     if (scheme != Qt::ColorScheme::Unknown) return scheme == Qt::ColorScheme::Dark;
 
     // Fallback for platform themes that don't report a color scheme.
-    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
+    QSettings settings(R"(HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize)", QSettings::NativeFormat);
     if (settings.value("AppsUseLightTheme") == 0)
     {
         return true;
@@ -104,7 +102,7 @@ ThemeHelper::Colors ThemeHelper::loadColors(AppTheme theme)
 {
     const Colors fallback = (theme == AppTheme::Light) ? lightFallbackColors() : darkFallbackColors();
 
-    QFile file(QString(kThemeXmlPath).arg(themeName(theme)));
+    QFile file(QString(K_THEME_XML_PATH).arg(themeName(theme)));
     if (!file.open(QIODevice::ReadOnly))
     {
         qWarning("ThemeHelper: cannot read %s, using built-in colors", qPrintable(file.fileName()));
@@ -121,7 +119,8 @@ ThemeHelper::Colors ThemeHelper::loadColors(AppTheme theme)
     QHash<QString, QColor> values;
     const QDomElement root = document.documentElement();
 
-    for (QDomElement element = root.firstChildElement(QStringLiteral("color")); !element.isNull(); element = element.nextSiblingElement(QStringLiteral("color")))
+    for (QDomElement element = root.firstChildElement(QStringLiteral("color")); !element.isNull();
+         element = element.nextSiblingElement(QStringLiteral("color")))
     {
         const QColor color(element.text().trimmed());
         if (color.isValid()) values.insert(element.attribute(QStringLiteral("name")), color);
@@ -188,7 +187,11 @@ QPalette ThemeHelper::palette(AppTheme theme)
     palette.setColor(QPalette::LinkVisited, themeColors.primaryLight);
     palette.setColor(QPalette::PlaceholderText, disabledText);
 
-    const QPalette::ColorRole disabledRoles[] = {QPalette::WindowText, QPalette::Text, QPalette::ButtonText, QPalette::ToolTipText, QPalette::HighlightedText};
+    constexpr QPalette::ColorRole disabledRoles[] = {QPalette::WindowText,
+                                                     QPalette::Text,
+                                                     QPalette::ButtonText,
+                                                     QPalette::ToolTipText,
+                                                     QPalette::HighlightedText};
     for (QPalette::ColorRole role : disabledRoles)
         palette.setColor(QPalette::Disabled, role, disabledText);
 
@@ -197,26 +200,26 @@ QPalette ThemeHelper::palette(AppTheme theme)
     palette.setColor(QPalette::Disabled, QPalette::Button, themeColors.secondaryDark);
 
     // Keep selections visible in inactive panes as well.
-    const QPalette::ColorRole inactiveRoles[] = {QPalette::Window,
-                                                 QPalette::WindowText,
-                                                 QPalette::Base,
-                                                 QPalette::AlternateBase,
-                                                 QPalette::ToolTipBase,
-                                                 QPalette::ToolTipText,
-                                                 QPalette::Text,
-                                                 QPalette::Button,
-                                                 QPalette::ButtonText,
-                                                 QPalette::BrightText,
-                                                 QPalette::Light,
-                                                 QPalette::Midlight,
-                                                 QPalette::Dark,
-                                                 QPalette::Mid,
-                                                 QPalette::Shadow,
-                                                 QPalette::Highlight,
-                                                 QPalette::HighlightedText,
-                                                 QPalette::Link,
-                                                 QPalette::LinkVisited,
-                                                 QPalette::PlaceholderText};
+    constexpr QPalette::ColorRole inactiveRoles[] = {QPalette::Window,
+                                                     QPalette::WindowText,
+                                                     QPalette::Base,
+                                                     QPalette::AlternateBase,
+                                                     QPalette::ToolTipBase,
+                                                     QPalette::ToolTipText,
+                                                     QPalette::Text,
+                                                     QPalette::Button,
+                                                     QPalette::ButtonText,
+                                                     QPalette::BrightText,
+                                                     QPalette::Light,
+                                                     QPalette::Midlight,
+                                                     QPalette::Dark,
+                                                     QPalette::Mid,
+                                                     QPalette::Shadow,
+                                                     QPalette::Highlight,
+                                                     QPalette::HighlightedText,
+                                                     QPalette::Link,
+                                                     QPalette::LinkVisited,
+                                                     QPalette::PlaceholderText};
     for (QPalette::ColorRole role : inactiveRoles)
         palette.setColor(QPalette::Inactive, role, palette.color(QPalette::Active, role));
 
@@ -225,7 +228,7 @@ QPalette ThemeHelper::palette(AppTheme theme)
 
 QString ThemeHelper::renderOverrides(const Colors& themeColors)
 {
-    QString overrides = readResource(QLatin1String(kOverridesPath));
+    QString overrides = readResource(QLatin1String(K_OVERRIDES_PATH));
     if (overrides.isEmpty()) return overrides;
 
     overrides.replace(QLatin1String("@PRIMARY@"), themeColors.primary.name());
@@ -245,7 +248,7 @@ QString ThemeHelper::readResource(const QString& path)
     if (!file.open(QIODevice::ReadOnly))
     {
         qWarning("ThemeHelper: cannot read %s", qPrintable(path));
-        return QString();
+        return {};
     }
 
     return QString::fromUtf8(file.readAll());
@@ -253,8 +256,8 @@ QString ThemeHelper::readResource(const QString& path)
 
 QString ThemeHelper::styleSheet(AppTheme theme)
 {
-    const QString base = readResource(QString(kStylesheetPath).arg(themeName(theme)));
-    if (base.isEmpty()) return QString();
+    const QString base = readResource(QString(K_STYLESHEET_PATH).arg(themeName(theme)));
+    if (base.isEmpty()) return {};
 
     const QString overrides = renderOverrides(colors(theme));
     if (overrides.isEmpty()) return base;
@@ -271,9 +274,9 @@ void ThemeHelper::applyTheme(AppTheme appTheme)
     auto* application = qobject_cast<QApplication*>(QCoreApplication::instance());
     if (!application) return;
 
-    if (QStyle* style = QStyleFactory::create(QStringLiteral("Fusion"))) application->setStyle(style);
+    if (QStyle* style = QStyleFactory::create(QStringLiteral("Fusion"))) QApplication::setStyle(style);
 
-    application->setPalette(palette(appTheme));
+    QApplication::setPalette(palette(appTheme));
     application->setStyleSheet(styleSheet(appTheme));
 }
 

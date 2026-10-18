@@ -1,13 +1,13 @@
-// \file settingsdialog.cpp
+// \file settings_dialog.cpp
 // \author zhangjianhua
 // \date 2026/10/18
 
-#include "settingsdialog.h"
 #include "application.h"
+#include "settings_dialog.h"
 #include "shell/shellfolder.h"
-#include "utils/iconloader.h"
-#include "utils/localsettings.h"
-#include "utils/separatorcombobox.h"
+#include "utils/icon_loader.h"
+#include "utils/local_settings.h"
+#include "utils/separator_combobox.h"
 #include "xmlui/gradientwidget.h"
 #include "xmlui/toolstrip.h"
 
@@ -19,7 +19,7 @@
 // the whole font list and lets it be scrolled past the last family, which leaves
 // a large empty area below the items. Reset the view once the list is final so
 // the popup is laid out again with the filtered families.
-static void resetPopupLayout(QFontComboBox* combo)
+static void resetPopupLayout(const QFontComboBox* combo)
 {
     if (QAbstractItemView* view = combo->view()) view->reset();
 }
@@ -314,9 +314,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     resize(450, 300);
 }
 
-SettingsDialog::~SettingsDialog()
-{
-}
+SettingsDialog::~SettingsDialog() = default;
 
 void SettingsDialog::accept()
 {
@@ -406,7 +404,7 @@ void SettingsDialog::browseTool(QLineEdit* edit)
     if (!result.isEmpty()) edit->setText(QDir::toNativeSeparators(result));
 }
 
-void SettingsDialog::loadLanguages()
+void SettingsDialog::loadLanguages() const
 {
     m_languageComboBox->addItem(tr("System Default"));
     m_languageComboBox->addSeparator();
@@ -428,7 +426,7 @@ void SettingsDialog::loadLanguages()
     settings.endGroup();
 }
 
-QToolButton* SettingsDialog::browseButton(QWidget* parent, const char* slot)
+QToolButton* SettingsDialog::browseButton(QWidget* parent, const char* slot) const
 {
     auto button = new QToolButton(parent);
     button->setAutoRaise(true);
@@ -440,7 +438,7 @@ QToolButton* SettingsDialog::browseButton(QWidget* parent, const char* slot)
     return button;
 }
 
-void SettingsDialog::showGeneralTab()
+void SettingsDialog::showGeneralTab() const
 {
     m_stackedWidget->setCurrentIndex(0);
 
@@ -448,7 +446,7 @@ void SettingsDialog::showGeneralTab()
     m_toolsAction->setChecked(false);
 }
 
-void SettingsDialog::showToolsTab()
+void SettingsDialog::showToolsTab() const
 {
     m_stackedWidget->setCurrentIndex(1);
 
@@ -456,7 +454,7 @@ void SettingsDialog::showToolsTab()
     m_toolsAction->setChecked(true);
 }
 
-void SettingsDialog::loadIcons()
+void SettingsDialog::loadIcons() const
 {
     m_promptPixmap->setPixmap(IconLoader::pixmap("configure", 22));
 

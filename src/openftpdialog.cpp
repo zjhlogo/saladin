@@ -3,7 +3,7 @@
 // \date 2026/10/18
 
 #include "openftpdialog.h"
-#include "utils/iconloader.h"
+#include "utils/icon_loader.h"
 #include "xmlui/gradientwidget.h"
 
 OpenFtpDialog::OpenFtpDialog(QWidget* parent)

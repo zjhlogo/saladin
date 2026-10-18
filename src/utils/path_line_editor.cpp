@@ -1,8 +1,8 @@
-// \file PathLineEditor.cpp
+// \file path_line_editor.cpp
 // \author zhangjianhua
 // \date 2026/10/16
 
-#include "PathLineEditor.h"
+#include "path_line_editor.h"
 
 PathLineEditor::PathLineEditor(QWidget* parent)
     : QLineEdit(parent)

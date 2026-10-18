@@ -4,7 +4,7 @@
 
 #include "guidedialog.h"
 #include "application.h"
-#include "utils/iconloader.h"
+#include "utils/icon_loader.h"
 #include "xmlui/builder.h"
 #include "xmlui/gradientwidget.h"
 #include "xmlui/toolstrip.h"

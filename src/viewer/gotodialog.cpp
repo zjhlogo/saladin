@@ -17,7 +17,7 @@
  **************************************************************************/
 
 #include "gotodialog.h"
-#include "utils/iconloader.h"
+#include "utils/icon_loader.h"
 #include "xmlui/gradientwidget.h"
 
 GoToDialog::GoToDialog(int lines, int current, QWidget* parent)

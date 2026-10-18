@@ -21,8 +21,8 @@
 #include "imagelabel.h"
 #include "imageloader.h"
 #include "shell/streamdevice.h"
-#include "utils/iconloader.h"
-#include "utils/localsettings.h"
+#include "utils/icon_loader.h"
+#include "utils/local_settings.h"
 #include "xmlui/builder.h"
 
 ImageView::ImageView(QObject* parent, QWidget* parentWidget)

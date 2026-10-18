@@ -17,10 +17,9 @@
  **************************************************************************/
 
 #include "folderitemmodel.h"
-#include "utils/iconloader.h"
+#include "utils/icon_loader.h"
 
 #include <QApplication>
-
 #include <algorithm>
 
 class ShellItemLessThan
