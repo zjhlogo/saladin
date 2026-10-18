@@ -1,20 +1,6 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file searchdialog.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "searchdialog.h"
 #include "application.h"
@@ -26,7 +12,6 @@
 #include "utils/iconloader.h"
 #include "utils/localsettings.h"
 #include "viewer/viewmanager.h"
-#include "windark.h"
 #include "xmlui/builder.h"
 #include "xmlui/gradientwidget.h"
 #include "xmlui/toolstrip.h"
@@ -35,41 +20,36 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     : QDialog(parent)
     , m_folder(folder)
 {
-    if (winDark::isDarkTheme())
-    {
-        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
-    }
-
-    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
+    auto promptWidget = new XmlUi::GradientWidget(this);
     topLayout->addWidget(promptWidget);
 
-    QHBoxLayout* promptLayout = new QHBoxLayout(promptWidget);
+    auto promptLayout = new QHBoxLayout(promptWidget);
     promptLayout->setSpacing(10);
 
-    QLabel* promptPixmap = new QLabel(promptWidget);
+    auto promptPixmap = new QLabel(promptWidget);
     promptLayout->addWidget(promptPixmap);
 
-    QLabel* promptLabel = new QLabel(promptWidget);
+    auto promptLabel = new QLabel(promptWidget);
     promptLabel->setWordWrap(true);
     promptLayout->addWidget(promptLabel, 1);
 
-    QFrame* separator = new QFrame(this);
+    auto separator = new QFrame(this);
     separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     topLayout->addWidget(separator);
 
-    QVBoxLayout* mainLayout = new QVBoxLayout();
+    auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(6);
     topLayout->addLayout(mainLayout);
 
-    QGridLayout* gridLayout = new QGridLayout();
+    auto gridLayout = new QGridLayout();
     mainLayout->addLayout(gridLayout);
 
-    QLabel* locationLabel = new QLabel(tr("Directory:"), this);
+    auto locationLabel = new QLabel(tr("Directory:"), this);
     gridLayout->addWidget(locationLabel, 0, 0);
 
     m_locationEdit = new QLineEdit(this);
@@ -78,7 +58,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
 
     locationLabel->setBuddy(m_locationEdit);
 
-    QLabel* patternLabel = new QLabel(tr("&Pattern:"), this);
+    auto patternLabel = new QLabel(tr("&Pattern:"), this);
     gridLayout->addWidget(patternLabel, 1, 0);
 
     m_patternComboBox = new QComboBox(this);
@@ -123,10 +103,10 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-    QGroupBox* resultsBox = new QGroupBox(tr("Search Results"), this);
+    auto resultsBox = new QGroupBox(tr("Search Results"), this);
     mainLayout->addWidget(resultsBox);
 
-    QVBoxLayout* resultsLayout = new QVBoxLayout(resultsBox);
+    auto resultsLayout = new QVBoxLayout(resultsBox);
 
     QAction* action;
 
@@ -162,10 +142,10 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
 
     loadXmlUiFile(":/resources/searchdialog.xml");
 
-    XmlUi::Builder* builder = new XmlUi::Builder(this);
+    auto builder = new XmlUi::Builder(this);
     builder->addClient(this);
 
-    XmlUi::ToolStrip* strip = new XmlUi::ToolStrip(resultsBox);
+    auto strip = new XmlUi::ToolStrip(resultsBox);
     builder->registerToolStrip("stripSearch", strip);
     strip->addAuxiliaryAction(this->action("copyNames"));
     resultsLayout->addWidget(strip);
@@ -201,7 +181,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     m_view->setSortingEnabled(true);
     m_view->sortByColumn(0, Qt::AscendingOrder);
 
-    QStatusBar* status = new QStatusBar(this);
+    auto status = new QStatusBar(this);
     topLayout->addWidget(status);
 
     m_searchStatus = new ElidedLabel(status);
@@ -219,7 +199,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
 
     m_locationEdit->setText(folder->path());
 
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     if (settings->contains("SearchHeaderState"))
     {
@@ -240,7 +220,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     {
         m_textComboBox->addItems(settings->value("FindText").toStringList());
         m_textComboBox->setCurrentIndex(0);
-        m_caseCheckBox->setChecked(((QTextDocument::FindFlags)settings->value("FindFlags").toInt() & QTextDocument::FindCaseSensitively) != 0);
+        m_caseCheckBox->setChecked((static_cast<QTextDocument::FindFlags>(settings->value("FindFlags").toInt()) & QTextDocument::FindCaseSensitively) != 0);
     }
 
     m_patternComboBox->setFocus();
@@ -250,7 +230,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
 
 SearchDialog::~SearchDialog()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     settings->setValue("SearchHeaderState", m_view->header()->saveState());
     settings->setValue("SearchDialogSize", size());
@@ -291,7 +271,7 @@ void SearchDialog::accept()
         cs = m_caseCheckBox->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
     }
 
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     QStringList patterns;
     patterns.append(pattern);
@@ -316,7 +296,7 @@ void SearchDialog::accept()
             if (item != text && texts.count() < 10) texts.append(item);
         }
         settings->setValue("FindText", texts);
-        settings->setValue("FindFlags", (int)(cs == Qt::CaseSensitive ? QTextDocument::FindCaseSensitively : 0));
+        settings->setValue("FindFlags", cs == Qt::CaseSensitive ? QTextDocument::FindCaseSensitively : 0);
 
         m_textComboBox->clear();
         m_textComboBox->addItems(texts);
@@ -406,7 +386,7 @@ void SearchDialog::viewCurrent()
 
     if (!item.isValid() || !item.attributes().testFlag(ShellItem::FileSystem)) return;
 
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     if (settings->value("InternalViewer").toBool())
         mainWindow->viewManager()->openView(folder->itemPidl(item));
@@ -430,7 +410,7 @@ void SearchDialog::viewAll()
 
     if (pidls.empty()) return;
 
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     if (settings->value("InternalViewer").toBool())
         mainWindow->viewManager()->openView(pidls);

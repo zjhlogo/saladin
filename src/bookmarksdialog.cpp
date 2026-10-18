@@ -1,26 +1,11 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file bookmarksdialog.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "bookmarksdialog.h"
 #include "application.h"
 #include "operationdialog.h"
 #include "utils/iconloader.h"
-#include "windark.h"
 #include "xmlui/builder.h"
 #include "xmlui/gradientwidget.h"
 #include "xmlui/toolstrip.h"
@@ -30,11 +15,6 @@
 BookmarksDialog::BookmarksDialog(QWidget* parent)
     : QDialog(parent)
 {
-    if (winDark::isDarkTheme())
-    {
-        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
-    }
-
     setWindowTitle(tr("Edit Bookmarks"));
 
     QAction* action;
@@ -51,40 +31,40 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
 
     loadXmlUiFile(":/resources/bookmarksdialog.xml");
 
-    XmlUi::Builder* builder = new XmlUi::Builder(this);
+    auto builder = new XmlUi::Builder(this);
     builder->addClient(this);
 
-    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
+    auto promptWidget = new XmlUi::GradientWidget(this);
     topLayout->addWidget(promptWidget);
 
-    QHBoxLayout* promptLayout = new QHBoxLayout(promptWidget);
+    auto promptLayout = new QHBoxLayout(promptWidget);
     promptLayout->setSpacing(10);
 
-    QLabel* promptPixmap = new QLabel(promptWidget);
+    auto promptPixmap = new QLabel(promptWidget);
     promptPixmap->setPixmap(IconLoader::pixmap("edit", 22));
     promptLayout->addWidget(promptPixmap);
 
-    QLabel* promptLabel = new QLabel(promptWidget);
+    auto promptLabel = new QLabel(promptWidget);
     promptLabel->setWordWrap(true);
     promptLabel->setText(tr("Edit your list of bookmarks:"));
     promptLabel->setMinimumWidth(350);
     promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
     promptLayout->addWidget(promptLabel, 1);
 
-    QFrame* separator = new QFrame(this);
+    auto separator = new QFrame(this);
     separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     topLayout->addWidget(separator);
 
-    QVBoxLayout* mainLayout = new QVBoxLayout();
+    auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(4);
     topLayout->addLayout(mainLayout);
 
-    XmlUi::ToolStrip* strip = new XmlUi::ToolStrip(this);
+    auto strip = new XmlUi::ToolStrip(this);
     builder->registerToolStrip("stripBookmarks", strip);
     mainLayout->addWidget(strip);
 
@@ -98,7 +78,7 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
     m_list->setContextMenuPolicy(Qt::CustomContextMenu);
     mainLayout->addWidget(m_list, 1);
 
-    QTreeWidgetItem* header = new QTreeWidgetItem();
+    auto header = new QTreeWidgetItem();
     header->setText(0, tr("Name"));
     header->setText(1, tr("Path"));
     m_list->setHeaderItem(header);
@@ -112,7 +92,7 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
 
     mainLayout->addSpacing(7);
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
     mainLayout->addWidget(buttonBox);
 
     buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&OK"));
@@ -123,7 +103,7 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
 
     resize(700, 500);
 
-    m_bookmarks = application->bookmarks();
+    m_bookmarks = g_application->bookmarks();
     std::sort(m_bookmarks.begin(), m_bookmarks.end());
 
     populateList();
@@ -137,7 +117,7 @@ BookmarksDialog::~BookmarksDialog()
 
 void BookmarksDialog::accept()
 {
-    application->setBookmarks(m_bookmarks);
+    g_application->setBookmarks(m_bookmarks);
 
     QDialog::accept();
 }
@@ -158,7 +138,7 @@ void BookmarksDialog::editRename()
 
         dialog.setName(m_bookmarks.at(index).name());
 
-        if (dialog.exec() != QDialog::Accepted) return;
+        if (dialog.exec() != Accepted) return;
 
         m_bookmarks[index].setName(dialog.name());
         std::sort(m_bookmarks.begin(), m_bookmarks.end());
@@ -183,7 +163,7 @@ void BookmarksDialog::editDelete()
 
         dialog.setName(m_bookmarks.at(index).name());
 
-        if (dialog.exec() != QDialog::Accepted) return;
+        if (dialog.exec() != Accepted) return;
 
         m_bookmarks.removeAt(index);
 
@@ -197,7 +177,7 @@ void BookmarksDialog::populateList()
 
     foreach (Bookmark bookmark, m_bookmarks)
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem(m_list);
+        auto item = new QTreeWidgetItem(m_list);
         item->setText(0, bookmark.name());
         item->setText(1, bookmark.path());
     }

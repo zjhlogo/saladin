@@ -1,25 +1,10 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file guidedialog.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "guidedialog.h"
 #include "application.h"
 #include "utils/iconloader.h"
-#include "windark.h"
 #include "xmlui/builder.h"
 #include "xmlui/gradientwidget.h"
 #include "xmlui/toolstrip.h"
@@ -27,11 +12,6 @@
 GuideDialog::GuideDialog(QWidget* parent)
     : QDialog(parent)
 {
-    if (winDark::isDarkTheme())
-    {
-        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
-    }
-
     setAttribute(Qt::WA_DeleteOnClose, true);
 
     setWindowTitle(tr("Quick Guide"));
@@ -52,39 +32,39 @@ GuideDialog::GuideDialog(QWidget* parent)
 
     loadXmlUiFile(":/resources/guidedialog.xml");
 
-    XmlUi::Builder* builder = new XmlUi::Builder(this);
+    auto builder = new XmlUi::Builder(this);
     builder->addClient(this);
 
-    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
+    auto promptWidget = new XmlUi::GradientWidget(this);
     topLayout->addWidget(promptWidget);
 
-    QHBoxLayout* promptLayout = new QHBoxLayout(promptWidget);
+    auto promptLayout = new QHBoxLayout(promptWidget);
     promptLayout->setSpacing(10);
 
     m_promptPixmap = new QLabel(promptWidget);
     promptLayout->addWidget(m_promptPixmap);
 
-    QLabel* promptLabel = new QLabel(promptWidget);
+    auto promptLabel = new QLabel(promptWidget);
     promptLabel->setWordWrap(true);
     promptLabel->setText(tr("Quick guide to Saladin:"));
     promptLabel->setMinimumWidth(350);
     promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
     promptLayout->addWidget(promptLabel, 1);
 
-    QFrame* separator = new QFrame(this);
+    auto separator = new QFrame(this);
     separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     topLayout->addWidget(separator);
 
-    QVBoxLayout* mainLayout = new QVBoxLayout();
+    auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(4);
     topLayout->addLayout(mainLayout);
 
-    XmlUi::ToolStrip* strip = new XmlUi::ToolStrip(this);
+    auto strip = new XmlUi::ToolStrip(this);
     builder->registerToolStrip("stripGuide", strip);
     mainLayout->addWidget(strip);
 
@@ -96,7 +76,7 @@ GuideDialog::GuideDialog(QWidget* parent)
 
     mainLayout->addSpacing(7);
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
     mainLayout->addWidget(buttonBox);
 
     buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&OK"));
@@ -105,7 +85,7 @@ GuideDialog::GuideDialog(QWidget* parent)
 
     loadIcons();
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
     updateActions();
 

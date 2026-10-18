@@ -1,64 +1,44 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file openftpdialog.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "openftpdialog.h"
 #include "utils/iconloader.h"
-#include "windark.h"
 #include "xmlui/gradientwidget.h"
 
 OpenFtpDialog::OpenFtpDialog(QWidget* parent)
     : QDialog(parent)
 {
-    if (winDark::isDarkTheme())
-    {
-        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
-    }
-
-    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
+    auto promptWidget = new XmlUi::GradientWidget(this);
     topLayout->addWidget(promptWidget);
 
-    QHBoxLayout* promptLayout = new QHBoxLayout(promptWidget);
+    auto promptLayout = new QHBoxLayout(promptWidget);
     promptLayout->setSpacing(10);
 
-    QLabel* promptPixmap = new QLabel(promptWidget);
+    auto promptPixmap = new QLabel(promptWidget);
     promptLayout->addWidget(promptPixmap);
 
-    QLabel* promptLabel = new QLabel(promptWidget);
+    auto promptLabel = new QLabel(promptWidget);
     promptLabel->setWordWrap(true);
     promptLayout->addWidget(promptLabel, 1);
 
-    QFrame* separator = new QFrame(this);
+    auto separator = new QFrame(this);
     separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     topLayout->addWidget(separator);
 
-    QVBoxLayout* mainLayout = new QVBoxLayout();
+    auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(6);
     topLayout->addLayout(mainLayout);
 
-    QGridLayout* gridLayout = new QGridLayout();
+    auto gridLayout = new QGridLayout();
     mainLayout->addLayout(gridLayout);
 
-    QLabel* hostLabel = new QLabel(tr("&Host name:"), this);
+    auto hostLabel = new QLabel(tr("&Host name:"), this);
     gridLayout->addWidget(hostLabel, 0, 0);
 
     m_hostEdit = new QLineEdit(this);
@@ -66,10 +46,10 @@ OpenFtpDialog::OpenFtpDialog(QWidget* parent)
 
     hostLabel->setBuddy(m_hostEdit);
 
-    QLabel* portLabel = new QLabel(tr("Po&rt:"), this);
+    auto portLabel = new QLabel(tr("Po&rt:"), this);
     gridLayout->addWidget(portLabel, 1, 0);
 
-    QHBoxLayout* portLayout = new QHBoxLayout();
+    auto portLayout = new QHBoxLayout();
     gridLayout->addLayout(portLayout, 1, 1);
 
     m_portSpinBox = new QSpinBox(this);
@@ -82,7 +62,7 @@ OpenFtpDialog::OpenFtpDialog(QWidget* parent)
 
     portLabel->setBuddy(m_portSpinBox);
 
-    QLabel* pathLabel = new QLabel(tr("Pa&th:"), this);
+    auto pathLabel = new QLabel(tr("Pa&th:"), this);
     gridLayout->addWidget(pathLabel, 2, 0);
 
     m_pathEdit = new QLineEdit("/", this);
@@ -94,7 +74,7 @@ OpenFtpDialog::OpenFtpDialog(QWidget* parent)
     m_anonymousCheckBox->setChecked(true);
     gridLayout->addWidget(m_anonymousCheckBox, 3, 0, 1, 2);
 
-    QLabel* userLabel = new QLabel(tr("&User name:"), this);
+    auto userLabel = new QLabel(tr("&User name:"), this);
     gridLayout->addWidget(userLabel, 4, 0);
 
     m_userEdit = new QLineEdit(this);
@@ -103,7 +83,7 @@ OpenFtpDialog::OpenFtpDialog(QWidget* parent)
 
     userLabel->setBuddy(m_userEdit);
 
-    QLabel* passwordLabel = new QLabel(tr("&Password:"), this);
+    auto passwordLabel = new QLabel(tr("&Password:"), this);
     gridLayout->addWidget(passwordLabel, 5, 0);
 
     m_passwordEdit = new QLineEdit(this);
@@ -118,7 +98,7 @@ OpenFtpDialog::OpenFtpDialog(QWidget* parent)
 
     mainLayout->addSpacing(5);
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
     mainLayout->addWidget(buttonBox);
 
     buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&OK"));

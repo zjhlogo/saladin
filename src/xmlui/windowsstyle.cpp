@@ -71,7 +71,7 @@ static QColor blendColors(const QColor& src, const QColor& dest, double alpha)
 
 void WindowsStyle::polish(QPalette& palette)
 {
-    QString theme = application->applicationSettings()->value("Theme").toString();
+    QString theme = g_application->applicationSettings()->value("Theme").toString();
 
     m_whiteTheme = (theme == QLatin1String("white"));
     m_darkTheme = (theme == QLatin1String("dark"));

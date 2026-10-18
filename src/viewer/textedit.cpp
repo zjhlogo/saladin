@@ -1,24 +1,9 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file textedit.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "textedit.h"
 #include "application.h"
-#include "utils/localsettings.h"
 
 class LineNumberArea : public QWidget
 {
@@ -30,10 +15,10 @@ public:
     }
 
 public:
-    QSize sizeHint() const { return QSize(m_textEdit->lineNumberAreaWidth(), 0); }
+    QSize sizeHint() const override { return QSize(m_textEdit->lineNumberAreaWidth(), 0); }
 
 protected:
-    void paintEvent(QPaintEvent* e) { m_textEdit->lineNumberAreaPaintEvent(e); }
+    void paintEvent(QPaintEvent* e) override { m_textEdit->lineNumberAreaPaintEvent(e); }
 
 private:
     TextEdit* m_textEdit;
@@ -54,7 +39,7 @@ TextEdit::TextEdit(QWidget* parent)
 
     updateLineNumberAreaWidth();
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(themeChanged()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(themeChanged()));
 }
 
 TextEdit::~TextEdit()
@@ -117,7 +102,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent* e)
     QColor background;
     QColor foreground;
 
-    if (application->isDarkTheme())
+    if (ThemeHelper::getAppTheme() == ThemeHelper::AppTheme::Dark)
     {
         background = QColor(16, 16, 16);
         foreground = QColor(128, 128, 128);
@@ -133,8 +118,8 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent* e)
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
-    int top = (int)blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + (int)blockBoundingRect(block).height();
+    int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
+    int bottom = top + static_cast<int>(blockBoundingRect(block).height());
 
     painter.setPen(foreground);
 
@@ -148,7 +133,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent* e)
 
         block = block.next();
         top = bottom;
-        bottom = top + (int)blockBoundingRect(block).height();
+        bottom = top + static_cast<int>(blockBoundingRect(block).height());
         blockNumber++;
     }
 }

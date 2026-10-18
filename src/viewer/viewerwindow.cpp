@@ -75,7 +75,7 @@ ViewerWindow::ViewerWindow()
 
     loadIcons();
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
     QShortcut* shortcut;
 
@@ -212,7 +212,7 @@ void ViewerWindow::showEvent(QShowEvent* e)
 
 void ViewerWindow::initializeGeometry()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     if (settings->contains("ViewerWindowGeometry"))
     {
@@ -238,7 +238,7 @@ void ViewerWindow::initializeGeometry()
 
 void ViewerWindow::storeGeometry(bool offset)
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     QString geometryKey = QString("%1Geometry").arg(m_view->metaObject()->className());
     QString offsetKey = QString("%1Offset").arg(m_view->metaObject()->className());

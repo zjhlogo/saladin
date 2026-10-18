@@ -1,20 +1,6 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file mainwindow.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "mainwindow.h"
 #include "application.h"
@@ -31,7 +17,6 @@
 #include "utils/iconloader.h"
 #include "utils/localsettings.h"
 #include "viewer/viewmanager.h"
-#include "windark.h"
 #include "xmlui/builder.h"
 #include "xmlui/toolstrip.h"
 
@@ -40,27 +25,21 @@ MainWindow* mainWindow = nullptr;
 MainWindow::MainWindow()
 {
     mainWindow = this;
-
-    if (winDark::isDarkTheme())
-    {
-        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
-    }
-
     setWindowTitle(tr("Saladin"));
 
     QAction* action;
 
     action = new QAction(tr("About Saladin"), this);
     action->setShortcut(QKeySequence(Qt::Key_F1));
-    connect(action, SIGNAL(triggered()), application, SLOT(about()));
+    connect(action, SIGNAL(triggered()), g_application, SLOT(about()));
     setAction("about", action);
 
     action = new QAction(tr("Release Notes"), this);
-    connect(action, SIGNAL(triggered()), application, SLOT(openWebsite()));
+    connect(action, SIGNAL(triggered()), g_application, SLOT(openWebsite()));
     setAction("releaseNotes", action);
 
     action = new QAction(tr("Quick Quide"), this);
-    connect(action, SIGNAL(triggered()), application, SLOT(showQuickGuide()));
+    connect(action, SIGNAL(triggered()), g_application, SLOT(showQuickGuide()));
     setAction("showQuickGuide", action);
 
     action = new QAction(tr("Settings..."), this);
@@ -352,7 +331,7 @@ MainWindow::MainWindow()
 
     loadIcons();
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
     setTitle("sectionPanels", tr("Panels"));
     setTitle("sectionSelect", tr("Select"));
@@ -368,10 +347,10 @@ MainWindow::MainWindow()
 
     loadXmlUiFile(":/resources/mainwindow.xml");
 
-    XmlUi::Builder* builder = new XmlUi::Builder(this);
+    auto builder = new XmlUi::Builder(this);
     builder->addClient(this);
 
-    if (application->applicationSettings()->value("HideToolStrip").toBool())
+    if (g_application->applicationSettings()->value("HideToolStrip").toBool())
         createMenuBar();
     else
         createToolStrip();
@@ -393,13 +372,13 @@ MainWindow::MainWindow()
     shortcut = new QShortcut(Qt::CTRL + Qt::Key_Left, this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(openInLeftPanel()));
 
-    QWidget* widget = new QWidget(this);
+    auto widget = new QWidget(this);
     setCentralWidget(widget);
 
     m_panes[0] = new PaneWidget(PaneWidget::LeftPane, widget);
     m_panes[1] = new PaneWidget(PaneWidget::RightPane, widget);
 
-    QHBoxLayout* layout = new QHBoxLayout(widget);
+    auto layout = new QHBoxLayout(widget);
     layout->setContentsMargins(3, 0, 3, 0);
     layout->setSpacing(5);
 
@@ -411,7 +390,7 @@ MainWindow::MainWindow()
     connect(m_panes[0], SIGNAL(headerSectionMoved(int, int)), m_panes[1], SLOT(moveHeaderSection(int, int)));
     connect(m_panes[1], SIGNAL(headerSectionMoved(int, int)), m_panes[0], SLOT(moveHeaderSection(int, int)));
 
-    application->installEventFilter(this);
+    g_application->installEventFilter(this);
 
     initializeSettings();
 }
@@ -428,7 +407,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializeSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     action("viewHidden")->setChecked(settings->value("ViewHiddenFiles").toBool());
 
@@ -492,7 +471,7 @@ void MainWindow::initializeSettings()
 
 void MainWindow::saveSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     settings->setValue("ViewHiddenFiles", action("viewHidden")->isChecked());
 
@@ -518,7 +497,7 @@ void MainWindow::saveSettings()
 
 void MainWindow::closeEvent(QCloseEvent* e)
 {
-    application->quit();
+    g_application->quit();
     e->ignore();
 }
 
@@ -529,7 +508,7 @@ bool MainWindow::eventFilter(QObject* object, QEvent* e)
 
     if (!object->isWidgetType()) return false;
 
-    QWidget* widget = static_cast<QWidget*>(object);
+    auto widget = static_cast<QWidget*>(object);
 
     if (((widget->windowFlags().testFlag(Qt::Dialog)) && widget->isModal()) || (widget->windowFlags().testFlag(Qt::Popup))
         || (widget->windowFlags().testFlag(Qt::Tool)))
@@ -561,7 +540,7 @@ void MainWindow::changeEvent(QEvent* e)
 {
     QMainWindow::changeEvent(e);
 
-    if (e->type() == QEvent::ThemeChange) QTimer::singleShot(100, application, SLOT(updateTheme()));
+    if (e->type() == QEvent::ThemeChange) QTimer::singleShot(100, g_application, SLOT(updateTheme()));
 }
 
 void MainWindow::setSourcePane(int index)
@@ -754,7 +733,7 @@ void MainWindow::openRoot()
 
 void MainWindow::openHome()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     int index = (m_sourcePane == m_panes[0]) ? 0 : 1;
 
@@ -790,7 +769,7 @@ void MainWindow::copyToLeftPane()
 
 void MainWindow::selectMask()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     OperationDialog dialog(OperationDialog::WithPattern, this);
 
@@ -814,7 +793,7 @@ void MainWindow::selectAll()
 
 void MainWindow::unselectMask()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     OperationDialog dialog(OperationDialog::WithPattern, this);
 
@@ -852,7 +831,7 @@ void MainWindow::viewCurrent()
 
     if (!item.isValid() || !item.attributes().testFlag(ShellItem::Stream)) return;
 
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     if (settings->value("InternalViewer").toBool())
         m_viewManager->openView(m_sourcePane->getFolder()->itemPidl(item));
@@ -871,7 +850,7 @@ void MainWindow::viewSelected()
 
     if (items.isEmpty()) return;
 
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     if (settings->value("InternalViewer").toBool())
     {
@@ -955,7 +934,7 @@ void MainWindow::startTool(Tool tool, const QString& parameters, const QString& 
 
 QString MainWindow::toolPath(Tool tool)
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     QString path;
     switch (tool)
@@ -1263,7 +1242,7 @@ void MainWindow::packToZip()
 
     QString name = dialog.name();
 
-    static const char zipData[22] = {'P', 'K', 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    static constexpr char zipData[22] = {'P', 'K', 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     if (!targetFolder->createFile(name, dialog.checkBoxChecked(), zipData, sizeof(zipData))) return;
 
@@ -1349,7 +1328,7 @@ void MainWindow::compareDirectories()
 
 void MainWindow::search()
 {
-    SearchDialog* dialog = new SearchDialog(m_sourcePane->getFolder(), this);
+    auto dialog = new SearchDialog(m_sourcePane->getFolder(), this);
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     dialog->setWindowModality(Qt::WindowModal);
     dialog->show();
@@ -1391,7 +1370,7 @@ void MainWindow::addBookmark()
     if (dialog.exec() != QDialog::Accepted) return;
 
     Bookmark bookmark(dialog.name(), folder, dialog.checkBoxChecked());
-    application->addBookmark(bookmark);
+    g_application->addBookmark(bookmark);
 }
 
 void MainWindow::editBookmarks()
@@ -1464,19 +1443,19 @@ void MainWindow::hideToolStrip()
 
     createMenuBar();
 
-    application->applicationSettings()->setValue("HideToolStrip", true);
+    g_application->applicationSettings()->setValue("HideToolStrip", true);
 }
 
 void MainWindow::showToolStrip()
 {
     createToolStrip();
 
-    application->applicationSettings()->setValue("HideToolStrip", false);
+    g_application->applicationSettings()->setValue("HideToolStrip", false);
 }
 
 void MainWindow::createToolStrip()
 {
-    XmlUi::ToolStrip* strip = new XmlUi::ToolStrip(this);
+    auto strip = new XmlUi::ToolStrip(this);
     strip->setObjectName("ToolStrip");
     strip->setStyleSheet("#ToolStrip { border: 0px }");
     strip->addAuxiliaryAction(this->action("hideToolStrip"));
@@ -1489,7 +1468,7 @@ void MainWindow::createToolStrip()
 
 void MainWindow::createMenuBar()
 {
-    QMenuBar* menuBar = new QMenuBar(this);
+    auto menuBar = new QMenuBar(this);
     setMenuWidget(menuBar);
 
     menuBar->addMenu(builder()->contextMenu("menuBarEdit"))->setText(tr("&Edit"));
@@ -1500,7 +1479,7 @@ void MainWindow::createMenuBar()
     menuBar->addMenu(builder()->contextMenu("menuBarTools"))->setText(tr("&Tools"));
     menuBar->addMenu(builder()->contextMenu("menuBarHelp"))->setText(tr("&Help"));
 
-    QToolButton* button = new QToolButton(menuBar);
+    auto button = new QToolButton(menuBar);
     button->setAutoRaise(true);
     button->setFocusPolicy(Qt::NoFocus);
     button->setToolButtonStyle(Qt::ToolButtonIconOnly);

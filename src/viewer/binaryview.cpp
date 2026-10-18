@@ -49,7 +49,7 @@ BinaryView::BinaryView(QObject* parent, QWidget* parentWidget)
 
     loadIcons();
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
     loadXmlUiFile(":/resources/binaryview.xml");
 
@@ -85,7 +85,7 @@ BinaryView::BinaryView(QObject* parent, QWidget* parentWidget)
 
     initializeSettings();
 
-    connect(application->applicationSettings(), SIGNAL(settingsChanged()), this, SLOT(settingsChanged()));
+    connect(g_application->applicationSettings(), SIGNAL(settingsChanged()), this, SLOT(settingsChanged()));
 
     settingsChanged();
 
@@ -110,7 +110,7 @@ View::Type BinaryView::type() const
 
 void BinaryView::settingsChanged()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     QString family = settings->value("BinaryFont").toString();
     int size = settings->value("BinaryFontSize").toInt();
@@ -123,7 +123,7 @@ void BinaryView::settingsChanged()
 
 void BinaryView::initializeSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     m_hexMode = settings->value("HexMode", false).toBool();
     action("hexMode")->setChecked(m_hexMode);
@@ -131,7 +131,7 @@ void BinaryView::initializeSettings()
 
 void BinaryView::storeSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     settings->setValue("HexMode", m_hexMode);
 }

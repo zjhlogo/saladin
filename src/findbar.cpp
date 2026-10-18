@@ -1,26 +1,10 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file findbar.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "findbar.h"
 #include "application.h"
 #include "utils/iconloader.h"
-#include "utils/localsettings.h"
-#include "windark.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -33,14 +17,9 @@
 FindBar::FindBar(QWidget* parent)
     : QWidget(parent)
 {
-    if (winDark::isDarkTheme())
-    {
-        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
-    }
-
     setWindowTitle(tr("Find"));
 
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(3, 3, 3, 3);
     layout->setSpacing(5);
 
@@ -52,7 +31,7 @@ FindBar::FindBar(QWidget* parent)
 
     connect(m_closeButton, SIGNAL(clicked()), this, SLOT(hide()));
 
-    QLabel* label = new QLabel(tr("Find:"), this);
+    auto label = new QLabel(tr("Find:"), this);
     layout->addWidget(label);
 
     m_comboBox = new QComboBox(this);
@@ -103,7 +82,7 @@ FindBar::FindBar(QWidget* parent)
 
     loadIcons();
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
     m_previousButton->setEnabled(false);
     m_nextButton->setEnabled(false);
@@ -184,7 +163,7 @@ bool FindBar::eventFilter(QObject* obj, QEvent* e)
 {
     if (obj == m_comboBox && e->type() == QEvent::ShortcutOverride)
     {
-        QKeyEvent* ke = (QKeyEvent*)e;
+        auto ke = static_cast<QKeyEvent*>(e);
         if (ke->key() == Qt::Key_Escape)
         {
             hide();
@@ -195,7 +174,7 @@ bool FindBar::eventFilter(QObject* obj, QEvent* e)
 
     if (obj == m_comboBox && e->type() == QEvent::KeyPress)
     {
-        QKeyEvent* ke = (QKeyEvent*)e;
+        auto ke = static_cast<QKeyEvent*>(e);
         if (ke->key() == Qt::Key_Escape)
         {
             hide();

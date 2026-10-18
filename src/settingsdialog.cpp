@@ -1,20 +1,6 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file settingsdialog.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "settingsdialog.h"
 #include "application.h"
@@ -22,50 +8,44 @@
 #include "utils/iconloader.h"
 #include "utils/localsettings.h"
 #include "utils/separatorcombobox.h"
-#include "windark.h"
 #include "xmlui/gradientwidget.h"
 #include "xmlui/toolstrip.h"
 
 SettingsDialog::SettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
-    if (winDark::isDarkTheme())
-    {
-        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
-    }
-
     setWindowTitle(tr("Saladin Settings"));
 
-    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
+    auto promptWidget = new XmlUi::GradientWidget(this);
     topLayout->addWidget(promptWidget);
 
-    QHBoxLayout* promptLayout = new QHBoxLayout(promptWidget);
+    auto promptLayout = new QHBoxLayout(promptWidget);
     promptLayout->setSpacing(10);
 
     m_promptPixmap = new QLabel(promptWidget);
     promptLayout->addWidget(m_promptPixmap);
 
-    QLabel* promptLabel = new QLabel(promptWidget);
+    auto promptLabel = new QLabel(promptWidget);
     promptLabel->setWordWrap(true);
     promptLabel->setText(tr("Configure settings of Saladin:"));
     promptLabel->setMinimumWidth(350);
     promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
     promptLayout->addWidget(promptLabel, 1);
 
-    QFrame* separator = new QFrame(this);
+    auto separator = new QFrame(this);
     separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     topLayout->addWidget(separator);
 
-    QVBoxLayout* mainLayout = new QVBoxLayout();
+    auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(4);
     topLayout->addLayout(mainLayout);
 
-    XmlUi::ToolStrip* strip = new XmlUi::ToolStrip(this);
+    auto strip = new XmlUi::ToolStrip(this);
     mainLayout->addWidget(strip);
 
     m_generalAction = new QAction(tr("General"), this);
@@ -82,17 +62,17 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_stackedWidget = new QStackedWidget(this);
     mainLayout->addWidget(m_stackedWidget);
 
-    QWidget* generalTab = new QWidget(m_stackedWidget);
+    auto generalTab = new QWidget(m_stackedWidget);
     m_stackedWidget->addWidget(generalTab);
 
-    QVBoxLayout* generalLayout = new QVBoxLayout(generalTab);
+    auto generalLayout = new QVBoxLayout(generalTab);
     generalLayout->setContentsMargins(0, 6, 0, 0);
 
-    QGroupBox* regionalGroup = new QGroupBox(tr("Regional Options"), generalTab);
-    QGridLayout* regionalLayout = new QGridLayout(regionalGroup);
+    auto regionalGroup = new QGroupBox(tr("Regional Options"), generalTab);
+    auto regionalLayout = new QGridLayout(regionalGroup);
     generalLayout->addWidget(regionalGroup);
 
-    QLabel* languageLabel = new QLabel(tr("&Language of the user interface:"), regionalGroup);
+    auto languageLabel = new QLabel(tr("&Language of the user interface:"), regionalGroup);
     regionalLayout->addWidget(languageLabel, 0, 0);
 
     m_languageComboBox = new SeparatorComboBox(regionalGroup);
@@ -103,11 +83,11 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     regionalLayout->setColumnStretch(2, 1);
 
-    QGroupBox* directoriesGroup = new QGroupBox(tr("Home Directories"), generalTab);
-    QGridLayout* directoriesLayout = new QGridLayout(directoriesGroup);
+    auto directoriesGroup = new QGroupBox(tr("Home Directories"), generalTab);
+    auto directoriesLayout = new QGridLayout(directoriesGroup);
     generalLayout->addWidget(directoriesGroup);
 
-    QLabel* leftPaneLabel = new QLabel(tr("Left pane:"), directoriesGroup);
+    auto leftPaneLabel = new QLabel(tr("Left pane:"), directoriesGroup);
     directoriesLayout->addWidget(leftPaneLabel, 0, 0);
 
     m_leftPaneEdit = new QLineEdit(directoriesGroup);
@@ -119,7 +99,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_leftPaneButton = browseButton(directoriesGroup, SLOT(browseLeftPane()));
     directoriesLayout->addWidget(m_leftPaneButton, 0, 2);
 
-    QLabel* rightPaneLabel = new QLabel(tr("Right pane:"), directoriesGroup);
+    auto rightPaneLabel = new QLabel(tr("Right pane:"), directoriesGroup);
     directoriesLayout->addWidget(rightPaneLabel, 1, 0);
 
     m_rightPaneEdit = new QLineEdit(directoriesGroup);
@@ -134,17 +114,16 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_rememberCheckBox = new QCheckBox(tr("&Remember last directories on exit"), directoriesGroup);
     directoriesLayout->addWidget(m_rememberCheckBox, 2, 1);
 
-    QGroupBox* appearanceGroup = new QGroupBox(tr("Appearance"), generalTab);
-    QGridLayout* appearanceLayout = new QGridLayout(appearanceGroup);
+    auto appearanceGroup = new QGroupBox(tr("Appearance"), generalTab);
+    auto appearanceLayout = new QGridLayout(appearanceGroup);
     generalLayout->addWidget(appearanceGroup);
 
-    QLabel* themeLabel = new QLabel(tr("&User interface theme:"), appearanceGroup);
+    auto themeLabel = new QLabel(tr("&User interface theme:"), appearanceGroup);
     appearanceLayout->addWidget(themeLabel, 0, 0);
 
     m_themeComboBox = new SeparatorComboBox(appearanceGroup);
     m_themeComboBox->addItem(tr("Follow System"), "system");
-    m_themeComboBox->addItem(tr("Classic"), "classic");
-    m_themeComboBox->addItem(tr("White"), "white");
+    m_themeComboBox->addItem(tr("Light"), "light");
     m_themeComboBox->addItem(tr("Dark"), "dark");
     appearanceLayout->addWidget(m_themeComboBox, 0, 1);
 
@@ -152,11 +131,11 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     appearanceLayout->setColumnStretch(2, 1);
 
-    QGroupBox* fontsGroup = new QGroupBox(tr("Fonts"), generalTab);
-    QGridLayout* fontsLayout = new QGridLayout(fontsGroup);
+    auto fontsGroup = new QGroupBox(tr("Fonts"), generalTab);
+    auto fontsLayout = new QGridLayout(fontsGroup);
     generalLayout->addWidget(fontsGroup);
 
-    QLabel* binaryLabel = new QLabel(tr("&Binary view:"), fontsGroup);
+    auto binaryLabel = new QLabel(tr("&Binary view:"), fontsGroup);
     fontsLayout->addWidget(binaryLabel, 0, 0);
 
     m_binaryFontComboBox = new QFontComboBox(fontsGroup);
@@ -172,7 +151,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_binaryFontSpinBox->setSuffix(tr(" pt"));
     fontsLayout->addWidget(m_binaryFontSpinBox, 0, 2);
 
-    QLabel* textLabel = new QLabel(tr("&Text view:"), fontsGroup);
+    auto textLabel = new QLabel(tr("&Text view:"), fontsGroup);
     fontsLayout->addWidget(textLabel, 1, 0);
 
     m_textFontComboBox = new QFontComboBox(fontsGroup);
@@ -190,15 +169,15 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     fontsLayout->setColumnStretch(3, 1);
 
-    QGroupBox* miscGroup = new QGroupBox(tr("Misc. Options"), generalTab);
-    QVBoxLayout* miscLayout = new QVBoxLayout(miscGroup);
+    auto miscGroup = new QGroupBox(tr("Misc. Options"), generalTab);
+    auto miscLayout = new QVBoxLayout(miscGroup);
     generalLayout->addWidget(miscGroup);
 
     m_confirmDndCheckBox = new QCheckBox(tr("Confirm &Drag && Drop operations"), miscGroup);
     miscLayout->addWidget(m_confirmDndCheckBox);
 
-    QGroupBox* updateGroup = new QGroupBox(tr("Automatic Update"), generalTab);
-    QGridLayout* updateLayout = new QGridLayout(updateGroup);
+    auto updateGroup = new QGroupBox(tr("Automatic Update"), generalTab);
+    auto updateLayout = new QGridLayout(updateGroup);
     generalLayout->addWidget(updateGroup);
 
     m_updateCheckBox = new QCheckBox(tr("&Enable automatic checking for latest version of Saladin"), directoriesGroup);
@@ -206,14 +185,14 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     generalLayout->addStretch(1);
 
-    QWidget* toolsTab = new QWidget(m_stackedWidget);
+    auto toolsTab = new QWidget(m_stackedWidget);
     m_stackedWidget->addWidget(toolsTab);
 
-    QVBoxLayout* toolsLayout = new QVBoxLayout(toolsTab);
+    auto toolsLayout = new QVBoxLayout(toolsTab);
     toolsLayout->setContentsMargins(0, 6, 0, 0);
 
-    QGroupBox* viewerGroup = new QGroupBox(tr("File Viewer"), toolsTab);
-    QGridLayout* viewerLayout = new QGridLayout(viewerGroup);
+    auto viewerGroup = new QGroupBox(tr("File Viewer"), toolsTab);
+    auto viewerLayout = new QGridLayout(viewerGroup);
     toolsLayout->addWidget(viewerGroup);
 
     m_internalViewerCheckBox = new QCheckBox(tr("Use the internal file viewer"), viewerGroup);
@@ -229,8 +208,8 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     connect(m_internalViewerCheckBox, SIGNAL(toggled(bool)), m_viewerEdit, SLOT(setDisabled(bool)));
     connect(m_internalViewerCheckBox, SIGNAL(toggled(bool)), m_viewerButton, SLOT(setDisabled(bool)));
 
-    QGroupBox* editorGroup = new QGroupBox(tr("Text Editor"), toolsTab);
-    QGridLayout* editorLayout = new QGridLayout(editorGroup);
+    auto editorGroup = new QGroupBox(tr("Text Editor"), toolsTab);
+    auto editorLayout = new QGridLayout(editorGroup);
     toolsLayout->addWidget(editorGroup);
 
     m_editorEdit = new QLineEdit(editorGroup);
@@ -240,8 +219,8 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_editorButton = browseButton(editorGroup, SLOT(browseEditor()));
     editorLayout->addWidget(m_editorButton, 0, 1);
 
-    QGroupBox* consoleGroup = new QGroupBox(tr("Console"), toolsTab);
-    QGridLayout* consoleLayout = new QGridLayout(consoleGroup);
+    auto consoleGroup = new QGroupBox(tr("Console"), toolsTab);
+    auto consoleLayout = new QGridLayout(consoleGroup);
     toolsLayout->addWidget(consoleGroup);
 
     m_consoleEdit = new QLineEdit(consoleGroup);
@@ -251,8 +230,8 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_consoleButton = browseButton(consoleGroup, SLOT(browseConsole()));
     consoleLayout->addWidget(m_consoleButton, 0, 1);
 
-    QGroupBox* diffGroup = new QGroupBox(tr("Compare Files"), toolsTab);
-    QGridLayout* diffLayout = new QGridLayout(diffGroup);
+    auto diffGroup = new QGroupBox(tr("Compare Files"), toolsTab);
+    auto diffLayout = new QGridLayout(diffGroup);
     toolsLayout->addWidget(diffGroup);
 
     m_diffEdit = new QLineEdit(diffGroup);
@@ -266,7 +245,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     mainLayout->addSpacing(7);
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply, Qt::Horizontal, this);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply, Qt::Horizontal, this);
     mainLayout->addWidget(buttonBox);
 
     buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&OK"));
@@ -279,9 +258,9 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     loadIcons();
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     int index = m_languageComboBox->findData(settings->value("Language").toString());
     if (index >= 2) m_languageComboBox->setCurrentIndex(index);
@@ -331,7 +310,7 @@ void SettingsDialog::accept()
 
 bool SettingsDialog::apply()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     QString language = m_languageComboBox->itemData(m_languageComboBox->currentIndex()).toString();
     if (language != settings->value("Language").toString())
@@ -418,7 +397,7 @@ void SettingsDialog::loadLanguages()
     m_languageComboBox->addSeparator();
 
     // files in the ini format are always encoded as UTF-8 in Qt 6
-    QSettings settings(application->translationsPath() + "/locale.ini", QSettings::IniFormat);
+    QSettings settings(g_application->translationsPath() + "/locale.ini", QSettings::IniFormat);
 
     settings.beginGroup("languages");
     QStringList languages = settings.allKeys();
@@ -436,7 +415,7 @@ void SettingsDialog::loadLanguages()
 
 QToolButton* SettingsDialog::browseButton(QWidget* parent, const char* slot)
 {
-    QToolButton* button = new QToolButton(parent);
+    auto button = new QToolButton(parent);
     button->setAutoRaise(true);
     button->setIconSize(QSize(16, 16));
     button->setToolTip(tr("Browse"));

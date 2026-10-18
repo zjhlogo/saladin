@@ -1,20 +1,6 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file iconloader.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "iconloader.h"
 #include "application.h"
@@ -30,7 +16,7 @@ QPixmap IconLoader::pixmap(const QString& name, int size)
     QPixmap pixmap;
     if (QPixmapCache::find(key, &pixmap)) return pixmap;
 
-    QString path = QString("%1/%2-%3.png").arg(application->iconsPath(), name).arg(size);
+    QString path = QString("%1/%2-%3.png").arg(ThemeHelper::iconsPath(), name).arg(size);
 
     pixmap = QPixmap(path);
 
@@ -89,9 +75,9 @@ QIcon IconLoader::icon(const QString& name)
 {
     QIcon icon;
 
-    QString iconsPath = application->iconsPath();
+    QString iconsPath = ThemeHelper::iconsPath();
 
-    const int sizes[4] = {16, 22, 32, 48};
+    constexpr int sizes[4] = {16, 22, 32, 48};
 
     for (int i = 0; i < 4; i++)
     {
@@ -107,9 +93,9 @@ QIcon IconLoader::overlayedIcon(const QString& name, const QString& overlay)
 {
     QIcon icon;
 
-    QString iconsPath = application->iconsPath();
+    QString iconsPath = ThemeHelper::iconsPath();
 
-    const int sizes[4] = {16, 22, 32, 48};
+    constexpr int sizes[4] = {16, 22, 32, 48};
 
     for (int i = 0; i < 4; i++)
     {

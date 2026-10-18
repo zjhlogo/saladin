@@ -1,25 +1,10 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file aboutbox.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "aboutbox.h"
 #include "application.h"
 #include "utils/iconloader.h"
-#include "windark.h"
 #include "xmlui/gradientwidget.h"
 
 #include <QScreen>
@@ -27,46 +12,41 @@
 AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent)
     : QDialog(parent)
 {
-    if (winDark::isDarkTheme())
-    {
-        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
-    }
-
     setAttribute(Qt::WA_DeleteOnClose, true);
 
     setWindowTitle(title);
 
-    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
+    auto promptWidget = new XmlUi::GradientWidget(this);
     topLayout->addWidget(promptWidget);
 
-    QHBoxLayout* promptLayout = new QHBoxLayout(promptWidget);
+    auto promptLayout = new QHBoxLayout(promptWidget);
     promptLayout->setSpacing(10);
 
-    QLabel* promptPixmap = new QLabel(promptWidget);
-    promptPixmap->setPixmap(application->windowIcon().pixmap(QSize(48, 48)));
+    auto promptPixmap = new QLabel(promptWidget);
+    promptPixmap->setPixmap(g_application->windowIcon().pixmap(QSize(48, 48)));
     promptLayout->addWidget(promptPixmap, 0, Qt::AlignTop | Qt::AlignLeft);
 
-    QLabel* promptLabel = new QLabel(promptWidget);
+    auto promptLabel = new QLabel(promptWidget);
     promptLabel->setWordWrap(true);
     promptLabel->setText(message);
     promptLabel->setMinimumWidth(350);
     promptLabel->setOpenExternalLinks(true);
     promptLayout->addWidget(promptLabel, 1, Qt::AlignTop);
 
-    QFrame* separator = new QFrame(this);
+    auto separator = new QFrame(this);
     separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     topLayout->addWidget(separator);
 
-    QVBoxLayout* mainLayout = new QVBoxLayout();
+    auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(4);
     topLayout->addLayout(mainLayout);
 
-    AboutBoxScrollArea* scrollArea = new AboutBoxScrollArea(this);
+    auto scrollArea = new AboutBoxScrollArea(this);
     mainLayout->addWidget(scrollArea);
 
     scrollArea->setBackgroundRole(QPalette::Base);
@@ -83,7 +63,7 @@ AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent
 
     mainLayout->addSpacing(7);
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
     mainLayout->addWidget(buttonBox);
 
     buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&OK"));
@@ -97,7 +77,7 @@ AboutBox::~AboutBox()
 
 AboutBoxSection* AboutBox::addSection(const QPixmap& pixmap, const QString& message)
 {
-    AboutBoxSection* section = new AboutBoxSection(pixmap, message, m_sectionsWidget);
+    auto section = new AboutBoxSection(pixmap, message, m_sectionsWidget);
 
     m_sectionsLayout->insertWidget(m_sectionsLayout->count() - 1, section);
 
@@ -158,7 +138,7 @@ QPushButton* AboutBoxSection::addButton(const QString& text)
         m_mainLayout->addLayout(m_buttonsLayout);
     }
 
-    QPushButton* button = new QPushButton(text, this);
+    auto button = new QPushButton(text, this);
     m_buttonsLayout->addWidget(button, 0, Qt::AlignBottom);
 
     return button;

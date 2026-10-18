@@ -93,7 +93,7 @@ TextView::TextView(QObject* parent, QWidget* parentWidget)
 
     loadIcons();
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
     loadXmlUiFile(":/resources/textview.xml");
 
@@ -152,7 +152,7 @@ TextView::TextView(QObject* parent, QWidget* parentWidget)
 
     initializeSettings();
 
-    connect(application->applicationSettings(), SIGNAL(settingsChanged()), this, SLOT(settingsChanged()));
+    connect(g_application->applicationSettings(), SIGNAL(settingsChanged()), this, SLOT(settingsChanged()));
 
     settingsChanged();
 
@@ -172,7 +172,7 @@ TextView::~TextView()
 
 void TextView::settingsChanged()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     QString family = settings->value("TextFont").toString();
     int size = settings->value("TextFontSize").toInt();
@@ -185,7 +185,7 @@ void TextView::settingsChanged()
 
 void TextView::initializeSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     bool wordWrap = settings->value("WordWrap", true).toBool();
     m_edit->setWordWrapMode(wordWrap ? QTextOption::WrapAtWordBoundaryOrAnywhere : QTextOption::NoWrap);
@@ -203,7 +203,7 @@ void TextView::initializeSettings()
 
 void TextView::storeSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     settings->setValue("WordWrap", action("wordWrap")->isChecked());
     settings->setValue("LineNumbers", action("lineNumbers")->isChecked());

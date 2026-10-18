@@ -164,7 +164,7 @@ PaneWidget::PaneWidget(PaneLocation location, QWidget* parent)
 
     setFocusProxy(m_view);
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(updateEditPalette()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(updateEditPalette()));
 }
 
 PaneWidget::~PaneWidget()
@@ -173,7 +173,7 @@ PaneWidget::~PaneWidget()
 
 void PaneWidget::restoreSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     QString key = QString("HeaderState%1").arg(m_location + 1);
     if (settings->contains(key))
@@ -191,7 +191,7 @@ void PaneWidget::restoreSettings()
 
 void PaneWidget::saveSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     QString key = QString("HeaderState%1").arg(m_location + 1);
     settings->setValue(key, m_view->header()->saveState());
@@ -617,7 +617,7 @@ bool PaneWidget::dragDropHelper(QDropEvent* e, bool doDrop)
 
     if (result && doDrop)
     {
-        LocalSettings* settings = application->applicationSettings();
+        LocalSettings* settings = g_application->applicationSettings();
 
         if (!(e->mouseButtons() & Qt::RightButton) && settings->value("ConfirmDnd").toBool())
         {
@@ -1151,7 +1151,7 @@ void PaneWidget::showBookmarks()
 {
     QMenu menu;
 
-    QList<Bookmark> bookmarks = application->bookmarks();
+    QList<Bookmark> bookmarks = g_application->bookmarks();
     std::sort(bookmarks.begin(), bookmarks.end());
 
     QList<QAction*> actions;

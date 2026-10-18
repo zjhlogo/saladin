@@ -1,43 +1,23 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file operationdialog.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "operationdialog.h"
 #include "multirenamewidget.h"
 #include "utils/iconloader.h"
-#include "windark.h"
 #include "xmlui/gradientwidget.h"
 
 OperationDialog::OperationDialog(Flags flags, QWidget* parent)
     : QDialog(parent)
 {
-    if (winDark::isDarkTheme())
-    {
-        winDark::setDark_Titlebar(reinterpret_cast<HWND>(winId()));
-    }
-
-    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    XmlUi::GradientWidget* promptWidget = new XmlUi::GradientWidget(this);
+    auto promptWidget = new XmlUi::GradientWidget(this);
     topLayout->addWidget(promptWidget);
 
-    QHBoxLayout* promptLayout = new QHBoxLayout(promptWidget);
+    auto promptLayout = new QHBoxLayout(promptWidget);
     promptLayout->setSpacing(10);
 
     m_promptPixmap = new QLabel(promptWidget);
@@ -47,7 +27,7 @@ OperationDialog::OperationDialog(Flags flags, QWidget* parent)
     m_promptLabel->setWordWrap(true);
     promptLayout->addWidget(m_promptLabel, 1);
 
-    QFrame* separator = new QFrame(this);
+    auto separator = new QFrame(this);
     separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     topLayout->addWidget(separator);
 
@@ -56,14 +36,14 @@ OperationDialog::OperationDialog(Flags flags, QWidget* parent)
     m_mainLayout->setSpacing(6);
     topLayout->addLayout(m_mainLayout);
 
-    QGridLayout* gridLayout = new QGridLayout();
+    auto gridLayout = new QGridLayout();
     m_mainLayout->addLayout(gridLayout);
 
     int row = 0;
 
     if (flags.testFlag(WithName))
     {
-        QLabel* label = new QLabel(tr("&Name:"), this);
+        auto label = new QLabel(tr("&Name:"), this);
         gridLayout->addWidget(label, row, 0);
 
         m_nameEdit = new QLineEdit(this);
@@ -75,7 +55,7 @@ OperationDialog::OperationDialog(Flags flags, QWidget* parent)
 
     if (flags.testFlag(WithPattern))
     {
-        QLabel* label = new QLabel(tr("&Pattern:"), this);
+        auto label = new QLabel(tr("&Pattern:"), this);
         gridLayout->addWidget(label, row, 0);
 
         m_patternComboBox = new QComboBox(this);
@@ -91,7 +71,7 @@ OperationDialog::OperationDialog(Flags flags, QWidget* parent)
 
     if (flags.testFlag(WithLocation))
     {
-        QLabel* label = new QLabel(tr("Directory:"), this);
+        auto label = new QLabel(tr("Directory:"), this);
         gridLayout->addWidget(label, row, 0);
 
         m_locationEdit = new QLineEdit(this);
@@ -103,7 +83,7 @@ OperationDialog::OperationDialog(Flags flags, QWidget* parent)
 
     if (flags.testFlag(WithSource))
     {
-        QLabel* label = new QLabel(tr("Source:"), this);
+        auto label = new QLabel(tr("Source:"), this);
         gridLayout->addWidget(label, row, 0);
 
         m_sourceEdit = new QLineEdit(this);
@@ -115,7 +95,7 @@ OperationDialog::OperationDialog(Flags flags, QWidget* parent)
 
     if (flags.testFlag(WithTarget))
     {
-        QLabel* label = new QLabel(tr("Target:"), this);
+        auto label = new QLabel(tr("Target:"), this);
         gridLayout->addWidget(label, row, 0);
 
         m_targetEdit = new QLineEdit(this);
@@ -135,7 +115,7 @@ OperationDialog::OperationDialog(Flags flags, QWidget* parent)
 
     if (row > 0) m_mainLayout->addSpacing(5);
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
     m_mainLayout->addWidget(buttonBox);
 
     buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&OK"));
@@ -304,7 +284,7 @@ void OperationDialog::rename()
     {
         setMaximumHeight(QWIDGETSIZE_MAX);
 
-        QFrame* separator = new QFrame(this);
+        auto separator = new QFrame(this);
         separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
         m_mainLayout->insertWidget(1, separator);
 

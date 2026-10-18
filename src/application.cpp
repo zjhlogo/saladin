@@ -1,22 +1,9 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file application.cpp
+// \author zhangjianhua
+// \date 2026/10/18
 
 #include "application.h"
+#include "ThemeHelper.h"
 #include "aboutbox.h"
 #include "guidedialog.h"
 #include "mainwindow.h"
@@ -26,10 +13,9 @@
 #include "utils/iconloader.h"
 #include "utils/localsettings.h"
 #include "utils/updateclient.h"
-#include "windark.h"
 #include "xmlui/windowsstyle.h"
 
-Application* application = nullptr;
+Application* g_application = nullptr;
 
 Application::Application(int& argc, char** argv)
     : QApplication(argc, argv)
@@ -38,7 +24,7 @@ Application::Application(int& argc, char** argv)
 
     initializeDefaultPaths();
 
-    application = this;
+    g_application = this;
 
     ShellPidl::registerMetaType();
 
@@ -54,18 +40,23 @@ Application::Application(int& argc, char** argv)
     loadTranslation("qt", true);
     loadTranslation("saladin", false);
 
-    initializePalette();
+    // The theme selected in the settings is authoritative: "light" always use the light palette, "dark" always uses the dark one and "system" follows the
+    // Windows color scheme. Anything else (e.g. a missing value) is treated as "system".
+    QString settingTheme = m_settings->value("Theme").toString();
+    auto finalTheme = ThemeHelper::calculateAppTheme(settingTheme);
+    ThemeHelper::setAppTheme(finalTheme);
+    initializePalette(finalTheme);
 
     setWindowIcon(IconLoader::icon("saladin"));
 
     // Follow the system light/dark color scheme while the application is running.
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged, this, &Application::updateColorScheme);
+    connect(styleHints(), &QStyleHints::colorSchemeChanged, this, &Application::updateColorScheme);
 
     mainWindow = new MainWindow();
 
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
-    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    auto manager = new QNetworkAccessManager(this);
 
     m_updateClient = new UpdateClient("saladin", version(), manager);
 
@@ -257,9 +248,9 @@ static void updatePalette(QWidget* widget, const QPalette& palette)
     {
         if (child->isWidgetType())
         {
-            QWidget* childWidget = (QWidget*)child;
+            auto childWidget = static_cast<QWidget*>(child);
             if (childWidget->isTopLevel())
-                updatePalette(childWidget, application->palette());
+                updatePalette(childWidget, g_application->palette());
             else
                 updatePalette(childWidget, widget->palette());
         }
@@ -269,16 +260,15 @@ static void updatePalette(QWidget* widget, const QPalette& palette)
 void Application::settingsChanged()
 {
     m_updateClient->setAutoUpdate(m_settings->value("AutoUpdate").toBool());
-
-    QString oldTheme = m_theme;
-    m_theme = m_settings->value("Theme").toString();
-
-    if (!oldTheme.isEmpty() && m_theme != oldTheme) updateTheme();
+    QString settingTheme = m_settings->value("Theme").toString();
+    auto finalTheme = ThemeHelper::calculateAppTheme(settingTheme);
+    ThemeHelper::setAppTheme(finalTheme);
+    updateTheme(finalTheme);
 }
 
-void Application::updateTheme()
+void Application::updateTheme(ThemeHelper::AppTheme theme)
 {
-    initializePalette();
+    initializePalette(theme);
 
     foreach (QWidget* widget, topLevelWidgets())
         updatePalette(widget, palette());
@@ -308,7 +298,7 @@ bool Application::loadTranslation(const QString& name, bool tryQtDir)
 
     foreach (QString path, paths)
     {
-        QTranslator* translator = new QTranslator(this);
+        auto translator = new QTranslator(this);
 
         if (!translator->load(fullName, path))
         {
@@ -394,77 +384,39 @@ void Application::initializeSettings()
     if (!m_settings->contains("EditorTool"))
     {
         wchar_t buffer[MAX_PATH];
-        if (SHGetSpecialFolderPath(0, buffer, CSIDL_SYSTEM, FALSE)) m_settings->setValue("EditorTool", QString::fromWCharArray(buffer) + "\\notepad.exe");
+        if (SHGetSpecialFolderPath(nullptr, buffer, CSIDL_SYSTEM, FALSE)) m_settings->setValue("EditorTool", QString::fromWCharArray(buffer) + "\\notepad.exe");
     }
 
     if (!m_settings->contains("ConsoleTool"))
     {
         wchar_t buffer[MAX_PATH];
-        if (SHGetSpecialFolderPath(0, buffer, CSIDL_SYSTEM, FALSE)) m_settings->setValue("ConsoleTool", QString::fromWCharArray(buffer) + "\\cmd.exe");
+        if (SHGetSpecialFolderPath(nullptr, buffer, CSIDL_SYSTEM, FALSE)) m_settings->setValue("ConsoleTool", QString::fromWCharArray(buffer) + "\\cmd.exe");
     }
 }
 
-void Application::initializePalette()
+void Application::initializePalette(ThemeHelper::AppTheme theme)
 {
-    // The theme selected in the settings is authoritative: "classic" and
-    // "white" always use the light palette, "dark" always uses the dark one and
-    // "system" follows the Windows color scheme. Anything else (e.g. a missing
-    // value) is treated as "system".
-    QString theme = m_settings->value("Theme").toString();
-
-    if (theme != QLatin1String("classic") && theme != QLatin1String("white") && theme != QLatin1String("dark") && theme != QLatin1String("system"))
-        theme = QLatin1String("system");
-
-    bool systemDark = winDark::isSystemDarkTheme();
-    bool dark = (theme == QLatin1String("system")) ? systemDark : (theme == QLatin1String("dark"));
-
-    // Windows created later (dialogs, viewers) ask winDark::isDarkTheme() for
-    // their title bars, so let it report the theme in effect instead of the raw
+    // Windows created later (dialogs, viewers) ask ThemeHelper::getCurrentTheme() for their title bars, so let it report the theme in effect instead of the raw
     // system color scheme.
-    winDark::setThemeOverride(theme == QLatin1String("system") ? -1 : (dark ? 1 : 0));
-
-    if (theme == m_appliedTheme && dark == m_darkTheme) return;
-
-    m_appliedTheme = theme;
-    m_darkTheme = dark;
-
-    if (dark)
+    if (ThemeHelper::getAppTheme() == ThemeHelper::AppTheme::Dark)
     {
-        setStyle(QStyleFactory::create("Fusion"));
-        setPalette(winDark::darkPalette());
-        setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+        setStyle("fusion");
     }
     else
     {
-        // Set the style first and the palette second: QApplication::setPalette()
-        // polishes the palette, which is where XmlUi::WindowsStyle picks up the
-        // "classic" and "white" variants of the light theme.
-        setStyle(new XmlUi::WindowsStyle());
-        setPalette(style()->standardPalette());
-        setStyleSheet(QString());
+        setStyle("windows");
     }
+
+    m_appliedTheme = ThemeHelper::getAppTheme();
 }
 
 void Application::updateColorScheme()
 {
-    bool dark = winDark::isDarkTheme();
-
-    if (dark == m_darkTheme) return;
+    if (m_appliedTheme == ThemeHelper::getAppTheme()) return;
 
     // Re-apply the palette, propagate it to all widgets, clear the pixmap cache
     // and notify the windows so they can reload their theme-dependent resources.
-    updateTheme();
-
-    foreach (QWidget* widget, topLevelWidgets())
-    {
-        if (widget->isWindow()) winDark::setDark_Titlebar(reinterpret_cast<HWND>(widget->winId()), dark);
-    }
-}
-
-QString Application::iconsPath() const
-{
-    // The dark icon set is drawn for dark backgrounds and vice versa.
-    return m_darkTheme ? ":/icons/dark" : ":/icons";
+    updateTheme(ThemeHelper::getAppTheme());
 }
 
 QString Application::locateDataFile(const QString& name)

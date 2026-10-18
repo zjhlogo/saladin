@@ -259,7 +259,7 @@ bool DriveStripManager::dragDropHelper(XmlUi::ToolStrip* strip, QDropEvent* e, b
 
     if (result && doDrop)
     {
-        LocalSettings* settings = application->applicationSettings();
+        LocalSettings* settings = g_application->applicationSettings();
 
         if (!(e->mouseButtons() & Qt::RightButton) && settings->value("ConfirmDnd").toBool())
         {

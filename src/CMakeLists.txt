@@ -25,7 +25,7 @@ set(SALADIN_SOURCES
     searchhelper.cpp
     searchitemmodel.cpp
     settingsdialog.cpp
-    windark.cpp
+    ThemeHelper.cpp
 )
 
 set(SALADIN_HEADERS
@@ -49,7 +49,7 @@ set(SALADIN_HEADERS
     searchhelper.h
     searchitemmodel.h
     settingsdialog.h
-    windark.h
+    ThemeHelper.h
     precompiled.h
 )
 

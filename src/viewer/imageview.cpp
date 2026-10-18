@@ -80,7 +80,7 @@ ImageView::ImageView(QObject* parent, QWidget* parentWidget)
 
     loadIcons();
 
-    connect(application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
     loadXmlUiFile(":/resources/imageview.xml");
 
@@ -139,7 +139,7 @@ View::Type ImageView::type() const
 
 void ImageView::initializeSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     bool fit = settings->value("ZoomToFit", false).toBool();
     action("zoomFit")->setChecked(fit);
@@ -152,7 +152,7 @@ void ImageView::initializeSettings()
 
 void ImageView::storeSettings()
 {
-    LocalSettings* settings = application->applicationSettings();
+    LocalSettings* settings = g_application->applicationSettings();
 
     settings->setValue("ZoomToFit", m_label->zoom() < 0.0);
     settings->setValue("BlackBackground", m_label->isBlackBackground());
