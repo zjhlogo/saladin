@@ -3,21 +3,10 @@
 #
 # CMake build definition (replaces the former qmake project files).
 #
-# Quick start (Qt 6 + MinGW):
-#
-#   set PATH=C:\Qt\6.12.0\mingw_64\bin;C:\Qt\Tools\mingw1310_64\bin;%PATH%
-#   cmake -S . -B build -G "MinGW Makefiles" ^
-#         -DCMAKE_BUILD_TYPE=Release ^
-#         -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/mingw_64 ^
-#         -DCMAKE_INSTALL_PREFIX=%CD%/dist
-#   cmake --build build --parallel
-#   cmake --install build
-#
 # Quick start (Qt 6 + MSVC):
 #
 #   rmdir /s /q build
-#   cmake -S . -B build -G "Visual Studio 18 2026" -A x64 ^
-#         -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/msvc2022_64
+#   cmake -S . -B build -G "Visual Studio 18 2026" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/msvc2022_64
 #   cmake --build build --config Release
 #
 # From a normal prompt -G Ninja is faster.
