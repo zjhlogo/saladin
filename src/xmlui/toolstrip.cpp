@@ -36,6 +36,7 @@
 #include <QEvent>
 #include <QLayout>
 #include <QMenu>
+#include <QPolygon>
 #include <QStyle>
 #include <QStyleOption>
 #include <QStylePainter>
@@ -177,8 +178,11 @@ QToolButton* ToolStrip::createButton(QAction* action, ButtonSize size)
         button->setIconSize(QSize(16, 16));
         break;
     case LargeButton:
+        // Toolbar sections are icon only: the label would make each button as
+        // wide as its text, which leaves the icons unevenly spaced. The text
+        // is still used for the tooltip (see ActionButton::adjustText).
         button->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        button->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        button->setToolButtonStyle(Qt::ToolButtonIconOnly);
         button->setIconSize(QSize(22, 22));
         break;
     }
@@ -403,7 +407,12 @@ void ToolStripLayout::calculateSize()
     {
         m_auxWidthNoChevron = auxWidth > 0 ? auxWidth + 6 : 0;
         m_auxWidth = qMax(m_auxWidthNoChevron, chevronSize.width() + 6);
-        auxHeight += chevronSize.height() + 9;
+        // The chevron shares the bottom of the row with the buttons, so its
+        // height is a lower bound for the row, not something to add on top of
+        // it: adding it made a strip with sections (the main toolbar) as tall
+        // as buttons + chevron + 9, which left a wide empty band above and
+        // below the icons.
+        auxHeight = qMax(auxHeight, chevronSize.height() + 2);
     }
 
     int ml, mt, mr, mb;
@@ -564,7 +573,7 @@ void ToolStripLayout::setGeometry(const QRect& rect)
         if (m_simpleLayout)
             button->setGeometry(QRect(right - size.width(), contents.top(), size.width(), size.height()));
         else
-            button->setGeometry(QRect(right - size.width() - 3, contents.top() + 8, size.width(), size.height()));
+            button->setGeometry(QRect(right - size.width() - 3, contents.top() + qMax(0, (contents.height() - size.height()) / 2), size.width(), size.height()));
         right -= size.width();
     }
 
@@ -706,24 +715,35 @@ static int calculateWidth(QLayoutItem* item)
     return 0;
 }
 
+static int calculateHeight(QLayoutItem* item)
+{
+    if (item == nullptr) return 0;
+
+    QLayout* layout = item->layout();
+    if (layout)
+    {
+        int height = 0;
+        for (int i = 0; i < layout->count(); i++)
+            height = qMax(height, calculateHeight(layout->itemAt(i)));
+        return height;
+    }
+
+    QWidget* widget = item->widget();
+    if (widget) return widget->sizeHint().height();
+
+    return 0;
+}
+
 void ToolStripSectionLayout::calculateSize()
 {
     QFontMetrics fontMetrics = parentWidget()->fontMetrics();
 
-    QStyleOptionToolButton option;
-    option.initFrom(parentWidget());
-    option.iconSize = QSize(22, 22);
-    option.state |= QStyle::State_AutoRaise;
-    option.subControls = QStyle::SC_ToolButton;
-    option.toolButtonStyle = Qt::ToolButtonTextUnderIcon;
-
-    QSize buttonSize = parentWidget()->style()->sizeFromContents(QStyle::CT_ToolButton, &option, QSize(22, 22 + 4 + fontMetrics.height() * 2), parentWidget());
-
     int width = calculateWidth(const_cast<ToolStripSectionLayout*>(this));
+    int height = calculateHeight(const_cast<ToolStripSectionLayout*>(this));
 
     m_titleSize = fontMetrics.size(0, m_titleText);
 
-    m_sizeHint = QSize(qMax(width, m_titleSize.width()) + 9, buttonSize.height() + 8);
+    m_sizeHint = QSize(qMax(width, m_titleSize.width()) + 9, qMax(height, m_titleSize.height()) + 8);
 
     m_dirty = false;
 }
@@ -826,6 +846,57 @@ ActionButton::ActionButton(QWidget* parent)
 
 ActionButton::~ActionButton()
 {
+}
+
+bool ActionButton::hasMenuBadge() const
+{
+    if (toolButtonStyle() != Qt::ToolButtonIconOnly) return false;
+    if (popupMode() != QToolButton::MenuButtonPopup) return false;
+
+    if (menu() != nullptr) return true;
+
+    QAction* action = defaultAction();
+    return action != nullptr && action->menu() != nullptr;
+}
+
+// Draw the popup marker as a small wedge in the bottom right corner. The menu
+// segment drawn by the style would need room next to the icon, which an icon
+// only button does not have.
+static void drawMenuBadge(QPainter* painter, const QRect& rect, const QColor& color)
+{
+    const int size = 6;
+
+    QPolygon badge;
+    badge << QPoint(rect.right() - size, rect.bottom())
+          << QPoint(rect.right(), rect.bottom())
+          << QPoint(rect.right(), rect.bottom() - size);
+
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(color);
+    painter->drawPolygon(badge);
+    painter->restore();
+}
+
+void ActionButton::paintEvent(QPaintEvent* /*e*/)
+{
+    QStylePainter painter(this);
+
+    QStyleOptionToolButton option;
+    initStyleOption(&option);
+
+    const bool badge = hasMenuBadge();
+
+    if (badge)
+    {
+        option.subControls &= ~QStyle::SC_ToolButtonMenu;
+        option.features &= ~(QStyleOptionToolButton::HasMenu | QStyleOptionToolButton::MenuButtonPopup);
+    }
+
+    painter.drawComplexControl(QStyle::CC_ToolButton, option);
+
+    if (badge) drawMenuBadge(&painter, option.rect, option.palette.color(QPalette::ButtonText));
 }
 
 void ActionButton::adjustText()

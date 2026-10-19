@@ -173,7 +173,11 @@ namespace XmlUi
         void adjustText();
 
     protected: // overrides
+        void paintEvent(QPaintEvent* e);
         void actionEvent(QActionEvent* e);
+
+    private:
+        bool hasMenuBadge() const;
     };
 
 } // namespace XmlUi
