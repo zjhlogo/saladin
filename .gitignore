@@ -3,6 +3,7 @@ build/
 debug/
 release/
 tmp/
+translations/*.qm
 
 # CMake
 CMakeUserPresets.json
