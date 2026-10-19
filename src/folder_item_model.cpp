@@ -10,9 +10,10 @@
 #include <QTimer>
 #include <algorithm>
 
-// 兜底轮询间隔（毫秒）：仅在 shell 通知不可靠时启用。
-static constexpr int PollInterval = 3000;       // 注册失败（虚拟文件夹、特殊位置等）
+// 兜底轮询间隔（毫秒）：shell 通知为主，轮询只用于补上被合并/丢失的通知。
+static constexpr int LocalPollInterval = 10000; // 本地目录：通知可靠，低频校验即可
 static constexpr int RemotePollInterval = 5000; // 网络位置：通知可能永远不来
+static constexpr int PollInterval = 3000;       // 注册失败（虚拟文件夹、特殊位置等）
 
 // 单次校验耗时超过该值就放慢轮询，上限 MaxPollInterval。
 static constexpr int SlowPollThreshold = 500;
@@ -59,36 +60,44 @@ void FolderItemModel::setFolder(ShellFolder* folder)
     delete m_folder;
     m_folder = folder;
 
-    m_items = folderItems();
-
-    connect(m_folder, SIGNAL(itemChanged(const ItemChange&)), this, SLOT(itemChanged(const ItemChange&)));
-    connect(m_folder, SIGNAL(folderUpdated()), this, SLOT(folderUpdated()));
-
-    // 本地磁盘上的 shell 通知是可靠的；注册失败（虚拟文件夹等）或目录不在本地
-    // （网络位置的通知可能永远不来）时，退化为低频轮询兜底。
-    if (m_folder->startWatching())
-    {
-        if (m_folder->isLocalFileSystemFolder())
-        {
-            m_pollTimer->stop();
-        }
-        else
-        {
-            m_pollTimer->setInterval(RemotePollInterval);
-            m_pollTimer->start();
-        }
-    }
-    else
-    {
-        m_pollTimer->setInterval(PollInterval);
-        m_pollTimer->start();
-    }
-
     m_hasParent = m_folder->hasParent();
+    m_folderLost = false;
 
     m_extractQueue.clear();
     m_changes.clear();
     m_pendingRefresh = false;
+
+    // 目录已经被外部程序删除/移动时不要枚举：shell 会弹出“位置不可用”对话框，
+    // 改为通知面板退回最近的可用目录。
+    if (m_folder->exists())
+    {
+        m_items = folderItems();
+
+        connect(m_folder, SIGNAL(itemChanged(const ItemChange&)), this, SLOT(itemChanged(const ItemChange&)));
+        connect(m_folder, SIGNAL(folderUpdated()), this, SLOT(folderUpdated()));
+
+        // shell 通知是实时的主力；轮询只是兜底：通知可能被合并/丢失，当前目录
+        // 也可能被外部程序整个删掉（这种情况 shell 未必发通知）。注册失败
+        // （虚拟文件夹等）时完全没有通知，轮询间隔取最小。
+        if (m_folder->startWatching())
+        {
+            m_pollTimer->setInterval(m_folder->isLocalFileSystemFolder() ? LocalPollInterval : RemotePollInterval);
+        }
+        else
+        {
+            m_pollTimer->setInterval(PollInterval);
+        }
+
+        m_pollTimer->start();
+    }
+    else
+    {
+        m_items.clear();
+
+        m_pollTimer->stop();
+
+        reportFolderLost();
+    }
 
     endResetModel();
 
@@ -99,6 +108,12 @@ void FolderItemModel::refresh()
 {
     if (!m_folder) return;
 
+    if (!m_folder->exists())
+    {
+        reportFolderLost();
+        return;
+    }
+
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     setItems(folderItems());
@@ -108,7 +123,13 @@ void FolderItemModel::refresh()
 
 void FolderItemModel::refreshIfChanged()
 {
-    if (!m_folder || !m_folder->isValid()) return;
+    if (!m_folder || m_folderLost) return;
+
+    if (!m_folder->exists())
+    {
+        reportFolderLost();
+        return;
+    }
 
     QList<ShellItem> items = folderItems();
 
@@ -119,6 +140,15 @@ void FolderItemModel::refreshIfChanged()
     setItems(items);
 
     QApplication::restoreOverrideCursor();
+}
+
+void FolderItemModel::reportFolderLost()
+{
+    if (m_folderLost) return;
+
+    m_folderLost = true;
+
+    emit folderLost();
 }
 
 void FolderItemModel::pollForChanges()

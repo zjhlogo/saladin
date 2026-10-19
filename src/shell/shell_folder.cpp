@@ -125,6 +125,20 @@ bool ShellFolder::isValid() const
     return d->m_folder != nullptr;
 }
 
+bool ShellFolder::exists() const
+{
+    // 连 PIDL 都没有的目录既不能判断存在性也不能枚举，直接当作不可用。
+    if (!d->m_folder || !d->m_pidl) return false;
+
+    // 只有文件系统路径才能廉价地判断存在性；虚拟文件夹（此电脑、网络、控制面板等）
+    // 一律按仍然有效处理，避免误判后把面板赶走。
+    wchar_t path[MAX_PATH];
+
+    if (!SHGetPathFromIDListW(d->m_pidl, path)) return true;
+
+    return GetFileAttributesW(path) != INVALID_FILE_ATTRIBUTES;
+}
+
 bool ShellFolder::isLocalFileSystemFolder() const
 {
     wchar_t path[MAX_PATH];

@@ -88,6 +88,10 @@ public: // overrides
 
     virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
+signals:
+    // 当前目录已被外部删除/移动，面板需要换到别的目录。
+    void folderLost();
+
 private slots:
     void extractNextIcon();
 
@@ -112,6 +116,8 @@ private:
 
     void removeItemAt(int row, QStringList& names);
 
+    void reportFolderLost();
+
     bool shellItemLessThan(const ShellItem& item1, const ShellItem& item2);
 
     QStringList storeIndexes(const QModelIndexList& indexes);
@@ -134,8 +140,12 @@ private:
     bool m_pendingRefresh{};
     bool m_pendingUpdate{};
 
-    // shell 通知不可用（网络位置、虚拟文件夹等）时用低频轮询兜底。
+    // shell 通知为主，轮询只做兜底：补上被合并/丢失的通知，以及当前目录
+    // 被外部整个删除（shell 未必发通知）的情况。
     QTimer* m_pollTimer{};
+
+    // 已经报告过“目录不存在”，等面板切换目录，避免重复导航。
+    bool m_folderLost{};
 
     QString m_gotoItemName;
 

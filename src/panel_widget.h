@@ -113,6 +113,8 @@ private slots:
 
     void renameTimeout();
 
+    void folderLost();
+
     void updateStatus();
 
 private:

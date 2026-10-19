@@ -21,6 +21,7 @@
 #include "utils/path_line_editor.h"
 #include "xmlui/builder.h"
 
+#include <QDir>
 #include <algorithm>
 
 PanelWidget::PanelWidget(PaneLocation location, QWidget* parent)
@@ -117,6 +118,10 @@ PanelWidget::PanelWidget(PaneLocation location, QWidget* parent)
 
     m_model = new FolderItemModel(this);
     m_view->setModel(m_model);
+
+    // 目录被外部程序删除时，模型会通知面板换到仍然存在的目录（队列连接，
+    // 避免在模型的刷新流程里递归切换目录）。
+    connect(m_model, SIGNAL(folderLost()), this, SLOT(folderLost()), Qt::QueuedConnection);
 
     auto itemDelegate = new FolderItemDelegate(this);
     m_view->setItemDelegate(itemDelegate);
@@ -764,6 +769,38 @@ void PanelWidget::refresh()
 void PanelWidget::refreshIfChanged()
 {
     m_model->refreshIfChanged();
+}
+
+void PanelWidget::folderLost()
+{
+    // 当前目录被外部程序删除：沿父目录向上找到第一个仍然存在的目录，
+    // 避免继续在不存在的目录里枚举（shell 会弹出“位置不可用”对话框）。
+    ShellFolder* folder = m_model->folder();
+    ShellItem item;
+
+    for (int depth = 0; folder && depth < 32; depth++)
+    {
+        ShellFolder* parent = folder->parentFolder(item);
+
+        if (!parent) break;
+
+        if (parent->exists())
+        {
+            setFolder(parent);
+            activateView();
+            return;
+        }
+
+        if (folder != m_model->folder()) delete folder;
+
+        folder = parent;
+    }
+
+    // 整棵子树都没了（或不是文件系统目录）：退回该面板配置的主目录。
+    LocalSettings* settings = g_application->applicationSettings();
+    QString homePath = settings->value(QString("HomeDirectory%1").arg(m_location + 1)).toString();
+
+    setDirectory(homePath.isEmpty() ? QDir::homePath() : homePath);
 }
 
 void PanelWidget::viewHidden(bool on)

@@ -30,6 +30,11 @@ public:
 
 public:
     bool isValid() const;
+
+    // 目录是否仍然存在（只对文件系统路径做检查，虚拟文件夹按存在处理）。
+    // 外部的删除/移动会让 shell 在枚举时弹出“位置不可用”对话框，调用前先用它挡一下。
+    bool exists() const;
+
     QString path() const;
     bool hasParent() const;
 
