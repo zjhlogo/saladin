@@ -44,7 +44,7 @@ cmake --build build --parallel
 
 ### 输出与运行
 
-沿用历史 qmake 布局，可执行文件会写入**源码树内**的 `release/`（Release、RelWithDebInfo、MinSizeRel）或 `debug/`（Debug）目录。每次成功链接后，构建过程会把 Qt 运行时 DLL 和 Saladin 所用的插件复制到可执行文件旁，因此 `release\saladin.exe` 和 `debug\saladin.exe` 都可以在没有 Qt 环境的情况下直接启动。注意：
+沿用历史 qmake 布局，可执行文件会写入**源码树内**的 `release/`（Release、RelWithDebInfo、MinSizeRel）或 `debug/`（Debug）目录。每次成功链接后，构建过程会把 Qt 运行时 DLL、Saladin 所用的插件以及 `translations/` 下的运行时语言文件（`saladin_*.qm`、`locale.ini`）复制到可执行文件旁（语言文件位于 `<exe 目录>\translations`），因此 `release\saladin.exe` 和 `debug\saladin.exe` 都可以在没有 Qt 环境的情况下直接启动，并直接使用目标路径下的语言文件。注意：
 
 - 使用 `-DSALADIN_DEPLOY_QT_RUNTIME=OFF` 可禁用此行为。
 - Visual C++ 运行库**不会**被复制；要在干净的机器上运行 MSVC 构建，请安装 Visual C++ 可再发行组件包。
@@ -67,7 +67,7 @@ cmake --install build --config Release
 
 ## 翻译
 
-可翻译字符串位于 `translations/saladin_*.ts`。安装了 Qt *Linguist* 工具时会自动生成编译后的 `.qm` 文件（目标 `saladin_lrelease`；否则使用仓库中已提交的 `.qm` 文件）。要新增语言，请新建 `.ts` 文件，并在 `SALADIN_LANGUAGES`（`CMakeLists.txt`）和 `translations/locale.ini` 中注册。
+可翻译字符串位于 `translations/saladin_*.ts`。安装了 Qt *Linguist* 工具时会自动生成编译后的 `.qm` 文件（目标 `saladin_lrelease`；否则使用仓库中已提交的 `.qm` 文件）。运行时语言文件（`saladin_*.qm`、`locale.ini`）会随构建被复制到可执行文件旁的 `translations/` 子目录，程序启动时优先使用该副本；只有在它不存在时才回退到可执行文件上一级的 `translations/`（`cmake --install` 的 `bin/` + `translations/` 布局）。要新增语言，请新建 `.ts` 文件，并在 `SALADIN_LANGUAGES`（`CMakeLists.txt`）和 `translations/locale.ini` 中注册。
 
 ## 许可证
 

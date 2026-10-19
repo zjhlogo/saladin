@@ -193,7 +193,8 @@ qt_add_executable(saladin WIN32
 target_include_directories(saladin PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Keep the translation catalogs current when the application is built directly
-# (they are loaded from "<executable dir>/../translations" at runtime).
+# (they are the source of the copy deployed next to the executable, and the
+# fallback the application uses when the deployed copy is absent).
 if (TARGET saladin_sync_translations)
     add_dependencies(saladin saladin_sync_translations)
 endif ()
@@ -224,7 +225,9 @@ install(TARGETS saladin RUNTIME DESTINATION bin)
 #
 # Copy the Qt runtime next to the executable after every successful link, so
 # debug/saladin.exe and release/saladin.exe can be started without a Qt
-# environment. See "Qt runtime deployment" in the top-level CMakeLists.txt.
+# environment. The translation catalogs (saladin_*.qm, locale.ini) are part of
+# that runtime and are deployed to "<executable dir>/translations", see
+# "Qt runtime deployment" in the top-level CMakeLists.txt.
 
 if (SALADIN_DEPLOY_QT_RUNTIME)
     # Qt binary and plugins directories, taken from the Qt6::Core target.
@@ -249,6 +252,7 @@ if (SALADIN_DEPLOY_QT_RUNTIME)
             "-DQT_RUNTIME_MINGW_DLLS=${SALADIN_QT_MINGW_DLLS}"
             "-DQT_RUNTIME_DEBUG=$<CONFIG:Debug>"
             "-DQT_RUNTIME_MSVC=$<BOOL:${MSVC}>"
+            "-DQT_RUNTIME_TRANSLATIONS_DIR=${CMAKE_SOURCE_DIR}/translations"
             -P "${CMAKE_SOURCE_DIR}/cmake/DeployQtRuntime.cmake"
             COMMENT "Deploying Qt runtime files"
             VERBATIM

@@ -3,9 +3,9 @@
 #
 # Invoked as a POST_BUILD step of the saladin target (see src/CMakeLists.txt
 # and "Qt runtime deployment" in the top-level CMakeLists.txt). Copies the
-# Qt 6 runtime DLLs and the runtime plugins used by Saladin next to the
-# executable, so it can be started directly from debug/ or release/ without
-# a Qt environment.
+# Qt 6 runtime DLLs, the runtime plugins used by Saladin and the translation
+# catalogs next to the executable, so it can be started directly from debug/
+# or release/ without a Qt environment and with the deployed language files.
 #
 # The file set mirrors the runtime installed by installer/saladin.nsi,
 # updated for Qt 6 (Qt5WinExtras is gone, the SSL backend is now the
@@ -25,6 +25,9 @@
 #   QT_RUNTIME_MINGW_DLLS - MinGW toolchain DLLs, copied when present
 #   QT_RUNTIME_DEBUG      - 1 for debug builds, 0 otherwise
 #   QT_RUNTIME_MSVC       - 1 when building with MSVC, 0 otherwise
+#   QT_RUNTIME_TRANSLATIONS_DIR - source translations/ directory whose runtime
+#                           files (saladin_*.qm, locale.ini) are copied into
+#                           <output dir>/translations
 #############################################################################
 
 cmake_minimum_required(VERSION 3.21)
@@ -78,3 +81,34 @@ foreach(_plugin IN LISTS QT_RUNTIME_PLUGINS)
         file(COPY_FILE "${_src}" "${_dst}" ONLY_IF_DIFFERENT)
     endif()
 endforeach()
+
+# --- runtime translations --------------------------------------------------
+#
+# The translation catalogs (saladin_*.qm) and the language list (locale.ini)
+# are runtime files just like the DLLs: they are deployed as
+# "<executable dir>/translations", which is the directory the application
+# reads first (Application::initializeDefaultPaths). Without this copy the
+# executable in debug/ or release/ would fall back to the catalogs of the
+# source tree one level up, and the deployed language files would not be the
+# ones in use.
+
+if(NOT QT_RUNTIME_TRANSLATIONS_DIR)
+    message(WARNING "DeployQtRuntime: QT_RUNTIME_TRANSLATIONS_DIR not set, translations were not deployed.")
+elseif(NOT IS_DIRECTORY "${QT_RUNTIME_TRANSLATIONS_DIR}")
+    message(WARNING "DeployQtRuntime: translation directory not found: ${QT_RUNTIME_TRANSLATIONS_DIR}")
+else()
+    set(_translations_dst "${QT_RUNTIME_OUTPUT_DIR}/translations")
+    file(MAKE_DIRECTORY "${_translations_dst}")
+
+    file(GLOB _translation_files
+        "${QT_RUNTIME_TRANSLATIONS_DIR}/saladin_*.qm"
+        "${QT_RUNTIME_TRANSLATIONS_DIR}/locale.ini")
+
+    foreach(_file IN LISTS _translation_files)
+        get_filename_component(_name "${_file}" NAME)
+        file(COPY_FILE "${_file}" "${_translations_dst}/${_name}" ONLY_IF_DIFFERENT)
+    endforeach()
+
+    list(LENGTH _translation_files _translation_count)
+    message(STATUS "DeployQtRuntime: deployed ${_translation_count} translation files to ${_translations_dst}")
+endif()

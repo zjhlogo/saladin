@@ -26,7 +26,7 @@ cmake --build build --config Release
 ### 注意事项
 
 - 可执行文件输出在**源码树内**（历史 qmake 布局）：Release/RelWithDebInfo/MinSizeRel → `release\saladin.exe`，Debug → `debug\saladin.exe`。
-- 每次成功链接后，POST_BUILD 步骤（`cmake/DeployQtRuntime.cmake`）自动把 Qt 运行时 DLL 和插件复制到可执行文件旁，`release/` 与 `debug/` 下的 exe 可直接启动。用 `-DSALADIN_DEPLOY_QT_RUNTIME=OFF` 可禁用。
+- 每次成功链接后，POST_BUILD 步骤（`cmake/DeployQtRuntime.cmake`）自动把 Qt 运行时 DLL、插件以及 `translations/` 下的运行时语言文件（`saladin_*.qm`、`locale.ini`）复制到可执行文件旁（语言文件在 `<exe 目录>\translations`），`release/` 与 `debug/` 下的 exe 可直接启动，并优先使用该目录下的语言文件。用 `-DSALADIN_DEPLOY_QT_RUNTIME=OFF` 可禁用。
 - VC++ 运行库**不会**被复制；干净机器上需另装 VC++ 可再发行组件包。
 - 安装：`cmake --install build --config Release`（安装 `bin/` 与 `translations/` 到前缀目录）。
 - `build/`、`debug/`、`release/`、`tmp/`、`.vs/` 均已 gitignore，不要提交。

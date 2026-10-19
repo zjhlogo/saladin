@@ -71,9 +71,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL     "${CMAKE_SOURCE_DIR}/release")
 # ---------------------------------------------------------------------------
 # Qt runtime deployment
 #
-# After every successful link the Qt runtime files (DLLs and the runtime
-# plugins used by Saladin) are copied next to the executable, so debug/ and
-# release/ contain a directly runnable program without a Qt environment.
+# After every successful link the Qt runtime files (DLLs, the runtime plugins
+# used by Saladin and the runtime language files from translations/) are copied
+# next to the executable, so debug/ and release/ contain a directly runnable
+# program without a Qt environment, using the deployed language files.
 #
 # The deployed file set is defined below and implemented in
 # cmake/DeployQtRuntime.cmake; it mirrors the runtime installed by
@@ -136,12 +137,12 @@ if(TARGET Qt6::lrelease)
         QM_FILES_OUTPUT_VARIABLE SALADIN_QM_FILES
         LRELEASE_TARGET saladin_lrelease)
 
-    # lrelease writes the catalogs into the build tree, but the application
-    # loads them from "<executable dir>/../translations" (see
-    # Application::initializeDefaultPaths), which with this project's
-    # in-source-tree output layout is the translations/ directory below the
-    # source tree. Copy the generated catalogs back so the running application
-    # never keeps reading a stale .qm file.
+    # lrelease writes the catalogs into the build tree, but the runtime
+    # language files are deployed next to the executable as
+    # "<executable dir>/translations" (see "Qt runtime deployment"), which with
+    # this project's in-source-tree output layout is served from the
+    # translations/ directory below the source tree. Copy the generated
+    # catalogs back so the deployed copy is never made from a stale .qm file.
     add_custom_target(saladin_sync_translations ALL
         COMMAND "${CMAKE_COMMAND}"
             "-DQM_BUILD_DIR=${CMAKE_BINARY_DIR}/translations"

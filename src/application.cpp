@@ -331,7 +331,22 @@ void Application::initializeDefaultPaths()
 {
     QString appPath = applicationDirPath();
 
-    m_translationsPath = QDir::cleanPath(appPath + "/../translations");
+    // The build deploys the runtime language files next to the executable
+    // ("<executable dir>/translations", see cmake/DeployQtRuntime.cmake), and
+    // that deployed copy is the authoritative one: it is what "start the
+    // program from release/ or debug/" is supposed to use. Only when it holds
+    // no catalog at all - for example in an installed layout that keeps them in
+    // "<prefix>/translations" next to the bin/ directory holding the
+    // executable - fall back to the directory one level up.
+    QString deployedPath = QDir::cleanPath(appPath + "/translations");
+
+    QDir deployedDir(deployedPath);
+    QStringList deployedCatalogs = deployedDir.entryList(QStringList("saladin_*.qm"), QDir::Files);
+
+    if (!deployedCatalogs.isEmpty())
+        m_translationsPath = deployedPath;
+    else
+        m_translationsPath = QDir::cleanPath(appPath + "/../translations");
 
     setApplicationName("Saladin");
     m_dataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
