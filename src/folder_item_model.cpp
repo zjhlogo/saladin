@@ -6,7 +6,17 @@
 #include "utils/icon_loader.h"
 
 #include <QApplication>
+#include <QElapsedTimer>
+#include <QTimer>
 #include <algorithm>
+
+// 兜底轮询间隔（毫秒）：仅在 shell 通知不可靠时启用。
+static constexpr int PollInterval = 3000;       // 注册失败（虚拟文件夹、特殊位置等）
+static constexpr int RemotePollInterval = 5000; // 网络位置：通知可能永远不来
+
+// 单次校验耗时超过该值就放慢轮询，上限 MaxPollInterval。
+static constexpr int SlowPollThreshold = 500;
+static constexpr int MaxPollInterval = 60000;
 
 class ShellItemLessThan
 {
@@ -25,6 +35,10 @@ private:
 FolderItemModel::FolderItemModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
+    m_pollTimer = new QTimer(this);
+    m_pollTimer->setInterval(PollInterval);
+
+    connect(m_pollTimer, SIGNAL(timeout()), this, SLOT(pollForChanges()));
 }
 
 FolderItemModel::~FolderItemModel()
@@ -45,16 +59,30 @@ void FolderItemModel::setFolder(ShellFolder* folder)
     delete m_folder;
     m_folder = folder;
 
-    ShellFolder::Flags flags;
-    if (m_includeHidden) flags |= ShellFolder::IncludeHidden;
-
-    m_items = m_folder->listItems(flags);
-    std::sort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
+    m_items = folderItems();
 
     connect(m_folder, SIGNAL(itemChanged(const ItemChange&)), this, SLOT(itemChanged(const ItemChange&)));
     connect(m_folder, SIGNAL(folderUpdated()), this, SLOT(folderUpdated()));
 
-    m_folder->startWatching();
+    // 本地磁盘上的 shell 通知是可靠的；注册失败（虚拟文件夹等）或目录不在本地
+    // （网络位置的通知可能永远不来）时，退化为低频轮询兜底。
+    if (m_folder->startWatching())
+    {
+        if (m_folder->isLocalFileSystemFolder())
+        {
+            m_pollTimer->stop();
+        }
+        else
+        {
+            m_pollTimer->setInterval(RemotePollInterval);
+            m_pollTimer->start();
+        }
+    }
+    else
+    {
+        m_pollTimer->setInterval(PollInterval);
+        m_pollTimer->start();
+    }
 
     m_hasParent = m_folder->hasParent();
 
@@ -73,16 +101,64 @@ void FolderItemModel::refresh()
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
+    setItems(folderItems());
+
+    QApplication::restoreOverrideCursor();
+}
+
+void FolderItemModel::refreshIfChanged()
+{
+    if (!m_folder || !m_folder->isValid()) return;
+
+    QList<ShellItem> items = folderItems();
+
+    if (!itemsChanged(items)) return;
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    setItems(items);
+
+    QApplication::restoreOverrideCursor();
+}
+
+void FolderItemModel::pollForChanges()
+{
+    // 应用不在前台时不对网络位置做无谓的后台枚举；重新激活时
+    // MainWindow 会再调用一次 refreshIfChanged() 补上这次校验。
+    if (QApplication::applicationState() != Qt::ApplicationActive) return;
+
+    QElapsedTimer timer;
+    timer.start();
+
+    refreshIfChanged();
+
+    // 慢速位置（高延迟网络共享、超大目录）自动放慢轮询，避免周期性卡住界面；
+    // 切换目录时会在 setFolder() 里恢复默认间隔。
+    if (m_pollTimer->interval() > PollInterval && timer.elapsed() > SlowPollThreshold)
+    {
+        m_pollTimer->setInterval(qMin(m_pollTimer->interval() * 2, MaxPollInterval));
+    }
+}
+
+QList<ShellItem> FolderItemModel::folderItems()
+{
+    ShellFolder::Flags flags;
+    if (m_includeHidden) flags |= ShellFolder::IncludeHidden;
+
+    QList<ShellItem> items = m_folder->listItems(flags);
+    std::sort(items.begin(), items.end(), ShellItemLessThan(this));
+
+    return items;
+}
+
+void FolderItemModel::setItems(const QList<ShellItem>& items)
+{
     emit layoutAboutToBeChanged();
 
     QModelIndexList oldIndexes = persistentIndexList();
     QStringList names = storeIndexes(oldIndexes);
 
-    ShellFolder::Flags flags;
-    if (m_includeHidden) flags |= ShellFolder::IncludeHidden;
-
-    m_items = m_folder->listItems(flags);
-    std::sort(m_items.begin(), m_items.end(), ShellItemLessThan(this));
+    m_items = items;
 
     QModelIndexList newIndexes = restoreIndexes(names, oldIndexes);
     changePersistentIndexList(oldIndexes, newIndexes);
@@ -93,8 +169,25 @@ void FolderItemModel::refresh()
     m_gotoItemName.clear();
 
     emit layoutChanged();
+}
 
-    QApplication::restoreOverrideCursor();
+bool FolderItemModel::itemsChanged(const QList<ShellItem>& items) const
+{
+    // 只比较视图真正显示的字段：名字唯一确定条目，其余字段决定显示内容。
+    if (items.count() != m_items.count()) return true;
+
+    for (int i = 0; i < items.count(); i++)
+    {
+        const ShellItem& item = items.at(i);
+        const ShellItem& current = m_items.at(i);
+
+        if (item.name() != current.name()) return true;
+        if (item.size() != current.size()) return true;
+        if (item.lastModified() != current.lastModified()) return true;
+        if (item.attributes() != current.attributes()) return true;
+    }
+
+    return false;
 }
 
 void FolderItemModel::setGotoItemName(const QString& name)
@@ -167,52 +260,56 @@ void FolderItemModel::applyChanges()
             {
                 ShellItem& item = m_items[j];
 
-                if (item == change.item1())
+                if (!(item == change.item1())) continue;
+
+                found = true;
+
+                switch (change.type())
                 {
-                    switch (change.type())
+                case ItemChange::ItemAdded:
+                case ItemChange::ItemUpdated:
+                    // 变成隐藏而当前不显示隐藏文件，等同于被移除。
+                    if (!m_includeHidden && change.item1().attributes().testFlag(ShellItem::Hidden))
                     {
-                    case ItemChange::ItemAdded:
-                    case ItemChange::ItemUpdated:
-                        if (item.isSelected()) change.item1().setSelected(true);
-                        item = change.item1();
-                        break;
-
-                    case ItemChange::ItemRemoved:
-                        for (int k = 0; k < names.count(); k++)
-                        {
-                            QString& name = names[k];
-                            if (name == item.name())
-                            {
-                                if (j < m_items.count() - 1)
-                                    name = m_items.at(j + 1).name();
-                                else if (j > 0)
-                                    name = m_items.at(j - 1).name();
-                                else
-                                    name.clear();
-                            }
-                        }
-                        m_items.removeAt(j);
-                        break;
-
-                    case ItemChange::ItemRenamed:
-                        for (int k = 0; k < names.count(); k++)
-                        {
-                            QString& name = names[k];
-                            if (name == item.name()) name = change.item2().name();
-                        }
-                        if (item.isSelected()) change.item2().setSelected(true);
-                        item = change.item2();
+                        removeItemAt(j, names);
                         break;
                     }
 
-                    found = true;
+                    if (item.isSelected()) change.item1().setSelected(true);
+                    item = change.item1();
+                    break;
+
+                case ItemChange::ItemRemoved:
+                    removeItemAt(j, names);
+                    break;
+
+                case ItemChange::ItemRenamed:
+                    // 重命名后变成隐藏时按移除处理（此时 item.name() 还是旧名字，映射有效）。
+                    if (!m_includeHidden && change.item2().attributes().testFlag(ShellItem::Hidden))
+                    {
+                        removeItemAt(j, names);
+                        break;
+                    }
+
+                    for (int k = 0; k < names.count(); k++)
+                    {
+                        QString& name = names[k];
+                        if (name == item.name()) name = change.item2().name();
+                    }
+                    if (item.isSelected()) change.item2().setSelected(true);
+                    item = change.item2();
                     break;
                 }
+
+                break;
             }
 
-            if (!found && change.type() == ItemChange::ItemAdded)
+            if (!found && (change.type() == ItemChange::ItemAdded || change.type() == ItemChange::ItemUpdated))
             {
-                if (m_includeHidden || !change.item1().attributes().testFlag(ShellItem::Hidden)) m_items.append(change.item1());
+                // 由隐藏变为可见，或者通知先于目录枚举到达。
+                if (!m_includeHidden && change.item1().attributes().testFlag(ShellItem::Hidden)) continue;
+
+                m_items.append(change.item1());
             }
         }
 
@@ -228,6 +325,26 @@ void FolderItemModel::applyChanges()
     }
 
     m_pendingUpdate = false;
+}
+
+void FolderItemModel::removeItemAt(int row, QStringList& names)
+{
+    // 被移除条目的持久化索引改挂到相邻条目上，避免整行选中丢失。
+    for (int k = 0; k < names.count(); k++)
+    {
+        QString& name = names[k];
+
+        if (name != m_items.at(row).name()) continue;
+
+        if (row < m_items.count() - 1)
+            name = m_items.at(row + 1).name();
+        else if (row > 0)
+            name = m_items.at(row - 1).name();
+        else
+            name.clear();
+    }
+
+    m_items.removeAt(row);
 }
 
 QStringList FolderItemModel::storeIndexes(const QModelIndexList& indexes)

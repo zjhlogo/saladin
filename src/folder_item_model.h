@@ -9,6 +9,8 @@
 
 #include <QMainWindow>
 
+class QTimer;
+
 class FolderItemModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -65,6 +67,9 @@ public:
 
     void refresh();
 
+    // 重新枚举目录，只有内容确实变化时才更新视图（用于通知丢失后的兜底校验）。
+    void refreshIfChanged();
+
     void setGotoItemName(const QString& name);
     const QModelIndex gotoItemIndex();
 
@@ -91,11 +96,21 @@ private slots:
 
     void applyChanges();
 
+    void pollForChanges();
+
 private:
     int indexToRow(const QModelIndex& index) const;
     QModelIndex rowToIndex(int row, int column) const;
 
     void resort();
+
+    QList<ShellItem> folderItems();
+
+    void setItems(const QList<ShellItem>& items);
+
+    bool itemsChanged(const QList<ShellItem>& items) const;
+
+    void removeItemAt(int row, QStringList& names);
 
     bool shellItemLessThan(const ShellItem& item1, const ShellItem& item2);
 
@@ -118,6 +133,9 @@ private:
     QList<ItemChange> m_changes;
     bool m_pendingRefresh{};
     bool m_pendingUpdate{};
+
+    // shell 通知不可用（网络位置、虚拟文件夹等）时用低频轮询兜底。
+    QTimer* m_pollTimer{};
 
     QString m_gotoItemName;
 

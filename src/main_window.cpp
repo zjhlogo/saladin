@@ -390,6 +390,10 @@ MainWindow::MainWindow()
     connect(m_panes[0], SIGNAL(headerSectionMoved(int, int)), m_panes[1], SLOT(moveHeaderSection(int, int)));
     connect(m_panes[1], SIGNAL(headerSectionMoved(int, int)), m_panes[0], SLOT(moveHeaderSection(int, int)));
 
+    // shell 通知在外部工具改动时可能迟到或丢失（网络位置、通知队列溢出等），
+    // 应用重新回到前台时校验一次，保证面板里是最新内容。
+    connect(qApp, SIGNAL(applicationStateChanged(Qt::ApplicationState)), this, SLOT(applicationStateChanged(Qt::ApplicationState)));
+
     g_application->installEventFilter(this);
 
     initializeSettings();
@@ -701,6 +705,16 @@ void MainWindow::refresh()
 void MainWindow::refreshDrives()
 {
     m_driveStripManager->refresh();
+}
+
+void MainWindow::applicationStateChanged(Qt::ApplicationState state)
+{
+    if (state != Qt::ApplicationActive) return;
+
+    for (int i = 0; i < 2; i++)
+    {
+        if (m_panes[i]) m_panes[i]->refreshIfChanged();
+    }
 }
 
 void MainWindow::viewHidden(bool on)

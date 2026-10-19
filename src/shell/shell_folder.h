@@ -11,6 +11,7 @@
 class ShellFolderPrivate;
 class ShellPidl;
 class ItemChange;
+class ChangeNotifyWatcher;
 
 class ShellFolder : public QObject
 {
@@ -81,6 +82,10 @@ public:
 
     bool startWatching();
 
+    // 目录是否位于本地文件系统。虚拟文件夹、网络位置等拿不到可靠的 shell
+    // 文件系统通知，调用方（面板模型）需要退化为轮询兜底。
+    bool isLocalFileSystemFolder() const;
+
 public:
     static ShellPidl defaultFolder();
 
@@ -101,6 +106,8 @@ private:
 
 private:
     ShellFolderPrivate* d;
+
+    ChangeNotifyWatcher* m_watcher{};
 
     friend class ShellFolderPrivate;
     friend class ShellComputer;

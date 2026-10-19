@@ -125,6 +125,19 @@ bool ShellFolder::isValid() const
     return d->m_folder != nullptr;
 }
 
+bool ShellFolder::isLocalFileSystemFolder() const
+{
+    wchar_t path[MAX_PATH];
+
+    if (!SHGetPathFromIDListW(d->m_pidl, path)) return false;
+    if (GetFileAttributesW(path) == INVALID_FILE_ATTRIBUTES) return false;
+
+    // 网络位置的目录变更通知取决于服务器和重定向器，按不可靠处理。
+    UINT type = GetDriveTypeW(path);
+
+    return type == DRIVE_FIXED || type == DRIVE_RAMDISK || type == DRIVE_REMOVABLE;
+}
+
 QString ShellFolder::path() const
 {
     return d->m_path;
@@ -953,69 +966,94 @@ QString ShellFolder::toolTip(const ShellItem& item)
 
 bool ShellFolder::startWatching()
 {
+    if (m_watcher) return m_watcher->isValid();
+
     auto watcher = new ChangeNotifyWatcher(d->m_pidl, SHCNE_DISKEVENTS, this);
 
-    if (watcher->isValid())
+    if (!watcher->isValid())
     {
-        connect(watcher, SIGNAL(changeNotify(int, void*, void*)), this, SLOT(changeNotify(int, void*, void*)));
-        return true;
+        // 网络位置、虚拟文件夹等没有文件系统级的通知，调用方需要退化为轮询。
+        qWarning("ShellFolder::startWatching: cannot watch '%s'", qPrintable(d->m_path));
+
+        delete watcher;
+
+        return false;
     }
 
-    return false;
+    connect(watcher, SIGNAL(changeNotify(int, void*, void*)), this, SLOT(changeNotify(int, void*, void*)));
+
+    m_watcher = watcher;
+
+    return true;
 }
 
 void ShellFolder::changeNotify(int eventType, void* arg1, void* arg2)
 {
-    if (eventType == SHCNE_UPDATEDIR && ILIsEqual(d->m_pidl, (LPITEMIDLIST)arg1))
+    if (eventType == SHCNE_UPDATEDIR && arg1 && ILIsEqual(d->m_pidl, (LPITEMIDLIST)arg1))
     {
+        // shell 会把同一个目录里的大批 UPDATEITEM 合并成一条 UPDATEDIR，
+        // 这条路径做整目录扫描。
         emit folderUpdated();
         return;
     }
 
-    if (eventType == SHCNE_CREATE || eventType == SHCNE_MKDIR)
+    LPITEMIDLIST pidl1 = changeNotifyChildPidl(d->m_pidl, arg1);
+
+    switch (eventType)
     {
-        LPITEMIDLIST pidl = ILFindChild(d->m_pidl, (LPITEMIDLIST)arg1);
-        if (pidl && !ILIsEmpty(pidl))
-        {
-            ShellItem item = d->makeRealNotifyItem(pidl);
-            if (item.isValid()) emit itemChanged(ItemChange(ItemChange::ItemAdded, item));
-            return;
-        }
+    case SHCNE_CREATE:
+    case SHCNE_MKDIR:
+    {
+        if (!pidl1) return;
+
+        ShellItem item = d->makeRealNotifyItem(pidl1);
+
+        if (item.isValid()) emit itemChanged(ItemChange(ItemChange::ItemAdded, item));
+
+        return;
     }
 
-    if (eventType == SHCNE_DELETE || eventType == SHCNE_RMDIR)
+    case SHCNE_DELETE:
+    case SHCNE_RMDIR:
     {
-        LPITEMIDLIST pidl = ILFindChild(d->m_pidl, (LPITEMIDLIST)arg1);
-        if (pidl && !ILIsEmpty(pidl))
-        {
-            ShellItem item = d->makeNotifyItem(pidl);
-            emit itemChanged(ItemChange(ItemChange::ItemRemoved, item));
-            return;
-        }
+        if (!pidl1) return;
+
+        // 条目已经不存在，只能按 PIDL 构造。
+        emit itemChanged(ItemChange(ItemChange::ItemRemoved, d->makeNotifyItem(pidl1)));
+
+        return;
     }
 
-    if (eventType == SHCNE_UPDATEITEM || eventType == SHCNE_UPDATEDIR)
+    case SHCNE_UPDATEITEM:
+    case SHCNE_UPDATEDIR:  // 子目录的通知被合并后也按条目更新处理
+    case SHCNE_ATTRIBUTES: // 外部工具改属性（只读/隐藏）同样要刷新该条目
     {
-        LPITEMIDLIST pidl = ILFindChild(d->m_pidl, (LPITEMIDLIST)arg1);
-        if (pidl && !ILIsEmpty(pidl))
-        {
-            ShellItem item = d->makeRealNotifyItem(pidl);
-            if (item.isValid()) emit itemChanged(ItemChange(ItemChange::ItemUpdated, item));
-            return;
-        }
+        if (!pidl1) return;
+
+        ShellItem item = d->makeRealNotifyItem(pidl1);
+
+        if (item.isValid()) emit itemChanged(ItemChange(ItemChange::ItemUpdated, item));
+
+        return;
     }
 
-    if (eventType == SHCNE_RENAMEITEM || eventType == SHCNE_RENAMEFOLDER)
+    case SHCNE_RENAMEITEM:
+    case SHCNE_RENAMEFOLDER:
     {
-        LPITEMIDLIST fromPidl = ILFindChild(d->m_pidl, (LPITEMIDLIST)arg1);
-        LPITEMIDLIST toPidl = ILFindChild(d->m_pidl, (LPITEMIDLIST)arg2);
-        if (fromPidl && !ILIsEmpty(fromPidl) && toPidl && !ILIsEmpty(toPidl))
-        {
-            ShellItem fromItem = d->makeNotifyItem(fromPidl);
-            ShellItem toItem = d->makeRealNotifyItem(toPidl);
-            if (toItem.isValid()) emit itemChanged(ItemChange(ItemChange::ItemRenamed, fromItem, toItem));
-            return;
-        }
+        LPITEMIDLIST pidl2 = changeNotifyChildPidl(d->m_pidl, arg2);
+
+        if (!pidl1 || !pidl2) return;
+
+        ShellItem fromItem = d->makeNotifyItem(pidl1);
+        ShellItem toItem = d->makeRealNotifyItem(pidl2);
+
+        if (toItem.isValid()) emit itemChanged(ItemChange(ItemChange::ItemRenamed, fromItem, toItem));
+
+        return;
+    }
+
+    default:
+        return;
     }
 }
 

@@ -138,15 +138,24 @@ ShellSelection::MenuCommand ShellComputer::showContextMenu(const ShellDrive& dri
 
 bool ShellComputer::startWatching()
 {
+    if (m_watcher) return m_watcher->isValid();
+
     auto watcher = new ChangeNotifyWatcher(d->m_pidl, SHCNE_GLOBALEVENTS, this);
 
-    if (watcher->isValid())
+    if (!watcher->isValid())
     {
-        connect(watcher, SIGNAL(changeNotify(int, void*, void*)), this, SLOT(changeNotify(int, void*, void*)));
-        return true;
+        qWarning("ShellComputer::startWatching: cannot watch the computer folder");
+
+        delete watcher;
+
+        return false;
     }
 
-    return false;
+    connect(watcher, SIGNAL(changeNotify(int, void*, void*)), this, SLOT(changeNotify(int, void*, void*)));
+
+    m_watcher = watcher;
+
+    return true;
 }
 
 void ShellComputer::changeNotify(int eventType, void* arg1, void* /*arg2*/)
@@ -159,7 +168,10 @@ void ShellComputer::changeNotify(int eventType, void* arg1, void* /*arg2*/)
 
     if (eventType == SHCNE_MEDIAINSERTED || eventType == SHCNE_MEDIAREMOVED || eventType == SHCNE_UPDATEIMAGE)
     {
-        LPITEMIDLIST pidl = ILFindChild(d->m_pidl, (LPITEMIDLIST)arg1);
+        // SHCNE_UPDATEIMAGE 不带 PIDL（dwItem1 为 NULL，dwItem2 是图像索引），
+        // 这里必须容忍空参数。
+        LPITEMIDLIST pidl = changeNotifyChildPidl(d->m_pidl, arg1);
+
         if (pidl)
         {
             ShellDrive drive = d->makeRealNotifyDrive(pidl);

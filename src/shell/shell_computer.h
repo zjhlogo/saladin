@@ -10,6 +10,7 @@
 
 class ShellFolder;
 class ShellComputerPrivate;
+class ChangeNotifyWatcher;
 
 class ShellComputer : public QObject
 {
@@ -39,6 +40,8 @@ private slots:
 
 private:
     ShellComputerPrivate* d;
+
+    ChangeNotifyWatcher* m_watcher{};
 
     friend class ShellDropData;
 };

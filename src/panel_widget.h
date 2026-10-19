@@ -60,6 +60,7 @@ public:
     void activateView(const ShellItem& item = ShellItem());
 
     void refresh();
+    void refreshIfChanged();
     void viewHidden(bool on);
 
     void openDirectory();

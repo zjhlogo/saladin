@@ -66,6 +66,8 @@ private slots:
     void refreshDrives();
     void viewHidden(bool on);
 
+    void applicationStateChanged(Qt::ApplicationState state);
+
     void openDirectory();
     void openParent();
     void openRoot();

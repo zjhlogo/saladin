@@ -761,6 +761,11 @@ void PanelWidget::refresh()
     m_model->refresh();
 }
 
+void PanelWidget::refreshIfChanged()
+{
+    m_model->refreshIfChanged();
+}
+
 void PanelWidget::viewHidden(bool on)
 {
     m_model->setIncludeHidden(on);
