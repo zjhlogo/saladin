@@ -13,6 +13,13 @@
 #include <QStyleFactory>
 #include <QStyleHints>
 
+#ifdef Q_OS_WIN
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#endif
+
 namespace
 {
     constexpr auto K_STYLESHEET_PATH = ":/themes/qt-material/%1.qss";
@@ -54,6 +61,91 @@ namespace
         const double blue = alpha * source.blue() + (1.0 - alpha) * destination.blue();
         return {static_cast<int>(0.5 + red), static_cast<int>(0.5 + green), static_cast<int>(0.5 + blue)};
     }
+
+#ifdef Q_OS_WIN
+    // The shell context menu shown by ShellSelection is a native popup menu
+    // drawn by Windows, not a Qt widget, so it ignores the Qt-Material
+    // stylesheet. Windows 10 1809 introduced undocumented uxtheme entry points
+    // (see https://github.com/ysc3839/win32-darkmode) which switch the popup
+    // menus of the current process to the dark or light color scheme; they are
+    // used to keep those menus in sync with the application theme.
+    enum class PreferredAppMode
+    {
+        Default = 0,
+        AllowDark = 1,
+        ForceDark = 2,
+        ForceLight = 3,
+    };
+
+    using SetPreferredAppModeFn = PreferredAppMode(WINAPI*)(PreferredAppMode);
+    using AllowDarkModeForAppFn = bool(WINAPI*)(bool);
+    using FlushMenuThemesFn = void(WINAPI*)();
+    using RefreshImmersiveColorPolicyStateFn = void(WINAPI*)();
+
+    struct NativeMenuThemeFunctions
+    {
+        SetPreferredAppModeFn setPreferredAppMode = nullptr;                  // ordinal 135, Windows 10 1903+
+        AllowDarkModeForAppFn allowDarkModeForApp = nullptr;                  // ordinal 135, Windows 10 1809
+        FlushMenuThemesFn flushMenuThemes = nullptr;                          // ordinal 136
+        RefreshImmersiveColorPolicyStateFn refreshImmersiveColorPolicy = nullptr; // ordinal 104
+
+        bool supported = false;
+    };
+
+    NativeMenuThemeFunctions loadNativeMenuThemeFunctions()
+    {
+        NativeMenuThemeFunctions functions;
+
+        // RtlGetNtVersionNumbers reports the real Windows build number,
+        // regardless of the version declared in the application manifest.
+        auto rtlGetNtVersionNumbers = reinterpret_cast<void(WINAPI*)(DWORD*, DWORD*, DWORD*)>(GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlGetNtVersionNumbers"));
+
+        DWORD major = 0, minor = 0, build = 0;
+        if (!rtlGetNtVersionNumbers) return functions;
+
+        rtlGetNtVersionNumbers(&major, &minor, &build);
+        build &= ~0xF0000000;
+
+        // The dark mode API was introduced in Windows 10 1809 (build 17763).
+        if (major != 10 || minor != 0 || build < 17763) return functions;
+
+        const HMODULE uxtheme = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+        if (!uxtheme) return functions;
+
+        functions.refreshImmersiveColorPolicy = reinterpret_cast<RefreshImmersiveColorPolicyStateFn>(GetProcAddress(uxtheme, MAKEINTRESOURCEA(104)));
+        functions.flushMenuThemes = reinterpret_cast<FlushMenuThemesFn>(GetProcAddress(uxtheme, MAKEINTRESOURCEA(136)));
+
+        // Ordinal 135 was AllowDarkModeForApp(bool) in 1809 and became
+        // SetPreferredAppMode(PreferredAppMode) in 1903; the latter can force
+        // the menu colors independently of the system setting.
+        const FARPROC ordinal135 = GetProcAddress(uxtheme, MAKEINTRESOURCEA(135));
+        if (build >= 18362)
+            functions.setPreferredAppMode = reinterpret_cast<SetPreferredAppModeFn>(ordinal135);
+        else
+            functions.allowDarkModeForApp = reinterpret_cast<AllowDarkModeForAppFn>(ordinal135);
+
+        functions.supported = functions.flushMenuThemes && (functions.setPreferredAppMode || functions.allowDarkModeForApp);
+
+        return functions;
+    }
+
+    void applyNativeMenuTheme(bool dark)
+    {
+        static const NativeMenuThemeFunctions functions = loadNativeMenuThemeFunctions();
+        if (!functions.supported) return;
+
+        // Note: on Windows 10 1809 the menus can only follow the system color
+        // scheme, so a dark theme forced over a light system (or vice versa)
+        // still gets light menus there.
+        if (functions.setPreferredAppMode)
+            functions.setPreferredAppMode(dark ? PreferredAppMode::ForceDark : PreferredAppMode::ForceLight);
+        else
+            functions.allowDarkModeForApp(dark);
+
+        if (functions.refreshImmersiveColorPolicy) functions.refreshImmersiveColorPolicy();
+        functions.flushMenuThemes();
+    }
+#endif // Q_OS_WIN
 } // namespace
 
 ThemeHelper::AppTheme ThemeHelper::m_appTheme{AppTheme::Unknown};
@@ -278,6 +370,12 @@ void ThemeHelper::applyTheme(AppTheme appTheme)
 
     QApplication::setPalette(palette(appTheme));
     application->setStyleSheet(styleSheet(appTheme));
+
+#ifdef Q_OS_WIN
+    // The shell context menu is a native popup drawn by Windows, so its colors
+    // have to be switched separately from the Qt stylesheet.
+    applyNativeMenuTheme(appTheme == AppTheme::Dark);
+#endif
 }
 
 QString ThemeHelper::iconsPath()

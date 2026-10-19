@@ -15,9 +15,7 @@ BinaryView::BinaryView(QObject* parent, QWidget* parentWidget)
     , m_loader(nullptr)
     , m_hexMode(false)
 {
-    QAction* action;
-
-    action = new QAction(tr("Hex Mode"), this);
+    auto action = new QAction(tr("Hex Mode"), this);
     action->setShortcut(Qt::Key_H);
     action->setCheckable(true);
     connect(action, SIGNAL(triggered()), this, SLOT(toggleHexMode()));
@@ -40,7 +38,7 @@ BinaryView::BinaryView(QObject* parent, QWidget* parentWidget)
     loadXmlUiFile(":/resources/binaryview.xml");
 
     auto main = new QWidget(parentWidget);
-    QVBoxLayout* mainLayout = new QVBoxLayout(main);
+    auto mainLayout = new QVBoxLayout(main);
     mainLayout->setContentsMargins(3, 0, 3, 0);
     mainLayout->setSpacing(0);
 
