@@ -318,7 +318,7 @@ void FolderItemModel::setItemSelected(const QModelIndex& index, bool selected)
     if (row >= 0)
     {
         m_items[row].setSelected(selected);
-        emit dataChanged(rowToIndex(row, 0), rowToIndex(row, 3));
+        emit dataChanged(rowToIndex(row, 0), rowToIndex(row, Num_Column - 1));
     }
 }
 
@@ -335,7 +335,7 @@ void FolderItemModel::toggleItemSelected(const QModelIndex& index)
     if (row >= 0)
     {
         m_items[row].setSelected(!m_items.at(row).isSelected());
-        emit dataChanged(rowToIndex(row, 0), rowToIndex(row, 3));
+        emit dataChanged(rowToIndex(row, 0), rowToIndex(row, Num_Column - 1));
     }
 }
 
@@ -355,21 +355,21 @@ void FolderItemModel::selectAll()
 {
     for (int i = 0; i < m_items.count(); i++)
         m_items[i].setSelected(true);
-    emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, 3));
+    emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, Num_Column - 1));
 }
 
 void FolderItemModel::unselectAll()
 {
     for (int i = 0; i < m_items.count(); i++)
         m_items[i].setSelected(false);
-    emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, 3));
+    emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, Num_Column - 1));
 }
 
 void FolderItemModel::invertSelection()
 {
     for (int i = 0; i < m_items.count(); i++)
         m_items[i].setSelected(!m_items[i].isSelected());
-    emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, 3));
+    emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, Num_Column - 1));
 }
 
 void FolderItemModel::calculateSize(const QModelIndex& index)
@@ -384,7 +384,7 @@ void FolderItemModel::calculateSize(const QModelIndex& index)
             if (m_sortColumn == Column_Size)
                 resort();
             else
-                emit dataChanged(rowToIndex(row, 0), rowToIndex(row, 3));
+                emit dataChanged(rowToIndex(row, 0), rowToIndex(row, Num_Column - 1));
         }
 
         QApplication::restoreOverrideCursor();
@@ -403,7 +403,7 @@ void FolderItemModel::calculateSizeSelected()
     if (m_sortColumn == Column_Size)
         resort();
     else
-        emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, 3));
+        emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, Num_Column - 1));
 
     QApplication::restoreOverrideCursor();
 }
@@ -467,7 +467,7 @@ void FolderItemModel::compareWith(const QList<ShellItem>& items)
         m_items[i].setSelected(!match);
     }
 
-    emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, 3));
+    emit dataChanged(rowToIndex(0, 0), rowToIndex(m_items.count() - 1, Num_Column - 1));
 }
 
 int FolderItemModel::columnCount(const QModelIndex& parent /*= QModelIndex()*/) const

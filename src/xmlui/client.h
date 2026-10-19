@@ -44,7 +44,7 @@ namespace XmlUi
         /**
          * Destructor.
          */
-        ~Client();
+        virtual ~Client();
 
     public:
         /**

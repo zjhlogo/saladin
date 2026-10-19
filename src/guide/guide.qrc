@@ -1,6 +1,7 @@
 <RCC version="1.0">
 <qresource prefix="/guide">
   <file>style.css</file>
+  <file>style-dark.css</file>
   <file>en/functions.html</file>
   <file>en/index.html</file>
   <file>en/lists.html</file>

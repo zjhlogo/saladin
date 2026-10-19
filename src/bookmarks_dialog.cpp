@@ -1,9 +1,9 @@
 // \file bookmarks_dialog.cpp
 // \author zhangjianhua
-// \date 2026/10/18
+// \date 2026/10/19
 
-#include "application.h"
 #include "bookmarks_dialog.h"
+#include "application.h"
 #include "operation_dialog.h"
 #include "utils/icon_loader.h"
 #include "xmlui/builder.h"
@@ -17,9 +17,7 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
 {
     setWindowTitle(tr("Edit Bookmarks"));
 
-    QAction* action;
-
-    action = new QAction(IconLoader::icon("rename"), tr("Rename Bookmark..."), this);
+    auto action = new QAction(IconLoader::icon("rename"), tr("Rename Bookmark..."), this);
     action->setShortcut(Qt::Key_F2);
     connect(action, SIGNAL(triggered()), this, SLOT(editRename()));
     setAction("editRename", action);

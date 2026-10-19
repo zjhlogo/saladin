@@ -5,9 +5,9 @@
 #include "data_serializer.h"
 #include "local_settings.h"
 
-LocalSettings::LocalSettings(const QString& path, QObject* parent)
+LocalSettings::LocalSettings(QString path, QObject* parent)
     : QObject(parent)
-    , m_path(path)
+    , m_path(std::move(path))
 {
     load();
 }

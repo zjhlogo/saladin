@@ -5,9 +5,55 @@
 #include "guide_dialog.h"
 #include "application.h"
 #include "utils/icon_loader.h"
+#include "utils/theme_helper.h"
 #include "xmlui/builder.h"
 #include "xmlui/gradient_widget.h"
 #include "xmlui/tool_strip.h"
+
+namespace
+{
+    // The guide pages reference 16 px PNG icons ("../../icons/name-16.png")
+    // that were replaced by the Material Symbols SVG set. Serving the theme
+    // tinted Material icon keeps the inline images readable on both color
+    // schemes (a missing image renders as a light page glyph, which would
+    // glare on the dark theme).
+    class GuideDocument : public QTextDocument
+    {
+    public:
+        explicit GuideDocument(QObject* parent) : QTextDocument(parent) {}
+
+    protected:
+        QVariant loadResource(int type, const QUrl& url) override
+        {
+            if (type == QTextDocument::ImageResource)
+            {
+                const QString fileName = QFileInfo(url.toLocalFile()).fileName();
+
+                if (fileName.endsWith(QStringLiteral("-16.png")))
+                {
+                    const QPixmap pixmap = IconLoader::pixmap(fileName.chopped(7), 16);
+
+                    if (!pixmap.isNull())
+                    {
+                        QImage image = pixmap.toImage();
+                        image.setDevicePixelRatio(pixmap.devicePixelRatio());
+                        return image;
+                    }
+                }
+            }
+
+            return QTextDocument::loadResource(type, url);
+        }
+    };
+
+    QString readGuideResource(const QString& path)
+    {
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly)) return {};
+
+        return QString::fromUtf8(file.readAll());
+    }
+} // namespace
 
 GuideDialog::GuideDialog(QWidget* parent)
     : QDialog(parent)
@@ -16,9 +62,7 @@ GuideDialog::GuideDialog(QWidget* parent)
 
     setWindowTitle(tr("Quick Guide"));
 
-    QAction* action;
-
-    action = new QAction(tr("Back"), this);
+    auto action = new QAction(tr("Back"), this);
     connect(action, SIGNAL(triggered()), this, SLOT(goBack()));
     setAction("goBack", action);
 
@@ -70,6 +114,7 @@ GuideDialog::GuideDialog(QWidget* parent)
 
     m_browser = new QTextBrowser(this);
     m_browser->setOpenExternalLinks(true);
+    m_browser->setDocument(new GuideDocument(m_browser));
     mainLayout->addWidget(m_browser, 1);
 
     connect(m_browser, SIGNAL(historyChanged()), this, SLOT(updateActions()));
@@ -86,15 +131,16 @@ GuideDialog::GuideDialog(QWidget* parent)
     loadIcons();
 
     connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(updateGuideStyle()));
 
     updateActions();
+
+    updateGuideStyle();
 
     goHome();
 }
 
-GuideDialog::~GuideDialog()
-{
-}
+GuideDialog::~GuideDialog() = default;
 
 void GuideDialog::goBack()
 {
@@ -126,6 +172,19 @@ void GuideDialog::updateActions()
 {
     action("goBack")->setEnabled(m_browser->isBackwardAvailable());
     action("goForward")->setEnabled(m_browser->isForwardAvailable());
+}
+
+void GuideDialog::updateGuideStyle()
+{
+    // The pages link the light stylesheet; on the dark theme its colors are
+    // overridden by the dark sheet, while the page background and the default
+    // text color follow the theme through the QTextBrowser rules that
+    // saladin.qss contributes to the stylesheet.
+    const bool dark = (ThemeHelper::getAppTheme() == ThemeHelper::AppTheme::Dark);
+
+    m_browser->document()->setDefaultStyleSheet(dark ? readGuideResource(":/guide/style-dark.css") : QString());
+
+    if (!m_browser->source().isEmpty()) m_browser->reload();
 }
 
 void GuideDialog::loadIcons()

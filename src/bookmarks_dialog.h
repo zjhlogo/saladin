@@ -14,7 +14,7 @@ class BookmarksDialog : public QDialog, public XmlUi::Client
 {
     Q_OBJECT
 public:
-    BookmarksDialog(QWidget* parent);
+    explicit BookmarksDialog(QWidget* parent);
     ~BookmarksDialog() override;
 
 public: // overrides

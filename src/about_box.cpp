@@ -1,6 +1,6 @@
 // \file about_box.cpp
 // \author zhangjianhua
-// \date 2026/10/18
+// \date 2026/10/19
 
 #include "about_box.h"
 #include "application.h"
@@ -27,7 +27,7 @@ AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent
     promptLayout->setSpacing(10);
 
     auto promptPixmap = new QLabel(promptWidget);
-    promptPixmap->setPixmap(g_application->windowIcon().pixmap(QSize(48, 48)));
+    promptPixmap->setPixmap(Application::windowIcon().pixmap(QSize(48, 48)));
     promptLayout->addWidget(promptPixmap, 0, Qt::AlignTop | Qt::AlignLeft);
 
     auto promptLabel = new QLabel(promptWidget);
@@ -71,9 +71,7 @@ AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 }
 
-AboutBox::~AboutBox()
-{
-}
+AboutBox::~AboutBox() = default;
 
 AboutBoxSection* AboutBox::addSection(const QPixmap& pixmap, const QString& message)
 {
@@ -115,9 +113,7 @@ void AboutBoxSection::initialize()
     m_mainLayout->addWidget(m_messageLabel, 1, Qt::AlignTop);
 }
 
-AboutBoxSection::~AboutBoxSection()
-{
-}
+AboutBoxSection::~AboutBoxSection() = default;
 
 void AboutBoxSection::setPixmap(const QPixmap& pixmap)
 {
@@ -176,9 +172,7 @@ AboutBoxToolSection::AboutBoxToolSection()
     if (QScreen* screen = QGuiApplication::primaryScreen()) connect(screen, &QScreen::availableGeometryChanged, this, &AboutBoxToolSection::updatePosition);
 }
 
-AboutBoxToolSection::~AboutBoxToolSection()
-{
-}
+AboutBoxToolSection::~AboutBoxToolSection() = default;
 
 bool AboutBoxToolSection::event(QEvent* e)
 {
@@ -220,13 +214,11 @@ AboutBoxScrollArea::AboutBoxScrollArea(QWidget* parent)
 {
 }
 
-AboutBoxScrollArea::~AboutBoxScrollArea()
-{
-}
+AboutBoxScrollArea::~AboutBoxScrollArea() = default;
 
 QSize AboutBoxScrollArea::sizeHint() const
 {
     int w = 475;
     int fw = frameWidth();
-    return QSize(w, widget()->heightForWidth(w - 2 * fw) + 2 * fw);
+    return {w, widget()->heightForWidth(w - 2 * fw) + 2 * fw};
 }

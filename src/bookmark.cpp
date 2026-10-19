@@ -122,26 +122,27 @@ ShellFolder* Bookmark::createFolder(QWidget* parent) const
         return new ShellFolder(url.toString(), parent);
     }
 
-    default:
-        return nullptr;
+    case BookmarkPrivate::NullBookmark:
+        break;
     }
+    return nullptr;
 }
 
 static QByteArray encrypt(const QString& value)
 {
-    if (value.isEmpty()) return QByteArray();
+    if (value.isEmpty()) return {};
 
     QByteArray data = value.toUtf8();
 
     DATA_BLOB input;
-    input.pbData = (BYTE*)data.data();
+    input.pbData = reinterpret_cast<BYTE*>(data.data());
     input.cbData = data.length();
 
     DATA_BLOB output;
 
-    if (!CryptProtectData(&input, L"", nullptr, nullptr, nullptr, 0, &output)) return QByteArray();
+    if (!CryptProtectData(&input, L"", nullptr, nullptr, nullptr, 0, &output)) return {};
 
-    QByteArray result((char*)output.pbData, output.cbData);
+    QByteArray result(reinterpret_cast<char*>(output.pbData), output.cbData);
 
     LocalFree(output.pbData);
 
@@ -150,7 +151,7 @@ static QByteArray encrypt(const QString& value)
 
 static QString decrypt(const QByteArray& value)
 {
-    if (value.isEmpty()) return QString();
+    if (value.isEmpty()) return {};
 
     DATA_BLOB input;
     input.pbData = (BYTE*)value.data();
@@ -158,9 +159,9 @@ static QString decrypt(const QByteArray& value)
 
     DATA_BLOB output;
 
-    if (!CryptUnprotectData(&input, nullptr, nullptr, nullptr, nullptr, 0, &output)) return QString();
+    if (!CryptUnprotectData(&input, nullptr, nullptr, nullptr, nullptr, 0, &output)) return {};
 
-    QByteArray data((char*)output.pbData, output.cbData);
+    QByteArray data(reinterpret_cast<char*>(output.pbData), output.cbData);
 
     LocalFree(output.pbData);
 
@@ -174,7 +175,7 @@ bool operator<(const Bookmark& lhs, const Bookmark& rhs)
 
 QDataStream& operator<<(QDataStream& stream, const Bookmark& bookmark)
 {
-    stream << bookmark.d->m_name << (qint32)bookmark.d->m_type;
+    stream << bookmark.d->m_name << static_cast<qint32>(bookmark.d->m_type);
 
     switch (bookmark.d->m_type)
     {
@@ -184,6 +185,8 @@ QDataStream& operator<<(QDataStream& stream, const Bookmark& bookmark)
 
     case BookmarkPrivate::FtpBookmark:
         stream << bookmark.d->m_path << bookmark.d->m_user << encrypt(bookmark.d->m_password);
+        break;
+    case BookmarkPrivate::NullBookmark:
         break;
     }
 
@@ -195,7 +198,7 @@ QDataStream& operator>>(QDataStream& stream, Bookmark& bookmark)
     qint32 type;
     stream >> bookmark.d->m_name >> type;
 
-    bookmark.d->m_type = (BookmarkPrivate::BookmarkType)type;
+    bookmark.d->m_type = static_cast<BookmarkPrivate::BookmarkType>(type);
 
     switch (bookmark.d->m_type)
     {
@@ -210,6 +213,8 @@ QDataStream& operator>>(QDataStream& stream, Bookmark& bookmark)
         bookmark.d->m_password = decrypt(password);
         break;
     }
+    case BookmarkPrivate::NullBookmark:
+        break;
     }
 
     return stream;

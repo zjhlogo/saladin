@@ -19,9 +19,7 @@ DataSerializer::DataSerializer(const QString& path)
 {
 }
 
-DataSerializer::~DataSerializer()
-{
-}
+DataSerializer::~DataSerializer() = default;
 
 bool DataSerializer::openForReading()
 {

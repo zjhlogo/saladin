@@ -10,7 +10,7 @@ class LocalSettings : public QObject
 {
     Q_OBJECT
 public:
-    LocalSettings(const QString& path, QObject* parent);
+    LocalSettings(QString path, QObject* parent);
     ~LocalSettings() override;
 
 public:

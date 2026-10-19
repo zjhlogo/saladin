@@ -15,16 +15,9 @@
 class ShellDriveLessThan
 {
 public:
-    ShellDriveLessThan()
-    {
-        //
-    }
+    ShellDriveLessThan() = default;
 
-    bool operator()(const ShellDrive& drive1, const ShellDrive& drive2)
-    {
-        //
-        return drive1.letter() < drive2.letter();
-    }
+    bool operator()(const ShellDrive& drive1, const ShellDrive& drive2) { return drive1.letter() < drive2.letter(); }
 };
 
 DriveStripManager::DriveStripManager(QWidget* parent)
@@ -41,10 +34,7 @@ DriveStripManager::DriveStripManager(QWidget* parent)
     m_computer->startWatching();
 }
 
-DriveStripManager::~DriveStripManager()
-{
-    //
-}
+DriveStripManager::~DriveStripManager() = default;
 
 ShellDrive DriveStripManager::driveAt(int index) const
 {
@@ -68,7 +58,7 @@ ShellDrive DriveStripManager::driveAt(XmlUi::ToolStrip* strip, const QPoint& pos
         }
     }
 
-    return ShellDrive();
+    return {};
 }
 
 ShellDrive DriveStripManager::driveFromFolder(ShellFolder* folder) const
@@ -86,7 +76,7 @@ ShellDrive DriveStripManager::driveFromFolder(ShellFolder* folder) const
         }
     }
 
-    return ShellDrive();
+    return {};
 }
 
 void DriveStripManager::registerToolStrip(XmlUi::ToolStrip* strip, QObject* receiver, const std::function<void(int)>& driveSelected)
@@ -105,31 +95,48 @@ void DriveStripManager::registerToolStrip(XmlUi::ToolStrip* strip, QObject* rece
     strip->installEventFilter(this);
 }
 
-void DriveStripManager::populateToolStrip(StripInfo& info)
+void DriveStripManager::showDrivesMenu(XmlUi::ToolStrip* strip)
 {
-    info.m_strip->clearToolActions();
-
-    foreach (QAction* action, info.m_actions)
-        delete action;
-    info.m_actions.clear();
-
-    for (int i = 0; i < m_drives.count(); i++)
+    for (int i = 0; i < m_strips.count(); i++)
     {
-        ShellDrive drive = m_drives.at(i);
-
-        auto action = new QAction(this);
-        action->setText(QString("&%1 - %2").arg((QChar)drive.letter(), drive.name().replace("&", "&&")));
-        action->setIconText((QChar)drive.letter());
-        action->setToolTip(drive.name());
-        action->setIcon(drive.icon());
-
-        std::function<void(int)> handler = info.m_driveSelected;
-        connect(action, &QAction::triggered, info.m_receiver, [handler, i]() { handler(i); });
-
-        info.m_strip->addToolAction(action);
-
-        info.m_actions.append(action);
+        if (m_strips.at(i).m_strip == strip)
+        {
+            QMenu::exec(m_strips.at(i).m_actions, strip->mapToGlobal(strip->geometry().bottomLeft()));
+            break;
+        }
     }
+}
+
+void DriveStripManager::refresh()
+{
+    m_drives = m_computer->listDrives();
+    std::sort(m_drives.begin(), m_drives.end(), ShellDriveLessThan());
+
+    for (int i = 0; i < m_strips.count(); i++)
+        populateToolStrip(m_strips[i]);
+}
+
+bool DriveStripManager::eventFilter(QObject* watched, QEvent* e)
+{
+    auto strip = qobject_cast<XmlUi::ToolStrip*>(watched);
+    if (strip)
+    {
+        switch (e->type())
+        {
+        case QEvent::DragEnter:
+            return stripDragEnterEvent(strip, dynamic_cast<QDragEnterEvent*>(e));
+        case QEvent::DragMove:
+            return stripDragMoveEvent(strip, dynamic_cast<QDragMoveEvent*>(e));
+        case QEvent::DragLeave:
+            return stripDragLeaveEvent(strip, dynamic_cast<QDragLeaveEvent*>(e));
+        case QEvent::Drop:
+            return stripDropEvent(strip, dynamic_cast<QDropEvent*>(e));
+        default:
+            break;
+        }
+    }
+
+    return false;
 }
 
 void DriveStripManager::driveChanged(const ShellDrive& drive)
@@ -155,48 +162,31 @@ void DriveStripManager::driveChanged(const ShellDrive& drive)
     }
 }
 
-void DriveStripManager::refresh()
+void DriveStripManager::populateToolStrip(StripInfo& info)
 {
-    m_drives = m_computer->listDrives();
-    std::sort(m_drives.begin(), m_drives.end(), ShellDriveLessThan());
+    info.m_strip->clearToolActions();
 
-    for (int i = 0; i < m_strips.count(); i++)
-        populateToolStrip(m_strips[i]);
-}
+    foreach (QAction* action, info.m_actions)
+        delete action;
+    info.m_actions.clear();
 
-void DriveStripManager::showDrivesMenu(XmlUi::ToolStrip* strip)
-{
-    for (int i = 0; i < m_strips.count(); i++)
+    for (int i = 0; i < m_drives.count(); i++)
     {
-        if (m_strips.at(i).m_strip == strip)
-        {
-            QMenu::exec(m_strips.at(i).m_actions, strip->mapToGlobal(strip->geometry().bottomLeft()));
-            break;
-        }
-    }
-}
+        ShellDrive drive = m_drives.at(i);
 
-bool DriveStripManager::eventFilter(QObject* watched, QEvent* e)
-{
-    auto strip = qobject_cast<XmlUi::ToolStrip*>(watched);
-    if (strip)
-    {
-        switch (e->type())
-        {
-        case QEvent::DragEnter:
-            return stripDragEnterEvent(strip, static_cast<QDragEnterEvent*>(e));
-        case QEvent::DragMove:
-            return stripDragMoveEvent(strip, static_cast<QDragMoveEvent*>(e));
-        case QEvent::DragLeave:
-            return stripDragLeaveEvent(strip, static_cast<QDragLeaveEvent*>(e));
-        case QEvent::Drop:
-            return stripDropEvent(strip, static_cast<QDropEvent*>(e));
-        default:
-            break;
-        }
-    }
+        auto action = new QAction(this);
+        action->setText(QString("&%1 - %2").arg(static_cast<QChar>(drive.letter()), drive.name().replace("&", "&&")));
+        action->setIconText(static_cast<QChar>(drive.letter()));
+        action->setToolTip(drive.name());
+        action->setIcon(drive.icon());
 
-    return false;
+        std::function<void(int)> handler = info.m_driveSelected;
+        connect(action, &QAction::triggered, info.m_receiver, [handler, i]() { handler(i); });
+
+        info.m_strip->addToolAction(action);
+
+        info.m_actions.append(action);
+    }
 }
 
 bool DriveStripManager::stripDragEnterEvent(XmlUi::ToolStrip* strip, QDragEnterEvent* e)
@@ -239,7 +229,7 @@ bool DriveStripManager::dragDropHelper(XmlUi::ToolStrip* strip, QDropEvent* e, b
 
     bool result = false;
 
-    ShellDrive drive = driveAt(strip, e->pos());
+    ShellDrive drive = driveAt(strip, e->position().toPoint());
 
     if (drive.isValid()) result = m_dropData->dragToDrive(e, drive);
 
@@ -247,7 +237,7 @@ bool DriveStripManager::dragDropHelper(XmlUi::ToolStrip* strip, QDropEvent* e, b
     {
         LocalSettings* settings = g_application->applicationSettings();
 
-        if (!(e->mouseButtons() & Qt::RightButton) && settings->value("ConfirmDnd").toBool())
+        if (!(e->buttons() & Qt::RightButton) && settings->value("ConfirmDnd").toBool())
         {
             if (m_dropData->dropAction() & (Qt::CopyAction | Qt::MoveAction))
             {

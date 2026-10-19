@@ -247,9 +247,9 @@ static void updatePalette(QWidget* widget, const QPalette& palette)
     {
         if (child->isWidgetType())
         {
-            auto childWidget = static_cast<QWidget*>(child);
-            if (childWidget->isTopLevel())
-                updatePalette(childWidget, g_application->palette());
+            auto childWidget = dynamic_cast<QWidget*>(child);
+            if (childWidget->isWindow())
+                updatePalette(childWidget, Application::palette());
             else
                 updatePalette(childWidget, widget->palette());
         }
@@ -288,7 +288,7 @@ void Application::updateTheme(ThemeHelper::AppTheme theme)
 
 QString Application::version() const
 {
-    return QString("1.0");
+    return {"1.0"};
 }
 
 bool Application::loadTranslation(const QString& name, bool tryQtDir)
@@ -297,7 +297,7 @@ bool Application::loadTranslation(const QString& name, bool tryQtDir)
 
     QStringList paths;
     paths.append(m_translationsPath);
-    if (tryQtDir) paths.append(QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    if (tryQtDir) paths.append(QLibraryInfo::path(QLibraryInfo::TranslationsPath));
 
     foreach (QString path, paths)
     {

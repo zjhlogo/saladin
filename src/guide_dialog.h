@@ -24,6 +24,10 @@ private slots:
 
     void updateActions();
 
+    // Re-applies the theme colors of the guide document (the linked light
+    // stylesheet is overridden by style-dark.css on the dark theme).
+    void updateGuideStyle();
+
     void loadIcons();
 
 private:

@@ -1,0 +1,24 @@
+/*  Dark color scheme variant of the quick guide stylesheet.
+ *
+ *  The guide pages link "../style.css", whose colors assume a white page.
+ *  GuideDialog applies this sheet as the document's default style sheet on
+ *  the dark theme; its rules override the colors of the linked sheet while
+ *  the page background and the default text color come from the theme
+ *  (QTextBrowser uses the @SECONDARY@ / @SECONDARY_TEXT@ palette tokens).
+ */
+h1
+{
+  color: #4db6ac;
+}
+h2
+{
+  color: #4db6ac;
+}
+th
+{
+  background-color: #37474f;
+}
+td
+{
+  background-color: #2b3036;
+}

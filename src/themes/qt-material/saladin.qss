@@ -223,11 +223,12 @@ QPlainTextEdit {
   border-radius: 0px;
 }
 
-/*  The quick guide is plain HTML with light table cells; keep it readable in
-    both color schemes by rendering it as a white document.  */
+/*  The quick guide document follows the theme: background and text color use
+    the theme tokens, and GuideDialog overrides the colors of the light
+    stylesheet linked by the pages with style-dark.css on the dark theme.  */
 QTextBrowser {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: @SECONDARY@;
+  color: @SECONDARY_TEXT@;
   selection-background-color: @PRIMARY@;
   selection-color: @PRIMARY_TEXT@;
 }
