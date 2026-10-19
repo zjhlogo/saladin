@@ -115,7 +115,26 @@ set(SALADIN_QT_MINGW_DLLS
     libwinpthread-1.dll)
 
 # ---------------------------------------------------------------------------
+# Sources
+# ---------------------------------------------------------------------------
+
+add_subdirectory(src)
+
+# ---------------------------------------------------------------------------
 # Translations
+#
+# Must come after add_subdirectory(src): the lupdate target reads the source
+# list of the "saladin" target.
+#
+#   cmake --build build --target saladin_lupdate       # recollect the strings
+#                                                      # from the sources into
+#                                                      # the .ts files
+#   cmake --build build --target saladin_lrelease      # recompile .ts -> .qm
+#
+# Both targets also exist under their global aliases "update_translations"
+# and "release_translations" (added by Qt's LinguistTools macros). The lupdate
+# run passes -no-obsolete so strings removed from the sources are dropped from
+# the catalogs; remove the option to keep them as "vanished" entries instead.
 # ---------------------------------------------------------------------------
 
 set(SALADIN_LANGUAGES de es hu pl pt_BR ru zh_CN)
@@ -128,6 +147,15 @@ endforeach()
 find_package(Qt6 QUIET COMPONENTS LinguistTools)
 
 if(TARGET Qt6::lrelease)
+    # Recollect the user-visible strings into the .ts catalogs. The sources
+    # (and include paths) are taken from the "saladin" target itself, so no
+    # separate file list has to be maintained here.
+    qt_add_lupdate(
+        SOURCE_TARGETS saladin
+        TS_FILES ${SALADIN_TS_FILES}
+        LUPDATE_TARGET saladin_lupdate
+        OPTIONS -no-obsolete)
+
     # Compile the .ts sources into .qm files in the build tree; the
     # "saladin_lrelease" target is part of ALL and "release_translations"
     # rebuilds only the translations.
@@ -168,9 +196,3 @@ install(FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/translations/locale.ini"
     ${SALADIN_QM_FILES}
     DESTINATION translations)
-
-# ---------------------------------------------------------------------------
-# Sources
-# ---------------------------------------------------------------------------
-
-add_subdirectory(src)
