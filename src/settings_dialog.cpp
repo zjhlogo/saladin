@@ -4,12 +4,12 @@
 
 #include "application.h"
 #include "settings_dialog.h"
-#include "shell/shellfolder.h"
+#include "shell/shell_folder.h"
 #include "utils/icon_loader.h"
 #include "utils/local_settings.h"
-#include "utils/separator_combobox.h"
-#include "xmlui/gradientwidget.h"
-#include "xmlui/toolstrip.h"
+#include "utils/separator_combo_box.h"
+#include "xmlui/gradient_widget.h"
+#include "xmlui/tool_strip.h"
 
 #include <QAbstractItemView>
 

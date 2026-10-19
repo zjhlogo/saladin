@@ -1,18 +1,18 @@
 // \file application.cpp
 // \author zhangjianhua
-// \date 2026/10/18
+// \date 2026/10/19
 
 #include "application.h"
 #include "about_box.h"
-#include "guidedialog.h"
-#include "mainwindow.h"
-#include "shell/shellfolder.h"
-#include "shell/shellpidl.h"
+#include "guide_dialog.h"
+#include "main_window.h"
+#include "shell/shell_folder.h"
+#include "shell/shell_pidl.h"
 #include "utils/data_serializer.h"
 #include "utils/icon_loader.h"
 #include "utils/local_settings.h"
 #include "utils/update_client.h"
-#include "xmlui/windowsstyle.h"
+#include "xmlui/windows_style.h"
 
 Application* g_application = nullptr;
 

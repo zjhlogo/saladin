@@ -1,0 +1,1371 @@
+// \file panel_widget.cpp
+// \author zhangjianhua
+// \date 2026/10/19
+
+#include "panel_widget.h"
+#include "application.h"
+#include "drive_strip_manager.h"
+#include "folder_item_delegate.h"
+#include "folder_item_model.h"
+#include "folder_item_view.h"
+#include "main_window.h"
+#include "open_ftp_dialog.h"
+#include "shell/shell_computer.h"
+#include "shell/shell_drop_data.h"
+#include "shell/shell_folder.h"
+#include "shell/shell_item.h"
+#include "shell/shell_pidl.h"
+#include "utils/elided_label.h"
+#include "utils/icon_loader.h"
+#include "utils/local_settings.h"
+#include "utils/path_line_editor.h"
+#include "xmlui/builder.h"
+
+#include <algorithm>
+
+PanelWidget::PanelWidget(PaneLocation location, QWidget* parent)
+    : QWidget(parent)
+    , m_location(location)
+{
+    auto layout = new QVBoxLayout(this);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    layout->addSpacing(3);
+
+    m_strip = new XmlUi::ToolStrip(this);
+    layout->addWidget(m_strip);
+    layout->addSpacing(3);
+
+    m_strip->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(m_strip, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(stripContextMenuRequested(const QPoint&)));
+
+    m_strip->addAuxiliaryAction(mainWindow->action("openHome"));
+    m_strip->addAuxiliaryAction(mainWindow->action("openRoot"));
+    m_strip->addAuxiliaryAction(mainWindow->action("openParent"));
+    if (location == LeftPane)
+        m_strip->addAuxiliaryAction(mainWindow->action("copyToRightPane"));
+    else
+        m_strip->addAuxiliaryAction(mainWindow->action("copyToLeftPane"));
+
+    m_tabBar = new QTabBar(this);
+    m_tabBar->setStyleSheet("QTabBar::tab { text-align: left; width: 100px; }");
+    m_tabBar->setExpanding(false);
+    m_tabBar->setMovable(true);
+
+    layout->addWidget(m_tabBar);
+    connect(m_tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+    connect(m_tabBar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(tabDoubleClicked(int)));
+
+    auto editLayout = new QHBoxLayout();
+
+    auto editFrame = new QFrame(this);
+    editFrame->setProperty("frameless", true);
+    editLayout->addWidget(editFrame);
+
+    auto innerLayout = new QHBoxLayout(editFrame);
+    innerLayout->setContentsMargins(0, 0, 0, 0);
+
+    m_edit = new PathLineEditor(editFrame);
+    m_edit->setFocusPolicy(Qt::ClickFocus);
+    m_edit->setFrame(false);
+    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    innerLayout->addWidget(m_edit);
+
+    updateEditPalette();
+
+    connect(m_edit, SIGNAL(returnPressed()), this, SLOT(changeDirectory()));
+
+    m_bookmarkButton = new XmlUi::ActionButton(parent);
+    m_bookmarkButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    m_bookmarkButton->setIconSize(QSize(16, 16));
+    m_bookmarkButton->setDefaultAction(mainWindow->action("showBookmarks"));
+    m_bookmarkButton->adjustText();
+    editLayout->addWidget(m_bookmarkButton);
+
+    m_historyButton = new XmlUi::ActionButton(parent);
+    m_historyButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    m_historyButton->setIconSize(QSize(16, 16));
+    m_historyButton->setDefaultAction(mainWindow->action("showHistory"));
+    m_historyButton->adjustText();
+    editLayout->addWidget(m_historyButton);
+
+    addAction(mainWindow->action("addBookmark"));
+
+    layout->addLayout(editLayout);
+    layout->addSpacing(3);
+
+    m_view = new FolderItemView(this);
+    m_view->setSelectionMode(QAbstractItemView::NoSelection);
+    m_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_view->setRootIsDecorated(false);
+    m_view->setAlternatingRowColors(true);
+    m_view->setAllColumnsShowFocus(true);
+    m_view->setUniformRowHeights(true);
+    m_view->header()->setStretchLastSection(false);
+    m_view->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_view->viewport()->setAcceptDrops(true);
+    m_view->setAutoScroll(true);
+    m_view->setAutoScrollMargin(50);
+    layout->addWidget(m_view, 1);
+
+    connect(m_view, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(viewContextMenuRequested(const QPoint&)));
+
+    connect(m_view->header(), SIGNAL(sectionResized(int, int, int)), this, SLOT(sectionResized(int, int, int)));
+    connect(m_view->header(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(sectionMoved(int, int, int)));
+
+    m_model = new FolderItemModel(this);
+    m_view->setModel(m_model);
+
+    auto itemDelegate = new FolderItemDelegate(this);
+    m_view->setItemDelegate(itemDelegate);
+
+    m_view->setSortingEnabled(true);
+    m_view->sortByColumn(0, Qt::AscendingOrder);
+
+    m_renameTimer = new QTimer(this);
+    m_renameTimer->setInterval(qApp->doubleClickInterval() + 200);
+    m_renameTimer->setSingleShot(true);
+
+    connect(m_renameTimer, SIGNAL(timeout()), this, SLOT(renameTimeout()));
+
+    auto status = new QStatusBar(this);
+    status->setSizeGripEnabled(false);
+    layout->addWidget(status);
+
+    m_selectionStatus = new ElidedLabel(status);
+    status->addWidget(m_selectionStatus, 1);
+
+    m_driveStatus = new ElidedLabel(status);
+    status->addWidget(m_driveStatus, 1);
+
+    connect(m_model, SIGNAL(modelReset()), this, SLOT(updateStatus()));
+    connect(m_model, SIGNAL(layoutChanged()), this, SLOT(updateStatus()));
+    connect(m_model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(updateStatus()));
+
+    m_edit->installEventFilter(this);
+    m_view->installEventFilter(this);
+    m_view->viewport()->installEventFilter(this);
+
+    setFocusProxy(m_view);
+
+    connect(g_application, SIGNAL(themeChanged()), this, SLOT(updateEditPalette()));
+}
+
+PanelWidget::~PanelWidget()
+{
+}
+
+void PanelWidget::restoreSettings()
+{
+    LocalSettings* settings = g_application->applicationSettings();
+
+    QString key = QString("HeaderState%1").arg(m_location + 1);
+    if (settings->contains(key))
+    {
+        m_view->header()->restoreState(settings->value(key).toByteArray());
+    }
+    else
+    {
+        m_view->setColumnWidth(0, 210);
+        m_view->setColumnWidth(1, 90);
+        m_view->setColumnWidth(2, 110);
+        m_view->setColumnWidth(3, 70);
+    }
+}
+
+void PanelWidget::saveSettings()
+{
+    LocalSettings* settings = g_application->applicationSettings();
+
+    QString key = QString("HeaderState%1").arg(m_location + 1);
+    settings->setValue(key, m_view->header()->saveState());
+}
+
+void PanelWidget::populateDrives()
+{
+    mainWindow->driveStripManager()->registerToolStrip(m_strip, this, [this](int index) { driveSelected(index); });
+}
+
+bool PanelWidget::eventFilter(QObject* watched, QEvent* e)
+{
+    if (watched == m_edit)
+    {
+        switch (e->type())
+        {
+        case QEvent::FocusIn:
+            return editFocusInEvent(static_cast<QFocusEvent*>(e));
+        case QEvent::FocusOut:
+            return editFocusOutEvent(static_cast<QFocusEvent*>(e));
+        case QEvent::KeyPress:
+            return editKeyPressEvent(static_cast<QKeyEvent*>(e));
+        default:
+            break;
+        }
+    }
+
+    if (watched == m_view || watched == m_view->viewport())
+    {
+        switch (e->type())
+        {
+        case QEvent::KeyPress:
+            return viewKeyPressEvent(static_cast<QKeyEvent*>(e));
+        case QEvent::MouseButtonPress:
+            return viewMouseButtonPressEvent(static_cast<QMouseEvent*>(e));
+        case QEvent::MouseMove:
+            return viewMouseMoveEvent(static_cast<QMouseEvent*>(e));
+        case QEvent::MouseButtonRelease:
+            return viewMouseButtonReleaseEvent(static_cast<QMouseEvent*>(e));
+        case QEvent::MouseButtonDblClick:
+            return viewMouseDoubleClickEvent(static_cast<QMouseEvent*>(e));
+        case QEvent::DragEnter:
+            return viewDragEnterEvent(static_cast<QDragEnterEvent*>(e));
+        case QEvent::DragMove:
+            return viewDragMoveEvent(static_cast<QDragMoveEvent*>(e));
+        case QEvent::DragLeave:
+            return viewDragLeaveEvent(static_cast<QDragLeaveEvent*>(e));
+        case QEvent::Drop:
+            return viewDropEvent(static_cast<QDropEvent*>(e));
+        case QEvent::Resize:
+            if (watched == m_view) resizeColumns();
+            return false;
+        case QEvent::Paint:
+            if (watched == m_view->viewport()) gotoItem();
+            return false;
+        default:
+            break;
+        }
+    }
+
+    return false;
+}
+
+bool PanelWidget::editFocusInEvent(QFocusEvent* /*e*/)
+{
+    QPalette palette = Application::palette();
+    palette.setColor(QPalette::Text, palette.color(QPalette::WindowText));
+    m_edit->setPalette(palette);
+    return false;
+}
+
+bool PanelWidget::editFocusOutEvent(QFocusEvent* /*e*/)
+{
+    updateEditPalette();
+    updateLocation();
+    return false;
+}
+
+bool PanelWidget::editKeyPressEvent(QKeyEvent* e)
+{
+    switch (e->key())
+    {
+    case Qt::Key_Escape:
+        m_view->setFocus();
+        return true;
+    default:
+        break;
+    }
+    return false;
+}
+
+bool PanelWidget::viewKeyPressEvent(QKeyEvent* e)
+{
+    switch ((e->key() | e->modifiers()) & ~Qt::KeypadModifier)
+    {
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        if (!m_view->isEditing())
+        {
+            openItem(m_view->currentIndex());
+            return true;
+        }
+        break;
+
+    case Qt::Key_Right:
+        if (m_model->isParentFolder(m_view->currentIndex()))
+            openParent();
+        else
+            enterDirectory(m_model->itemAt(m_view->currentIndex()));
+        return true;
+
+    case Qt::ControlModifier + Qt::Key_PageDown:
+        enterDirectory(m_model->itemAt(m_view->currentIndex()));
+        return true;
+
+    case Qt::Key_Backspace:
+    case Qt::Key_Left:
+    case Qt::ControlModifier + Qt::Key_PageUp:
+        openParent();
+        return true;
+
+    case Qt::Key_Space:
+        if (!m_model->isItemSelected(m_view->currentIndex())) m_model->calculateSize(m_view->currentIndex());
+        m_model->toggleItemSelected(m_view->currentIndex());
+        return true;
+
+    case Qt::Key_Insert:
+    {
+        m_model->toggleItemSelected(m_view->currentIndex());
+        QModelIndex index = m_view->indexBelow(m_view->currentIndex());
+        if (index.isValid()) m_view->setCurrentIndex(index);
+        return true;
+    }
+
+    case Qt::ShiftModifier + Qt::Key_Up:
+    case Qt::ShiftModifier + Qt::Key_Down:
+    {
+        m_model->toggleItemSelected(m_view->currentIndex());
+        QModelIndex index = (e->key() == Qt::Key_Up) ? m_view->indexAbove(m_view->currentIndex()) : m_view->indexBelow(m_view->currentIndex());
+        if (index.isValid()) m_view->setCurrentIndex(index);
+        return true;
+    }
+
+    case Qt::ShiftModifier + Qt::Key_PageUp:
+    {
+        QModelIndex fromIndex = m_view->currentIndex();
+        if (fromIndex.isValid())
+        {
+            QModelIndex toIndex = m_view->movePageUp();
+            if (toIndex.isValid())
+            {
+                int toRow = toIndex.row();
+                if (toRow == 0) toRow--;
+                for (int i = fromIndex.row(); i > toRow; i--)
+                    m_model->toggleItemSelected(m_model->index(i, 0));
+                m_view->setCurrentIndex(toIndex);
+            }
+        }
+        return true;
+    }
+
+    case Qt::ShiftModifier + Qt::Key_PageDown:
+    {
+        QModelIndex fromIndex = m_view->currentIndex();
+        if (fromIndex.isValid())
+        {
+            QModelIndex toIndex = m_view->movePageDown();
+            if (toIndex.isValid())
+            {
+                int toRow = toIndex.row();
+                if (toRow == m_model->rowCount() - 1) toRow++;
+                for (int i = fromIndex.row(); i < toRow; i++)
+                    m_model->toggleItemSelected(m_model->index(i, 0));
+                m_view->setCurrentIndex(toIndex);
+            }
+        }
+        return true;
+    }
+
+    case Qt::ShiftModifier + Qt::Key_Home:
+    {
+        QModelIndex fromIndex = m_view->currentIndex();
+        if (fromIndex.isValid())
+        {
+            for (int i = fromIndex.row(); i >= 0; i--)
+                m_model->toggleItemSelected(m_model->index(i, 0));
+            m_view->setCurrentIndex(fromIndex.sibling(0, 0));
+        }
+        return true;
+    }
+
+    case Qt::ShiftModifier + Qt::Key_End:
+    {
+        QModelIndex fromIndex = m_view->currentIndex();
+        if (fromIndex.isValid())
+        {
+            for (int i = fromIndex.row(); i < m_model->rowCount(); i++)
+                m_model->toggleItemSelected(m_model->index(i, 0));
+            m_view->setCurrentIndex(fromIndex.sibling(m_model->rowCount() - 1, 0));
+        }
+        return true;
+    }
+
+    case Qt::ALT + Qt::Key_Left:
+    {
+        if (m_historyIndex < m_history.count() - 1) setHistoryIndex(m_historyIndex + 1);
+        return true;
+    }
+
+    case Qt::ALT + Qt::Key_Right:
+    {
+        if (m_historyIndex > 0) setHistoryIndex(m_historyIndex - 1);
+        return true;
+    }
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
+bool PanelWidget::viewMouseButtonPressEvent(QMouseEvent* e)
+{
+    QModelIndex index = m_view->indexAt(e->pos());
+
+    if (index.isValid() && !m_model->isParentFolder(index)) m_startDragPosition = e->pos();
+
+    m_renameIndex = QModelIndex();
+    m_renameTimer->stop();
+
+    if (e->button() == Qt::LeftButton)
+    {
+        if (e->modifiers().testFlag(Qt::ShiftModifier))
+        {
+            if (index.isValid())
+            {
+                QModelIndex anchor = m_view->anchor();
+                if (!anchor.isValid()) anchor = m_view->currentIndex();
+                if (anchor.isValid())
+                {
+                    int from = qMin(anchor.row(), index.row());
+                    int to = qMax(anchor.row(), index.row());
+                    if (e->modifiers().testFlag(Qt::ControlModifier))
+                    {
+                        bool isSelected = m_model->isItemSelected(index);
+                        for (int i = from; i <= to; i++)
+                            m_model->setItemSelected(m_model->index(i, 0), !isSelected);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < m_model->rowCount(); i++)
+                            m_model->setItemSelected(m_model->index(i, 0), i >= from && i <= to);
+                    }
+                    m_view->setCurrentIndex(index);
+                    m_view->setAnchor(anchor);
+                    return true;
+                }
+            }
+        }
+        else if (e->modifiers().testFlag(Qt::ControlModifier))
+        {
+            if (index.isValid())
+            {
+                if (index != m_view->currentIndex() && m_model->selectedItems().isEmpty()) m_model->setItemSelected(m_view->currentIndex(), true);
+                m_model->toggleItemSelected(index);
+            }
+        }
+        else
+        {
+            if (index.isValid() && index == m_view->currentIndex()) m_renameIndex = index;
+
+            if (!m_model->isItemSelected(index)) m_model->unselectAll();
+        }
+    }
+
+    if (e->button() == Qt::RightButton)
+    {
+        if (!m_model->isItemSelected(index)) m_model->unselectAll();
+    }
+
+    if (e->button() == Qt::XButton1)
+    {
+        if (m_historyIndex < m_history.count() - 1) setHistoryIndex(m_historyIndex + 1);
+    }
+
+    if (e->button() == Qt::XButton2)
+    {
+        if (m_historyIndex > 0) setHistoryIndex(m_historyIndex - 1);
+    }
+
+    m_view->setAnchor(QModelIndex());
+
+    return false;
+}
+
+bool PanelWidget::viewMouseMoveEvent(QMouseEvent* e)
+{
+    if (!m_startDragPosition.isNull() && (m_startDragPosition - e->pos()).manhattanLength() > QApplication::startDragDistance())
+    {
+        m_startDragPosition = QPoint();
+
+        QList<ShellItem> items = m_model->selectedItems();
+
+        if (items.isEmpty())
+        {
+            ShellItem item = m_model->itemAt(m_view->currentIndex());
+            if (item.isValid())
+            {
+                m_model->setItemSelected(m_view->currentIndex(), true);
+                items.append(item);
+            }
+        }
+
+        if (!items.isEmpty())
+        {
+            ShellSelection selection(m_model->folder(), items, this);
+            selection.doDragDrop();
+        }
+    }
+
+    return false;
+}
+
+bool PanelWidget::viewMouseButtonReleaseEvent(QMouseEvent* e)
+{
+    m_startDragPosition = QPoint();
+
+    if (e->button() == Qt::LeftButton)
+    {
+        QModelIndex index = m_view->indexAt(e->pos());
+        if (index.isValid() && index == m_view->currentIndex() && index == m_renameIndex) m_renameTimer->start();
+
+        if (!e->modifiers().testFlag(Qt::ShiftModifier) && !e->modifiers().testFlag(Qt::ControlModifier)) m_model->unselectAll();
+    }
+
+    return false;
+}
+
+bool PanelWidget::viewMouseDoubleClickEvent(QMouseEvent* e)
+{
+    if (e->button() == Qt::LeftButton) openItem(m_view->indexAt(e->pos()));
+
+    if (e->button() == Qt::XButton1)
+    {
+        if (m_historyIndex < m_history.count() - 1) setHistoryIndex(m_historyIndex + 1);
+    }
+
+    if (e->button() == Qt::XButton2)
+    {
+        if (m_historyIndex > 0) setHistoryIndex(m_historyIndex - 1);
+    }
+
+    return true;
+}
+
+bool PanelWidget::viewDragEnterEvent(QDragEnterEvent* e)
+{
+    m_dropData = new ShellDropData(e, m_model->folder(), this);
+
+    m_view->setDragging(true);
+
+    dragDropHelper(e, false);
+
+    return true;
+}
+
+bool PanelWidget::viewDragMoveEvent(QDragMoveEvent* e)
+{
+    dragDropHelper(e, false);
+
+    m_view->checkAutoScroll(e->pos());
+
+    return true;
+}
+
+bool PanelWidget::viewDragLeaveEvent(QDragLeaveEvent* /*e*/)
+{
+    delete m_dropData;
+    m_dropData = nullptr;
+
+    m_view->setDragging(false);
+
+    return true;
+}
+
+bool PanelWidget::viewDropEvent(QDropEvent* e)
+{
+    dragDropHelper(e, true);
+
+    delete m_dropData;
+    m_dropData = nullptr;
+
+    m_view->setDragging(false);
+
+    return true;
+}
+
+bool PanelWidget::dragDropHelper(QDropEvent* e, bool doDrop)
+{
+    if (!m_dropData || !m_dropData->isValid()) return false;
+
+    bool result = false;
+
+    QModelIndex index = m_view->indexAt(e->pos());
+
+    if (m_model->isParentFolder(index))
+    {
+        result = m_dropData->dragToParent(e);
+    }
+    else
+    {
+        if (index.isValid()) result = m_dropData->dragToItem(e, m_model->itemAt(index));
+
+        if (!result)
+        {
+            result = m_dropData->dragToFolder(e);
+            index = QModelIndex();
+        }
+    }
+
+    if (!doDrop) m_view->highlightDropItem(index);
+
+    if (result && doDrop)
+    {
+        LocalSettings* settings = g_application->applicationSettings();
+
+        if (!(e->mouseButtons() & Qt::RightButton) && settings->value("ConfirmDnd").toBool())
+        {
+            if (m_dropData->dropAction() & (Qt::CopyAction | Qt::MoveAction))
+            {
+                ShellSelection* selection = ShellSelection::draggedSelection(m_dropData);
+                if (selection)
+                {
+                    ShellFolder* targetFolder;
+                    if (m_model->isParentFolder(index))
+                    {
+                        ShellItem item;
+                        targetFolder = getFolder()->parentFolder(item);
+                    }
+                    else if (index.isValid())
+                    {
+                        targetFolder = getFolder()->openFolder(m_model->itemAt(index));
+                    }
+                    else
+                    {
+                        targetFolder = getFolder();
+                    }
+
+                    if (targetFolder)
+                    {
+                        mainWindow->transferSelection(selection,
+                                                      targetFolder,
+                                                      m_dropData->dropAction() & Qt::CopyAction ? ShellSelection::Copy : ShellSelection::Move,
+                                                      false);
+
+                        if (targetFolder != getFolder()) delete targetFolder;
+
+                        result = false;
+                    }
+                }
+            }
+
+            if (result)
+            {
+                QString targetPath;
+                if (m_model->isParentFolder(index))
+                {
+                    ShellItem item;
+                    ShellFolder* parentFolder = getFolder()->parentFolder(item);
+                    if (parentFolder)
+                    {
+                        targetPath = parentFolder->path();
+                        delete parentFolder;
+                    }
+                }
+                else if (index.isValid())
+                {
+                    targetPath = getFolder()->itemPath(m_model->itemAt(index));
+                }
+                else
+                {
+                    targetPath = getFolder()->path();
+                }
+
+                mainWindow->raise();
+                mainWindow->activateWindow();
+
+                if (QMessageBox::question(this,
+                                          tr("Drag & Drop"),
+                                          tr("Drop selected items to <b>%1</b>?").arg(targetPath),
+                                          QMessageBox::Ok | QMessageBox::Cancel)
+                    != QMessageBox::Ok)
+                    result = false;
+            }
+        }
+
+        if (result) result = m_dropData->drop();
+    }
+
+    if (result)
+        e->setDropAction(m_dropData->dropAction());
+    else
+        e->setDropAction(Qt::IgnoreAction);
+    e->accept();
+
+    return result;
+}
+
+void PanelWidget::resizeColumns()
+{
+    int w = width() - m_view->verticalScrollBar()->sizeHint().width() - m_view->frameWidth() * 2;
+    for (int i = 1; i < m_model->columnCount(); i++)
+        w -= m_view->columnWidth(i);
+
+    bool block = blockSignals(true);
+    m_view->setColumnWidth(0, qMax(w, 150));
+    blockSignals(block);
+}
+
+void PanelWidget::gotoItem()
+{
+    QModelIndex index = m_model->gotoItemIndex();
+    if (index.isValid()) m_view->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
+}
+
+ShellFolder* PanelWidget::getFolder() const
+{
+    return m_model->folder();
+}
+
+QStringList PanelWidget::getTabFolderList() const
+{
+    QStringList paths;
+
+    int count = m_tabBar->count();
+    for (int i = 0; i < count; ++i)
+    {
+        auto tabData = m_tabBar->tabData(i);
+        paths.append(tabData.toString());
+    }
+
+    return paths;
+}
+
+int PanelWidget::getSelectedTab() const
+{
+    return m_tabBar->currentIndex();
+}
+
+QList<ShellItem> PanelWidget::items() const
+{
+    return m_model->items();
+}
+
+QList<ShellItem> PanelWidget::selectedItems() const
+{
+    QList<ShellItem> items = m_model->selectedItems();
+
+    if (items.isEmpty())
+    {
+        ShellItem item = m_model->itemAt(m_view->currentIndex());
+        if (item.isValid()) items.append(item);
+    }
+
+    return items;
+}
+
+ShellItem PanelWidget::currentItem() const
+{
+    return m_model->itemAt(m_view->currentIndex());
+}
+
+void PanelWidget::setGotoItemName(const QString& name)
+{
+    m_model->setGotoItemName(name);
+}
+
+void PanelWidget::refresh()
+{
+    m_model->refresh();
+}
+
+void PanelWidget::viewHidden(bool on)
+{
+    m_model->setIncludeHidden(on);
+    m_model->refresh();
+}
+
+void PanelWidget::openDirectory()
+{
+    m_edit->setFocus(Qt::TabFocusReason);
+}
+
+void PanelWidget::changeDirectory()
+{
+    setDirectory(m_edit->text());
+}
+
+void PanelWidget::tabChanged(int index)
+{
+    auto tabData = m_tabBar->tabData(index);
+    if (tabData.isValid())
+    {
+        setDirectory(tabData.toString());
+    }
+}
+
+void PanelWidget::tabDoubleClicked(int index)
+{
+    if (index != -1)
+    {
+        // delete current tab
+        if (m_tabBar->count() <= 1) return;
+
+        m_tabBar->removeTab(index);
+    }
+    else
+    {
+        // add new tab
+        int currentIndex = m_tabBar->currentIndex();
+        auto tabData = m_tabBar->tabData(currentIndex);
+
+        int newIndex = m_tabBar->addTab(getDirName(tabData.toString()));
+        m_tabBar->setTabData(newIndex, tabData);
+        m_tabBar->setCurrentIndex(newIndex);
+    }
+}
+
+void PanelWidget::setDirectory(const QString& path)
+{
+    if (m_model->folder() && path == m_model->folder()->path())
+    {
+        m_model->refresh();
+        m_view->setFocus();
+    }
+    else
+    {
+        auto folder = new ShellFolder(path, this);
+        if (folder->isValid())
+        {
+            setFolder(folder);
+            activateView();
+        }
+        else
+        {
+            delete folder;
+            QMessageBox::warning(this, tr("Invalid Path"), tr("The path you entered cannot be opened.\nPlease check the spelling and try again."));
+        }
+    }
+}
+
+void PanelWidget::openParent()
+{
+    ShellItem item;
+    ShellFolder* folder = m_model->folder()->parentFolder(item);
+    if (folder)
+    {
+        setFolder(folder);
+        activateView(item);
+    }
+}
+
+void PanelWidget::openRoot()
+{
+    ShellFolder* folder = m_model->folder()->rootFolder();
+    if (folder)
+    {
+        setFolder(folder);
+        activateView();
+    }
+}
+
+void PanelWidget::browse()
+{
+    ShellFolder* folder = m_model->folder()->browseFolder();
+    if (folder)
+    {
+        setFolder(folder);
+        activateView();
+    }
+}
+
+void PanelWidget::driveSelected(int index)
+{
+    DriveStripManager* manager = mainWindow->driveStripManager();
+    openDrive(manager->driveAt(index));
+}
+
+void PanelWidget::openDrive(const ShellDrive& drive)
+{
+    DriveStripManager* manager = mainWindow->driveStripManager();
+    ShellFolder* folder = manager->computer()->openRootFolder(drive);
+    if (folder)
+    {
+        setFolder(folder);
+        activateView();
+    }
+}
+
+void PanelWidget::openItem(const QModelIndex& index)
+{
+    if (!index.isValid()) return;
+
+    if (m_model->isParentFolder(index))
+    {
+        openParent();
+        return;
+    }
+
+    ShellItem item = m_model->itemAt(index);
+
+    if (item.attributes().testFlag(ShellItem::Folder))
+    {
+        enterDirectory(item);
+        return;
+    }
+
+    m_model->folder()->executeItem(item);
+}
+
+void PanelWidget::enterDirectory(const ShellItem& item)
+{
+    if (!item.isValid()) return;
+
+    ShellFolder* folder = m_model->folder()->openFolder(item);
+    if (folder)
+    {
+        setFolder(folder);
+        activateView();
+    }
+}
+
+void PanelWidget::setFolder(ShellFolder* folder)
+{
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+    m_model->setFolder(folder);
+
+    updateLocation();
+    updateTabText();
+
+    if (!m_lockHistory)
+    {
+        ShellPidl pidl = m_model->folder()->pidl();
+
+        while (m_historyIndex > 0)
+        {
+            m_history.removeFirst();
+            m_historyIndex--;
+        }
+
+        m_history.removeAll(pidl);
+
+        m_history.prepend(pidl);
+
+        while (m_history.count() > 20)
+            m_history.removeLast();
+    }
+
+    QApplication::restoreOverrideCursor();
+}
+
+void PanelWidget::activateView(const ShellItem& item /*= ShellItem()*/)
+{
+    QModelIndex index;
+    if (item.isValid()) index = m_model->indexOf(item);
+    if (!index.isValid() && m_model->rowCount() > 0) index = m_model->index(0, 0);
+
+    m_view->setCurrentIndex(index);
+    m_view->setFocus();
+}
+
+void PanelWidget::setSourcePane(bool source)
+{
+    if (m_isSource != source)
+    {
+        m_isSource = source;
+
+        updateEditPalette();
+
+        if (source && !m_edit->hasFocus()) m_view->setFocus();
+    }
+}
+
+void PanelWidget::InitFolders(const QStringList& paths, int selectedIndex)
+{
+    for (int i = 0; i < paths.length(); ++i)
+    {
+        int newIndex = m_tabBar->addTab(getDirName(paths[i]));
+        m_tabBar->setTabData(newIndex, QVariant::fromValue(paths[i]));
+    }
+
+    m_tabBar->setCurrentIndex(selectedIndex);
+    setDirectory(paths[selectedIndex]);
+}
+
+void PanelWidget::updateLocation()
+{
+    QString path = m_model->folder()->path();
+    m_edit->setText(path);
+}
+
+void PanelWidget::updateTabText()
+{
+    QString path = m_model->folder()->path();
+
+    int currentIndex = m_tabBar->currentIndex();
+    if (currentIndex == -1)
+    {
+        currentIndex = m_tabBar->addTab("NewTab");
+    }
+
+    m_tabBar->setTabText(currentIndex, getDirName(path));
+    m_tabBar->setTabData(currentIndex, QVariant(path));
+}
+
+void PanelWidget::updateEditPalette()
+{
+    // QPalette palette = Application::palette();
+    // if (m_isSource)
+    //{
+    //    palette.setColor(QPalette::Base, palette.color(QPalette::Highlight));
+    //    palette.setColor(QPalette::Text, palette.color(QPalette::HighlightedText));
+    //}
+    // else
+    //{
+    //    palette.setColor(QPalette::Base, palette.color(QPalette::Window));
+    //    palette.setColor(QPalette::Text, palette.color(QPalette::WindowText));
+    //}
+    // m_edit->setPalette(palette);
+}
+
+void PanelWidget::selectAll()
+{
+    m_model->selectAll();
+}
+
+void PanelWidget::unselectAll()
+{
+    m_model->unselectAll();
+}
+
+void PanelWidget::invertSelection()
+{
+    m_model->invertSelection();
+}
+
+void PanelWidget::setPatternSelection(const QString& pattern, bool selected)
+{
+    QStringList parts = pattern.split(QLatin1Char(';'), Qt::SkipEmptyParts);
+
+    QList<QRegularExpression> filters;
+    foreach (QString part, parts)
+        filters.append(QRegularExpression(QRegularExpression::wildcardToRegularExpression(part), QRegularExpression::CaseInsensitiveOption));
+
+    for (int i = 0; i < m_model->rowCount(); i++)
+    {
+        QModelIndex index = m_model->index(i, 0);
+        if (!m_model->isParentFolder(index))
+        {
+            foreach (QRegularExpression filter, filters)
+            {
+                if (filter.match(m_model->itemAt(index).name()).hasMatch())
+                {
+                    m_model->setItemSelected(index, selected);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void PanelWidget::renameCurrent()
+{
+    QModelIndex index = m_view->currentIndex();
+    ShellItem item = m_model->itemAt(index);
+
+    if (item.isValid() && item.attributes().testFlag(ShellItem::CanRename))
+    {
+        m_view->edit(index);
+
+        QWidget* editor = m_view->indexWidget(index);
+        if (auto lineEdit = qobject_cast<QLineEdit*>(editor))
+        {
+            QString text = lineEdit->text();
+            int pos = text.lastIndexOf('.');
+            if (pos > 0) lineEdit->setSelection(0, pos);
+        }
+    }
+}
+
+void PanelWidget::calculateSize()
+{
+    if (m_model->selectedItemsCount() > 0)
+        m_model->calculateSizeSelected();
+    else
+        m_model->calculateSize(m_view->currentIndex());
+}
+
+void PanelWidget::compareWith(const QList<ShellItem>& items)
+{
+    m_model->compareWith(items);
+}
+
+void PanelWidget::showDrivesMenu()
+{
+    DriveStripManager* manager = mainWindow->driveStripManager();
+    manager->showDrivesMenu(m_strip);
+}
+
+void PanelWidget::showHistory()
+{
+    QMenu menu;
+
+    QList<QAction*> actions;
+    for (int i = 0; i < m_history.count(); i++)
+    {
+        QAction* action = menu.addAction(m_history.at(i).path().replace(QLatin1String("&"), QLatin1String("&&")));
+
+        if (m_historyIndex == i) menu.setDefaultAction(action);
+
+        actions.append(action);
+    }
+
+    QAction* action = menu.exec(m_historyButton->mapToGlobal(m_historyButton->rect().bottomLeft()));
+
+    if (action)
+    {
+        int index = actions.indexOf(action);
+        if (index >= 0) setHistoryIndex(index);
+    }
+}
+
+void PanelWidget::setHistoryIndex(int index)
+{
+    m_lockHistory = true;
+
+    m_historyIndex = index;
+
+    auto folder = new ShellFolder(m_history.at(index), this);
+    if (folder->isValid())
+    {
+        setFolder(folder);
+        activateView();
+    }
+    else
+    {
+        delete folder;
+        QMessageBox::warning(this, tr("Invalid Path"), tr("The path you selected cannot be opened.\nMake sure the device is available and try again."));
+    }
+
+    m_lockHistory = false;
+}
+
+void PanelWidget::showBookmarks()
+{
+    QMenu menu;
+
+    QList<Bookmark> bookmarks = g_application->bookmarks();
+    std::sort(bookmarks.begin(), bookmarks.end());
+
+    QList<QAction*> actions;
+    for (int i = 0; i < bookmarks.count(); i++)
+    {
+        QAction* action = menu.addAction(bookmarks.at(i).name().replace(QLatin1String("&"), QLatin1String("&&")));
+        actions.append(action);
+    }
+
+    if (!actions.isEmpty()) menu.addSeparator();
+
+    menu.addAction(mainWindow->action("addBookmark"));
+    menu.addAction(mainWindow->action("editBookmarks"));
+
+    mainWindow->action("editBookmarks")->setEnabled(!actions.isEmpty());
+
+    QAction* action = menu.exec(m_bookmarkButton->mapToGlobal(m_bookmarkButton->rect().bottomLeft()));
+    if (action)
+    {
+        int index = actions.indexOf(action);
+        if (index >= 0) setBookmark(bookmarks.at(index));
+    }
+}
+
+void PanelWidget::setBookmark(const Bookmark& bookmark)
+{
+    if (!bookmark.user().isEmpty())
+    {
+        OpenFtpDialog dialog(this);
+        dialog.setPath(bookmark.path());
+        dialog.setUser(bookmark.user());
+        dialog.setPassword(bookmark.password());
+
+        if (dialog.exec() != QDialog::Accepted) return;
+
+        setDirectory(dialog.path());
+    }
+    else
+    {
+        ShellFolder* folder = bookmark.createFolder(this);
+        if (folder->isValid())
+        {
+            setFolder(folder);
+            activateView();
+        }
+        else
+        {
+            delete folder;
+            QMessageBox::warning(this,
+                                 tr("Invalid Bookmark"),
+                                 tr("The bookmark you selected cannot be opened.\nMake sure the device is available and try again."));
+        }
+    }
+}
+
+void PanelWidget::closeSelectedTab()
+{
+    // delete current tab
+    if (m_tabBar->count() <= 1) return;
+    int index = m_tabBar->currentIndex();
+    if (index >= 0)
+    {
+        m_tabBar->removeTab(index);
+    }
+}
+
+void PanelWidget::duplicateSelectedTab()
+{
+    // add new tab
+    int currentIndex = m_tabBar->currentIndex();
+    auto tabData = m_tabBar->tabData(currentIndex);
+
+    int newIndex = m_tabBar->insertTab(currentIndex + 1, getDirName(tabData.toString()));
+    m_tabBar->setTabData(newIndex, tabData);
+    m_tabBar->setCurrentIndex(newIndex);
+}
+
+void PanelWidget::viewContextMenuRequested(const QPoint& pos)
+{
+    if (!m_view->viewport()->visibleRegion().contains(pos)) return;
+
+    QModelIndex index = m_view->indexAt(pos);
+
+    if (index.isValid() && !m_model->isParentFolder(index))
+    {
+        QList<ShellItem> items;
+
+        if (m_model->isItemSelected(index))
+        {
+            items = m_model->selectedItems();
+        }
+        else
+        {
+            m_model->unselectAll();
+            m_model->setItemSelected(index, true);
+            items.append(m_model->itemAt(index));
+        }
+
+        m_view->setCurrentIndex(index);
+
+        ShellSelection::Flags flags = ShellSelection::CanRename;
+
+        if (items.count() == 1 && items.first().attributes().testFlag(ShellItem::Folder)) flags |= ShellSelection::CanOpen;
+
+        ShellSelection selection(m_model->folder(), items, this);
+        ShellSelection::MenuCommand command = selection.showContextMenu(m_view->viewport()->mapToGlobal(pos), flags);
+
+        if (command == ShellSelection::Open)
+            enterDirectory(items.first());
+        else if (command == ShellSelection::Rename)
+            renameCurrent();
+    }
+    else
+    {
+        m_model->unselectAll();
+
+        m_model->folder()->showContextMenu(m_view->viewport()->mapToGlobal(pos), ShellSelection::Flags());
+    }
+}
+
+void PanelWidget::stripContextMenuRequested(const QPoint& pos)
+{
+    DriveStripManager* manager = mainWindow->driveStripManager();
+
+    ShellDrive drive = manager->driveAt(m_strip, pos);
+
+    if (drive.isValid())
+    {
+        ShellSelection::MenuCommand command = manager->computer()->showContextMenu(drive, m_strip->mapToGlobal(pos), ShellSelection::CanOpen);
+
+        if (command == ShellSelection::Open) openDrive(drive);
+    }
+    else
+    {
+        QMenu* menu = mainWindow->builder()->contextMenu("menuDrives");
+
+        if (menu) menu->popup(m_strip->mapToGlobal(pos));
+    }
+}
+
+void PanelWidget::renameTimeout()
+{
+    if (m_renameIndex.isValid() && m_renameIndex == m_view->currentIndex())
+    {
+        if (m_renameIndex == m_view->indexAt(m_view->viewport()->mapFromGlobal(QCursor::pos()))) renameCurrent();
+    }
+}
+
+void PanelWidget::sectionResized(int index, int /*oldSize*/, int newSize)
+{
+    emit headerSectionResized(index, newSize);
+}
+
+void PanelWidget::sectionMoved(int /*index*/, int from, int to)
+{
+    m_movingSection = true;
+    emit headerSectionMoved(from, to);
+    m_movingSection = false;
+}
+
+void PanelWidget::resizeHeaderSection(int index, int size)
+{
+    m_view->header()->resizeSection(index, size);
+}
+
+void PanelWidget::moveHeaderSection(int from, int to)
+{
+    if (!m_movingSection) m_view->header()->moveSection(from, to);
+}
+
+void PanelWidget::updateStatus()
+{
+    DriveStripManager* manager = mainWindow->driveStripManager();
+    if (!manager) return;
+
+    int selectedCount = m_model->selectedItemsCount();
+    int totalCount = m_model->totalItemsCount();
+
+    qint64 selectedSize = m_model->selectedItemsSize();
+    qint64 totalSize = m_model->totalItemsSize();
+
+    m_selectionStatus->setText(
+        tr("%1 of %2 items selected (%3 of %4)")
+            .arg(QString::number(selectedCount), QString::number(totalCount), formatSize(selectedSize, false), formatSize(totalSize, true)));
+
+    ShellDrive drive = manager->driveFromFolder(m_model->folder());
+
+    if (drive.isValid())
+    {
+        qint64 free;
+        qint64 total;
+        if (drive.getFreeSpace(&free, &total) && total > 0)
+        {
+            m_driveStatus->setText(
+                tr("%1 - %2 of %3 free (%4%)").arg(drive.name(), formatSize(free, false), formatSize(total, true), QString::number(free * 100 / total)));
+        }
+        else
+        {
+            m_driveStatus->setText(drive.name());
+        }
+        m_driveStatus->show();
+    }
+    else
+    {
+        m_driveStatus->hide();
+    }
+}
+
+QString PanelWidget::formatSize(qint64 size, bool afterOf)
+{
+    if (size == 0 && !afterOf) return "0";
+    if (size < 1024) return !afterOf ? tr("%n bytes", "before of", size) : tr("%n bytes", "after of", size);
+    if (size < 1048576) return tr("%1 kB").arg(size / 1024.0, 0, 'f', 1);
+    if (size < 1073741824) return tr("%1 MB").arg(size / 1048576.0, 0, 'f', 1);
+    return tr("%1 GB").arg(size / 1073741824.0, 0, 'f', 1);
+}
+
+QString PanelWidget::getDirName(const QString& path, int maxLength)
+{
+    auto dir = QDir(path);
+
+    auto dirName = dir.dirName();
+    if (dirName.isEmpty()) dirName = path;
+
+    if (dirName.length() > maxLength)
+    {
+        dirName = dirName.left(maxLength) + "..";
+    }
+
+    return dirName;
+}

@@ -4,11 +4,11 @@
 
 #include "application.h"
 #include "bookmarks_dialog.h"
-#include "operationdialog.h"
+#include "operation_dialog.h"
 #include "utils/icon_loader.h"
 #include "xmlui/builder.h"
-#include "xmlui/gradientwidget.h"
-#include "xmlui/toolstrip.h"
+#include "xmlui/gradient_widget.h"
+#include "xmlui/tool_strip.h"
 
 #include <algorithm>
 

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "shell/shellpidl.h"
+#include "shell/shell_pidl.h"
 
 class SeparatorComboBox;
 

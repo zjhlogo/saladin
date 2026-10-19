@@ -5,7 +5,7 @@
 #include "about_box.h"
 #include "application.h"
 #include "utils/icon_loader.h"
-#include "xmlui/gradientwidget.h"
+#include "xmlui/gradient_widget.h"
 
 #include <QScreen>
 

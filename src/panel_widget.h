@@ -1,0 +1,183 @@
+// \file panel_widget.h
+// \author zhangjianhua
+// \date 2026/10/19
+
+#pragma once
+
+#include "shell/shell_item.h"
+#include "xmlui/tool_strip.h"
+#include "xmlui/tool_strip_p.h"
+
+#include <QWidget>
+
+class FolderItemView;
+class FolderItemModel;
+class DriveStripManager;
+class ShellFolder;
+class ShellDrive;
+class ShellPidl;
+class ShellDropData;
+class Bookmark;
+
+class PanelWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    enum PaneLocation
+    {
+        LeftPane,
+        RightPane
+    };
+
+public:
+    PanelWidget(PaneLocation location, QWidget* parent);
+    ~PanelWidget() override;
+
+public:
+    PaneLocation getPanelLocation() const { return m_location; };
+
+    void restoreSettings();
+    void saveSettings();
+
+    void populateDrives();
+
+    void setSourcePane(bool source);
+
+    void InitFolders(const QStringList& paths, int selectedIndex);
+
+    void setFolder(ShellFolder* folder);
+    ShellFolder* getFolder() const;
+
+    QStringList getTabFolderList() const;
+    int getSelectedTab() const;
+
+    QList<ShellItem> items() const;
+    QList<ShellItem> selectedItems() const;
+    ShellItem currentItem() const;
+
+    void setGotoItemName(const QString& name);
+
+    void activateView(const ShellItem& item = ShellItem());
+
+    void refresh();
+    void viewHidden(bool on);
+
+    void openDirectory();
+    void openParent();
+    void openRoot();
+    void browse();
+    void setDirectory(const QString& path);
+
+    void selectAll();
+    void unselectAll();
+    void invertSelection();
+    void setPatternSelection(const QString& pattern, bool selected);
+
+    void renameCurrent();
+    void calculateSize();
+    void compareWith(const QList<ShellItem>& items);
+    void showDrivesMenu();
+    void showHistory();
+    void showBookmarks();
+
+    void closeSelectedTab();
+    void duplicateSelectedTab();
+
+public: // overrides
+    bool eventFilter(QObject* watched, QEvent* e) override;
+
+public slots:
+    void resizeHeaderSection(int index, int size);
+    void moveHeaderSection(int from, int to);
+
+    void updateEditPalette();
+
+signals:
+    void headerSectionResized(int index, int size);
+    void headerSectionMoved(int from, int to);
+
+private slots:
+    void changeDirectory();
+    void tabChanged(int index);
+    void tabDoubleClicked(int index);
+    void driveSelected(int index);
+
+    void openItem(const QModelIndex& index);
+    void viewContextMenuRequested(const QPoint& pos);
+
+    void stripContextMenuRequested(const QPoint& pos);
+
+    void sectionResized(int index, int oldSize, int newSize);
+    void sectionMoved(int index, int from, int to);
+
+    void renameTimeout();
+
+    void updateStatus();
+
+private:
+    bool editFocusInEvent(QFocusEvent* e);
+    bool editFocusOutEvent(QFocusEvent* e);
+
+    bool editKeyPressEvent(QKeyEvent* e);
+
+    bool viewKeyPressEvent(QKeyEvent* e);
+
+    bool viewMouseButtonPressEvent(QMouseEvent* e);
+    bool viewMouseMoveEvent(QMouseEvent* e);
+    bool viewMouseButtonReleaseEvent(QMouseEvent* e);
+    bool viewMouseDoubleClickEvent(QMouseEvent* e);
+
+    bool viewDragEnterEvent(QDragEnterEvent* e);
+    bool viewDragMoveEvent(QDragMoveEvent* e);
+    bool viewDragLeaveEvent(QDragLeaveEvent* e);
+    bool viewDropEvent(QDropEvent* e);
+
+    bool dragDropHelper(QDropEvent* e, bool doDrop);
+
+    void resizeColumns();
+    void gotoItem();
+
+    void enterDirectory(const ShellItem& item);
+    void openDrive(const ShellDrive& drive);
+
+    void updateLocation();
+    void updateTabText();
+
+    QString formatSize(qint64 size, bool afterOf);
+    QString getDirName(const QString& path, int maxLength = 10);
+
+    void setHistoryIndex(int index);
+    void setBookmark(const Bookmark& bookmark);
+
+private:
+    PaneLocation m_location;
+
+    XmlUi::ToolStrip* m_strip{};
+
+    QTabBar* m_tabBar{};
+    QLineEdit* m_edit{};
+
+    XmlUi::ActionButton* m_bookmarkButton{};
+    XmlUi::ActionButton* m_historyButton{};
+
+    FolderItemView* m_view{};
+    FolderItemModel* m_model{};
+
+    QLabel* m_selectionStatus{};
+    QLabel* m_driveStatus{};
+
+    bool m_isSource{};
+
+    bool m_movingSection{};
+
+    QPersistentModelIndex m_renameIndex;
+    QTimer* m_renameTimer{};
+
+    QList<ShellPidl> m_history;
+    int m_historyIndex{};
+    bool m_lockHistory{};
+
+    QPoint m_startDragPosition;
+
+    ShellDropData* m_dropData{};
+};

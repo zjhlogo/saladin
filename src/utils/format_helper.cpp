@@ -3,7 +3,7 @@
 // \date 2026/10/18
 
 #include "format_helper.h"
-#include "shell/streamdevice.h"
+#include "shell/stream_device.h"
 #include "utils/text_encoding.h"
 
 bool FormatHelper::checkImage(StreamDevice& file, bool force, QByteArray& format)

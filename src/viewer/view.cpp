@@ -1,25 +1,11 @@
-/**************************************************************************
- * This file is part of the Saladin program
- * Copyright (C) 2011-2017 Michał Męciński
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- **************************************************************************/
+// \file view.cpp
+// \author zhangjianhua
+// \date 2026/10/19
 
 #include "view.h"
-#include "viewer/binaryview.h"
-#include "viewer/imageview.h"
-#include "viewer/textview.h"
+#include "viewer/binary_view.h"
+#include "viewer/image_view.h"
+#include "viewer/text_view.h"
 
 View::View(QObject* parent)
     : QObject(parent)
@@ -77,11 +63,11 @@ void View::setFullScreen(bool on)
     if (on)
     {
         layout->setContentsMargins(0, 0, 0, 0);
-        if (QFrame* frame = qobject_cast<QFrame*>(layout->itemAt(0)->widget())) frame->setFrameStyle(0);
+        if (auto frame = qobject_cast<QFrame*>(layout->itemAt(0)->widget())) frame->setFrameStyle(0);
     }
     else
     {
         layout->setContentsMargins(3, 0, 3, 0);
-        if (QFrame* frame = qobject_cast<QFrame*>(layout->itemAt(0)->widget())) frame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+        if (auto frame = qobject_cast<QFrame*>(layout->itemAt(0)->widget())) frame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     }
 }
