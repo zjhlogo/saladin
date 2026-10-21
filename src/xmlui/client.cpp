@@ -71,8 +71,6 @@ QString Client::defaultMenuAction(const QString& menuId)
 
 bool Client::loadXmlUiFile(const QString& path)
 {
-    QDomDocument document;
-
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly))
     {
@@ -80,12 +78,19 @@ bool Client::loadXmlUiFile(const QString& path)
         return false;
     }
 
+    return loadXmlUi(&file);
+}
+
+bool Client::loadXmlUi(QIODevice* device)
+{
+    QDomDocument document;
+
     QString error;
     int line;
     int column;
-    if (!document.setContent(&file, false, &error, &line, &column))
+    if (!document.setContent(device, false, &error, &line, &column))
     {
-        qWarning("XmlUi::Client::loadXmlUiFile: Cannot parse file");
+        qWarning("XmlUi::Client::loadXmlUi: Cannot parse file");
         qWarning("(%s, line: %d, column: %d)", qPrintable(error), line, column);
         return false;
     }
@@ -94,7 +99,7 @@ bool Client::loadXmlUiFile(const QString& path)
 
     if (m_rootNode.type() != Root)
     {
-        qWarning("XmlUi::Client::loadXmlUiFile: Incorrect root element type");
+        qWarning("XmlUi::Client::loadXmlUi: Incorrect root element type");
         return false;
     }
 

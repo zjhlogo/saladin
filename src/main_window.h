@@ -34,6 +34,10 @@ public:
 
     ViewManager* viewManager() const { return m_viewManager; }
 
+    PanelWidget* sourcePane() const { return m_sourcePane; }
+
+    PanelWidget* pane(int index) const { return m_panes[index]; }
+
     void transferSelection(ShellSelection* selection, ShellFolder* targetFolder, ShellSelection::TransferType type, bool canRename);
 
     void startTool(Tool tool, ShellFolder* folder, const ShellItem& item);

@@ -121,6 +121,19 @@ set(SALADIN_QT_MINGW_DLLS
 add_subdirectory(src)
 
 # ---------------------------------------------------------------------------
+# Plugins
+#
+# User-visible extension DLLs, loaded at runtime from "<exe dir>/plugins"
+# (system-wide) or "<AppData>/Saladin/plugins" (per user). See plugins/README.md.
+# ---------------------------------------------------------------------------
+
+option(SALADIN_BUILD_EXAMPLE_PLUGIN "Build the example Saladin plugin" ON)
+
+if(SALADIN_BUILD_EXAMPLE_PLUGIN)
+    add_subdirectory(plugins/example)
+endif()
+
+# ---------------------------------------------------------------------------
 # Translations
 #
 # Must come after add_subdirectory(src): the lupdate target reads the source

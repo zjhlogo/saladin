@@ -6,6 +6,7 @@
 #include "about_box.h"
 #include "guide_dialog.h"
 #include "main_window.h"
+#include "plugin/plugin_manager.h"
 #include "shell/shell_folder.h"
 #include "shell/shell_pidl.h"
 #include "utils/data_serializer.h"
@@ -47,7 +48,13 @@ Application::Application(int& argc, char** argv)
     // Follow the system light/dark color scheme while the application is running.
     connect(styleHints(), &QStyleHints::colorSchemeChanged, this, &Application::updateColorScheme);
 
+    // 先扫描插件（只读元数据），等主窗口（含 XmlUi Builder）就绪后再加载。
+    m_pluginManager = new PluginManager(this);
+    m_pluginManager->scan();
+
     mainWindow = new MainWindow();
+
+    m_pluginManager->loadPlugins();
 
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
@@ -70,6 +77,10 @@ Application::Application(int& argc, char** argv)
 
 Application::~Application()
 {
+    // 插件可能在 shutdown 后仍触摸 UI 相关资源，必须在主窗口销毁前回放。
+    delete m_pluginManager;
+    m_pluginManager = nullptr;
+
     delete mainWindow;
     mainWindow = nullptr;
 

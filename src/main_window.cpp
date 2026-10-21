@@ -378,6 +378,9 @@ MainWindow::MainWindow()
     m_panes[0] = new PanelWidget(PanelWidget::LeftPane, widget);
     m_panes[1] = new PanelWidget(PanelWidget::RightPane, widget);
 
+    // 插件 API 的 sourcePanel()/targetPanel() 依赖活动面板初始非空。
+    setSourcePane(0);
+
     auto layout = new QHBoxLayout(widget);
     layout->setContentsMargins(3, 0, 3, 0);
     layout->setSpacing(5);

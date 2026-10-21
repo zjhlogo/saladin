@@ -4,8 +4,13 @@
 
 #pragma once
 
+#include "plugin/plugin_info.h"
 #include "shell/shell_pidl.h"
 
+#include <QList>
+
+class QListWidget;
+class QListWidgetItem;
 class SeparatorComboBox;
 
 class SettingsDialog : public QDialog
@@ -29,8 +34,13 @@ private slots:
     void browseConsole();
     void browseDiff();
 
+    void openPluginsFolder();
+
     void showGeneralTab() const;
     void showToolsTab() const;
+    void showPluginsTab() const;
+
+    void pluginSelected(int index);
 
     void loadIcons() const;
 
@@ -39,6 +49,11 @@ private:
     void browseTool(QLineEdit* edit);
 
     void loadLanguages() const;
+
+    void populatePlugins();
+    void updatePluginDetails(int index);
+
+    QString pluginStateText(const PluginInfo& info) const;
 
     QToolButton* browseButton(QWidget* parent, const char* slot) const;
 
@@ -49,6 +64,7 @@ private:
 
     QAction* m_generalAction{};
     QAction* m_toolsAction{};
+    QAction* m_pluginsAction{};
 
     QToolButton* m_leftPaneButton{};
     QToolButton* m_rightPaneButton{};
@@ -80,6 +96,11 @@ private:
     QLineEdit* m_editorEdit{};
     QLineEdit* m_consoleEdit{};
     QLineEdit* m_diffEdit{};
+
+    QListWidget* m_pluginList{};
+    QLabel* m_pluginDetails{};
+    QVBoxLayout* m_pluginWidgetLayout{};
+    QList<PluginInfo> m_pluginInfos{};
 
     ShellPidl m_pidls[2]{};
 };

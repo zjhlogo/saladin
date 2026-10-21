@@ -170,6 +170,20 @@ list(APPEND SALADIN_HEADERS
         xmlui/windows_style.h
 )
 
+# --- plugin/ ---------------------------------------------------------------
+
+list(APPEND SALADIN_SOURCES
+        plugin/plugin_host.cpp
+        plugin/plugin_manager.cpp
+)
+
+list(APPEND SALADIN_HEADERS
+        plugin/plugin_api.h
+        plugin/plugin_host.h
+        plugin/plugin_info.h
+        plugin/plugin_manager.h
+)
+
 # --- resources -------------------------------------------------------------
 
 set(SALADIN_RESOURCES

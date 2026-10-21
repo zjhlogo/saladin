@@ -47,6 +47,7 @@ src/                  应用源码（目标 saladin）
   themes/qt-material/ Qt-Material 主题：生成的 QSS/指示器 SVG + themes.qrc、手工覆盖样式 saladin.qss
 translations/         saladin_*.ts / *.qm、locale.ini
 cmake/                DeployQtRuntime.cmake
+plugins/              插件工程（每个插件一个子目录与 CMakeLists，见 plugins/README.md）
 tools/                开发期辅助脚本（如 Qt-Material 资源生成），不参与构建
 ```
 

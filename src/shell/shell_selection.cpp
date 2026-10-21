@@ -14,6 +14,18 @@
 ShellSelection* ShellSelectionPrivate::m_dragSelection = nullptr;
 IDataObject* ShellSelectionPrivate::m_dragObject = nullptr;
 
+// 由插件框架注册的右键菜单扩展点；为空时右键菜单保持纯 Shell 行为。
+static ShellContextMenuProvider g_contextMenuProvider = nullptr;
+
+// 插件命令在 TrackPopupMenu 返回值中的保留 id 段起点。Shell 命令占用
+// 1000–0x7ffff（见 QueryContextMenu 调用），插件命令从 0x80000 起，二者不重叠。
+static const UINT PLUGIN_MENU_COMMAND_BASE = 0x80000;
+
+void setShellContextMenuProvider(ShellContextMenuProvider provider)
+{
+    g_contextMenuProvider = provider;
+}
+
 ShellSelection::ShellSelection(ShellFolder* folder, const QList<ShellItem>& items, QWidget* parent /*= nullptr*/)
     : QObject(parent)
     , d(new ShellSelectionPrivate())
@@ -335,6 +347,28 @@ ShellSelection::MenuCommand ShellSelection::showContextMenu(const QPoint& pos, F
 
         if (SUCCEEDED(hr))
         {
+            // 追加插件贡献的动作：id 从保留段开始顺序分配，禁用项显示为灰色。
+            QVector<QAction*> pluginCommandActions;
+
+            if (g_contextMenuProvider)
+            {
+                QList<QAction*> pluginActions = g_contextMenuProvider(d->m_sourceFolder, d->m_sourceItems);
+
+                foreach (QAction* action, pluginActions)
+                {
+                    if (!action || action->text().isEmpty()) continue;
+
+                    if (pluginCommandActions.isEmpty() && GetMenuItemCount(menu) > 0) AppendMenuW(menu, MF_SEPARATOR, 0, nullptr);
+
+                    UINT itemFlags = MF_STRING;
+                    if (!action->isEnabled()) itemFlags |= MF_GRAYED;
+
+                    AppendMenuW(menu, itemFlags, PLUGIN_MENU_COMMAND_BASE + pluginCommandActions.count(), (LPCWSTR)action->text().utf16());
+
+                    pluginCommandActions.append(action);
+                }
+            }
+
             hr = contextMenu->QueryInterface(IID_PPV_ARGS(&g->m_menu));
             if (SUCCEEDED(hr)) g->m_oldProc = (WNDPROC)SetWindowLongPtr((HWND)parent()->effectiveWinId(), GWLP_WNDPROC, (LONG_PTR)ContextMenuProc);
 
@@ -348,7 +382,14 @@ ShellSelection::MenuCommand ShellSelection::showContextMenu(const QPoint& pos, F
                 g->m_menu = nullptr;
             }
 
-            if (command > 0)
+            if (command >= PLUGIN_MENU_COMMAND_BASE && (command - PLUGIN_MENU_COMMAND_BASE) < pluginCommandActions.count())
+            {
+                // 插件命令不进入 Shell 的 InvokeCommand 分支，直接触发动作。
+                pluginCommandActions.at(command - PLUGIN_MENU_COMMAND_BASE)->trigger();
+
+                result = NoCommand;
+            }
+            else if (command > 0)
             {
                 result = InternalCommand;
 

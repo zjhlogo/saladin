@@ -3,6 +3,8 @@
 // \date 2026/10/18
 
 #include "application.h"
+#include "plugin/plugin_api.h"
+#include "plugin/plugin_manager.h"
 #include "settings_dialog.h"
 #include "shell/shell_folder.h"
 #include "utils/icon_loader.h"
@@ -12,6 +14,8 @@
 #include "xmlui/tool_strip.h"
 
 #include <QAbstractItemView>
+#include <QDesktopServices>
+#include <QUrl>
 
 // QFontComboBox rebuilds its family model when the writing system and the font
 // filters are applied, but its popup view keeps the item layout of the initial,
@@ -71,6 +75,11 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_toolsAction->setCheckable(true);
     connect(m_toolsAction, SIGNAL(triggered()), this, SLOT(showToolsTab()));
     strip->addToolAction(m_toolsAction);
+
+    m_pluginsAction = new QAction(tr("Plugins"), this);
+    m_pluginsAction->setCheckable(true);
+    connect(m_pluginsAction, SIGNAL(triggered()), this, SLOT(showPluginsTab()));
+    strip->addToolAction(m_pluginsAction);
 
     m_stackedWidget = new QStackedWidget(this);
     mainLayout->addWidget(m_stackedWidget);
@@ -259,6 +268,47 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     toolsLayout->addStretch(1);
 
+    auto pluginsTab = new QWidget(m_stackedWidget);
+    m_stackedWidget->addWidget(pluginsTab);
+
+    auto pluginsLayout = new QHBoxLayout(pluginsTab);
+    pluginsLayout->setContentsMargins(0, 6, 0, 0);
+
+    auto pluginListWidget = new QWidget(pluginsTab);
+    auto pluginListLayout = new QVBoxLayout(pluginListWidget);
+    pluginsLayout->addWidget(pluginListWidget, 1);
+
+    m_pluginList = new QListWidget(pluginListWidget);
+    pluginListLayout->addWidget(m_pluginList, 1);
+
+    auto openPluginsFolderButton = new QPushButton(tr("&Open Plugins Folder"), pluginListWidget);
+    connect(openPluginsFolderButton, SIGNAL(clicked()), this, SLOT(openPluginsFolder()));
+    pluginListLayout->addWidget(openPluginsFolderButton);
+
+    auto pluginDetailsWidget = new QWidget(pluginsTab);
+    auto pluginDetailsLayout = new QVBoxLayout(pluginDetailsWidget);
+    pluginsLayout->addWidget(pluginDetailsWidget, 2);
+
+    m_pluginDetails = new QLabel(pluginDetailsWidget);
+    m_pluginDetails->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_pluginDetails->setWordWrap(true);
+    m_pluginDetails->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    pluginDetailsLayout->addWidget(m_pluginDetails, 1);
+
+    // 插件自定义设置控件的宿主容器；对话框销毁时控件随容器一起销毁。
+    auto pluginSettingsWidget = new QWidget(pluginDetailsWidget);
+    m_pluginWidgetLayout = new QVBoxLayout(pluginSettingsWidget);
+    m_pluginWidgetLayout->setContentsMargins(0, 0, 0, 0);
+    pluginDetailsLayout->addWidget(pluginSettingsWidget);
+
+    auto restartLabel = new QLabel(tr("Enabling or disabling plugins takes effect after Saladin is restarted."), pluginDetailsWidget);
+    restartLabel->setWordWrap(true);
+    pluginDetailsLayout->addWidget(restartLabel);
+
+    connect(m_pluginList, SIGNAL(currentRowChanged(int)), this, SLOT(pluginSelected(int)));
+
+    populatePlugins();
+
     mainLayout->addSpacing(7);
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply, Qt::Horizontal, this);
@@ -351,6 +401,17 @@ bool SettingsDialog::apply()
     settings->setValue("EditorTool", m_editorEdit->text());
     settings->setValue("ConsoleTool", m_consoleEdit->text());
     settings->setValue("DiffTool", m_diffEdit->text());
+
+    PluginManager* pluginManager = g_application->pluginManager();
+
+    if (pluginManager)
+    {
+        for (int i = 0; i < m_pluginList->count(); i++)
+        {
+            QListWidgetItem* item = m_pluginList->item(i);
+            pluginManager->setEnabled(item->data(Qt::UserRole).toString(), item->checkState() == Qt::Checked);
+        }
+    }
 
     settings->save();
 
@@ -445,6 +506,7 @@ void SettingsDialog::showGeneralTab() const
 
     m_generalAction->setChecked(true);
     m_toolsAction->setChecked(false);
+    m_pluginsAction->setChecked(false);
 }
 
 void SettingsDialog::showToolsTab() const
@@ -453,6 +515,119 @@ void SettingsDialog::showToolsTab() const
 
     m_generalAction->setChecked(false);
     m_toolsAction->setChecked(true);
+    m_pluginsAction->setChecked(false);
+}
+
+void SettingsDialog::showPluginsTab() const
+{
+    m_stackedWidget->setCurrentIndex(2);
+
+    m_generalAction->setChecked(false);
+    m_toolsAction->setChecked(false);
+    m_pluginsAction->setChecked(true);
+}
+
+void SettingsDialog::openPluginsFolder()
+{
+    PluginManager* pluginManager = g_application->pluginManager();
+
+    if (pluginManager) QDesktopServices::openUrl(QUrl::fromLocalFile(pluginManager->userPluginsPath()));
+}
+
+void SettingsDialog::populatePlugins()
+{
+    PluginManager* pluginManager = g_application->pluginManager();
+
+    if (!pluginManager) return;
+
+    m_pluginInfos = pluginManager->pluginInfos();
+
+    if (m_pluginInfos.isEmpty())
+    {
+        m_pluginList->setEnabled(false);
+        m_pluginDetails->setText(tr("No plugins found.") + "<br><br>" +
+                                 tr("Put plugin DLLs into the plugins folder and restart Saladin."));
+        return;
+    }
+
+    foreach (PluginInfo info, m_pluginInfos)
+    {
+        QString label = info.name;
+        if (!info.version.isEmpty()) label += "  " + info.version;
+
+        auto item = new QListWidgetItem(label, m_pluginList);
+        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+        item->setCheckState(pluginManager->isDisabledInSettings(info.id) ? Qt::Unchecked : Qt::Checked);
+        item->setData(Qt::UserRole, info.id);
+        item->setToolTip(info.path);
+    }
+
+    m_pluginList->setCurrentRow(0);
+}
+
+void SettingsDialog::pluginSelected(int index)
+{
+    updatePluginDetails(index);
+}
+
+void SettingsDialog::updatePluginDetails(int index)
+{
+    // 换一个插件时先移除上一个插件的设置控件（容器销毁时也随之销毁）。
+    while (QLayoutItem* child = m_pluginWidgetLayout->takeAt(0))
+    {
+        if (QWidget* widget = child->widget()) widget->deleteLater();
+        delete child;
+    }
+
+    if (index < 0 || index >= m_pluginInfos.count())
+    {
+        m_pluginDetails->clear();
+        return;
+    }
+
+    PluginInfo info = m_pluginInfos.at(index);
+
+    QString text = "<h4>" + info.name.toHtmlEscaped();
+    if (!info.version.isEmpty()) text += " " + info.version.toHtmlEscaped();
+    text += "</h4>";
+
+    if (!info.author.isEmpty()) text += "<p>" + info.author.toHtmlEscaped() + "</p>";
+    if (!info.description.isEmpty()) text += "<p>" + info.description.toHtmlEscaped() + "</p>";
+
+    text += "<p>" + tr("File:") + " " + QDir::toNativeSeparators(info.path).toHtmlEscaped() + "</p>";
+    text += "<p>" + tr("State:") + " " + pluginStateText(info) + "</p>";
+
+    m_pluginDetails->setText(text);
+
+    PluginManager* pluginManager = g_application->pluginManager();
+
+    Saladin::Plugin* plugin = pluginManager ? pluginManager->loadedPlugin(info.id) : nullptr;
+
+    if (plugin)
+    {
+        QWidget* settings = plugin->createSettingsWidget(m_pluginWidgetLayout->parentWidget());
+        if (settings) m_pluginWidgetLayout->addWidget(settings);
+    }
+}
+
+QString SettingsDialog::pluginStateText(const PluginInfo& info) const
+{
+    switch (info.state)
+    {
+    case PluginLoaded:
+        return tr("Loaded");
+
+    case PluginDisabled:
+        return tr("Disabled");
+
+    case PluginIncompatible:
+        return tr("Incompatible: %1").arg(info.errorString);
+
+    case PluginError:
+        return tr("Failed to load: %1").arg(info.errorString);
+    }
+
+    return QString();
 }
 
 void SettingsDialog::loadIcons() const
@@ -461,6 +636,7 @@ void SettingsDialog::loadIcons() const
 
     m_generalAction->setIcon(IconLoader::icon("configure"));
     m_toolsAction->setIcon(IconLoader::icon("gear"));
+    m_pluginsAction->setIcon(IconLoader::icon("explore"));
 
     m_leftPaneButton->setIcon(IconLoader::icon("browse"));
     m_rightPaneButton->setIcon(IconLoader::icon("browse"));

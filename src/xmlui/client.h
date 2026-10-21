@@ -15,6 +15,7 @@ namespace XmlUi
 }
 
 class QAction;
+class QIODevice;
 class QDomElement;
 
 namespace XmlUi
@@ -115,6 +116,15 @@ namespace XmlUi
          * @return @c true if the file was loaded, @c false otherwise.
          */
         bool loadXmlUiFile(const QString& path);
+
+        /**
+         * Load the UI layout from an already opened device. This allows the
+         * layout to come from sources other than a plain file, e.g. a buffer
+         * or an embedded resource of a dynamically loaded component.
+         * @param device The opened read-only device.
+         * @return @c true if the layout was loaded, @c false otherwise.
+         */
+        bool loadXmlUi(QIODevice* device);
 
         /**
          * Return the associated UI builder.

@@ -4,12 +4,26 @@
 
 #pragma once
 
+#include "shell_item.h"
+
+#include <QList>
 #include <QObject>
 
+class QAction;
 class ShellFolder;
-class ShellItem;
 class ShellDropData;
 class ShellSelectionPrivate;
+
+/**
+ * 文件右键菜单的扩展点：返回要追加到原生 Shell 菜单末尾的 Qt 动作。
+ *
+ * 由插件框架（PluginManager）在启动时设置、退出时传 nullptr 恢复默认；
+ * shell 层不依赖插件层。folder 是选中项所在的目录，items 是当前选中项
+ * （空白处右键时为目录本身对应的选择）。
+ */
+using ShellContextMenuProvider = QList<QAction*> (*)(ShellFolder* folder, const QList<ShellItem>& items);
+
+void setShellContextMenuProvider(ShellContextMenuProvider provider);
 
 class ShellSelection : public QObject
 {

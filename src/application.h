@@ -11,6 +11,7 @@
 
 class MainWindow;
 class LocalSettings;
+class PluginManager;
 class UpdateClient;
 class AboutBox;
 class AboutBoxSection;
@@ -33,6 +34,8 @@ public:
     QString locateTempFile(const QString& name);
 
     LocalSettings* applicationSettings() const { return m_settings; }
+
+    PluginManager* pluginManager() const { return m_pluginManager; }
 
     const QList<Bookmark>& bookmarks() const { return m_bookmarks; }
     void setBookmarks(const QList<Bookmark>& bookmarks);
@@ -81,6 +84,7 @@ private:
 
     LocalSettings* m_settings{};
     UpdateClient* m_updateClient{};
+    PluginManager* m_pluginManager{};
     QList<Bookmark> m_bookmarks;
     QPointer<AboutBox> m_aboutBox;
 

@@ -1,0 +1,9 @@
+{
+    "name": "example",
+    "displayName": "Example",
+    "version": "1.0.0",
+    "apiVersion": "1.0",
+    "author": "Saladin",
+    "description": "示例插件：演示动作贡献（工具条与菜单）和文件右键菜单注入。",
+    "ui": "plugin.xml"
+}

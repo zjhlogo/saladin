@@ -12,7 +12,7 @@
 <context>
     <name>AboutBoxToolSection</name>
     <message>
-        <location filename="../src/about_box.cpp" line="172"/>
+        <location filename="../src/about_box.cpp" line="168"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -20,108 +20,108 @@
 <context>
     <name>Application</name>
     <message>
-        <location filename="../src/application.cpp" line="91"/>
+        <location filename="../src/application.cpp" line="102"/>
         <source>Saladin %1</source>
         <translation>Saladin %1м</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="111"/>
+        <location filename="../src/application.cpp" line="122"/>
         <source>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</source>
         <translation>Эта программа является свободным программным обеспечением: вы можете распространять и/или изменять её в соответствии с условиями GNU General Public License, опубликованной Free Software Foundation, либо 3 версии лицензии, либо (по вашему выбору), любой более поздней версии.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="101"/>
+        <location filename="../src/application.cpp" line="112"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="102"/>
+        <location filename="../src/application.cpp" line="113"/>
         <source>Open the Saladin Quick Guide for help.</source>
         <translation>Откройте Краткое руководство Saladin для просмотра справки.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="105"/>
-        <location filename="../src/application.cpp" line="176"/>
+        <location filename="../src/application.cpp" line="116"/>
+        <location filename="../src/application.cpp" line="187"/>
         <source>Latest Version</source>
         <translation>Последняя версия</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="106"/>
+        <location filename="../src/application.cpp" line="117"/>
         <source>Automatic checking for latest version is disabled. You can enable it in program settings.</source>
         <translation>Автоматическая проверка  последней версии отключена. Вы можете включить его в настройках программы.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="117"/>
+        <location filename="../src/application.cpp" line="128"/>
         <source>About Saladin</source>
         <translation>о Saladin</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="123"/>
+        <location filename="../src/application.cpp" line="134"/>
         <source>&amp;Quick Guide</source>
         <translation>&amp;Краткое руководство</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="92"/>
+        <location filename="../src/application.cpp" line="103"/>
         <source>Copyright &amp;copy; 2011-2017 Michał Męciński</source>
         <translation>Авторские права &amp;copy; 2011-2017 Michał Męciński</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="93"/>
+        <location filename="../src/application.cpp" line="104"/>
         <source>Icons copyright &amp;copy; 2017 Łukasz Grabowski</source>
         <translation>Автор иконок &amp;copy; 2017 Łukasz Grabowski</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="96"/>
+        <location filename="../src/application.cpp" line="107"/>
         <source>Release Notes</source>
         <translation>Примечания к выпуску</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="97"/>
+        <location filename="../src/application.cpp" line="108"/>
         <source>See what&apos;s new in this version of Saladin:</source>
         <translation>Посмотреть, что нового в этой версии Saladin:</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="109"/>
+        <location filename="../src/application.cpp" line="120"/>
         <source>License</source>
         <translation>Лицензия</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="136"/>
+        <location filename="../src/application.cpp" line="147"/>
         <source>&amp;Check Now</source>
         <translation>&amp;Проверить сейчас</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="183"/>
+        <location filename="../src/application.cpp" line="194"/>
         <source>Checking for latest version...</source>
         <translation>Проверка последней версии...</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="190"/>
+        <location filename="../src/application.cpp" line="201"/>
         <source>Checking for latest version failed.</source>
         <translation>Не удалось проверить последнюю версию.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="192"/>
+        <location filename="../src/application.cpp" line="203"/>
         <source>&amp;Retry</source>
         <translation>&amp;Повторить</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="200"/>
+        <location filename="../src/application.cpp" line="211"/>
         <source>Your version of Saladin is up to date.</source>
         <translation>Ваша версия Saladin в актуальном состоянии.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="207"/>
+        <location filename="../src/application.cpp" line="218"/>
         <source>The latest version of Saladin is %1.</source>
         <translation>Последняя версия Saladin %1.</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="209"/>
+        <location filename="../src/application.cpp" line="220"/>
         <source>&amp;Release Notes</source>
         <translation>&amp;Примечания к выпуску</translation>
     </message>
     <message>
-        <location filename="../src/application.cpp" line="212"/>
+        <location filename="../src/application.cpp" line="223"/>
         <source>Do&amp;wnload</source>
         <translation>&amp;Загрузить</translation>
     </message>
@@ -129,37 +129,37 @@
 <context>
     <name>BinaryView</name>
     <message>
-        <location filename="../src/viewer/binary_view.cpp" line="20"/>
+        <location filename="../src/viewer/binary_view.cpp" line="18"/>
         <source>Hex Mode</source>
         <translatorcomment>or Hex Mode</translatorcomment>
         <translation>Hex режим</translation>
     </message>
     <message>
-        <location filename="../src/viewer/binary_view.cpp" line="26"/>
+        <location filename="../src/viewer/binary_view.cpp" line="24"/>
         <source>&amp;Copy</source>
         <translation>&amp;Копировать</translation>
     </message>
     <message>
-        <location filename="../src/viewer/binary_view.cpp" line="31"/>
+        <location filename="../src/viewer/binary_view.cpp" line="29"/>
         <source>Select &amp;All</source>
         <translation>&amp;Выделить всё</translation>
     </message>
     <message>
-        <location filename="../src/viewer/binary_view.cpp" line="70"/>
-        <location filename="../src/viewer/binary_view.cpp" line="144"/>
+        <location filename="../src/viewer/binary_view.cpp" line="68"/>
+        <location filename="../src/viewer/binary_view.cpp" line="142"/>
+        <location filename="../src/viewer/binary_view.cpp" line="179"/>
         <location filename="../src/viewer/binary_view.cpp" line="181"/>
-        <location filename="../src/viewer/binary_view.cpp" line="183"/>
         <source>Binary</source>
         <translatorcomment>or Двоичный</translatorcomment>
         <translation>Бинарный</translation>
     </message>
     <message>
-        <location filename="../src/viewer/binary_view.cpp" line="181"/>
+        <location filename="../src/viewer/binary_view.cpp" line="179"/>
         <source>%1 bytes</source>
         <translation>%1 байт</translation>
     </message>
     <message>
-        <location filename="../src/viewer/binary_view.cpp" line="183"/>
+        <location filename="../src/viewer/binary_view.cpp" line="181"/>
         <source>loading... %1%</source>
         <translation>загрузка... %1%</translation>
     </message>
@@ -172,53 +172,53 @@
         <translation>Редактировать закладки</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="22"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="20"/>
         <source>Rename Bookmark...</source>
         <translation>Переименовать закладку...</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="27"/>
-        <location filename="../src/bookmarks_dialog.cpp" line="160"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="25"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="158"/>
         <source>Delete Bookmark</source>
         <translation>Удалить закладку</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="53"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="51"/>
         <source>Edit your list of bookmarks:</source>
         <translation>Редактировать список закладок:</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="82"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="80"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="83"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="81"/>
         <source>Path</source>
         <translation>Путь</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="98"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="96"/>
         <source>&amp;OK</source>
         <translation>&amp;Ок</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="99"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="97"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Отмена</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="135"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="133"/>
         <source>Rename Bookmark</source>
         <translation>Переименовать закладку</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="137"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="135"/>
         <source>Enter the new name of bookmark &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>Введите новое имя закладки &lt;b&gt;%1&lt;/b&gt;:</translation>
     </message>
     <message>
-        <location filename="../src/bookmarks_dialog.cpp" line="162"/>
+        <location filename="../src/bookmarks_dialog.cpp" line="160"/>
         <source>Are you sure you want to delete bookmark &lt;b&gt;%1&lt;/b&gt;?</source>
         <translation>Вы уверены, что хотите удалить закладку &lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
@@ -226,13 +226,13 @@
 <context>
     <name>DriveStripManager</name>
     <message>
-        <location filename="../src/drive_strip_manager.cpp" line="281"/>
+        <location filename="../src/drive_strip_manager.cpp" line="271"/>
         <source>Drag &amp; Drop</source>
         <translatorcomment>or Drag &amp; Drop</translatorcomment>
         <translation>Drag &amp; Drop</translation>
     </message>
     <message>
-        <location filename="../src/drive_strip_manager.cpp" line="282"/>
+        <location filename="../src/drive_strip_manager.cpp" line="272"/>
         <source>Drop selected items to &lt;b&gt;%1&lt;/b&gt;?</source>
         <translatorcomment>Не уверен</translatorcomment>
         <translation>Перенести выбранные элементы в &lt;b&gt;%1&lt;/b&gt;?</translation>
@@ -280,38 +280,38 @@
 <context>
     <name>FolderItemModel</name>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="486"/>
+        <location filename="../src/folder_item_model.cpp" line="603"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="488"/>
+        <location filename="../src/folder_item_model.cpp" line="605"/>
         <source>Ext</source>
         <translation>Расширение</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="490"/>
+        <location filename="../src/folder_item_model.cpp" line="607"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="492"/>
+        <location filename="../src/folder_item_model.cpp" line="609"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="494"/>
+        <location filename="../src/folder_item_model.cpp" line="611"/>
         <source>Attributes</source>
         <translation>Атрибуты</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="538"/>
-        <location filename="../src/folder_item_model.cpp" line="557"/>
+        <location filename="../src/folder_item_model.cpp" line="655"/>
+        <location filename="../src/folder_item_model.cpp" line="674"/>
         <source>&lt;DIR&gt;</source>
         <translation>&lt;DIR&gt;</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="556"/>
+        <location filename="../src/folder_item_model.cpp" line="673"/>
         <source>&lt;LNK&gt;</source>
         <translation>&lt;LNK&gt;</translation>
     </message>
@@ -347,32 +347,32 @@
 <context>
     <name>GuideDialog</name>
     <message>
-        <location filename="../src/guide_dialog.cpp" line="17"/>
+        <location filename="../src/guide_dialog.cpp" line="63"/>
         <source>Quick Guide</source>
         <translation>Краткое руководство</translation>
     </message>
     <message>
-        <location filename="../src/guide_dialog.cpp" line="21"/>
+        <location filename="../src/guide_dialog.cpp" line="65"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../src/guide_dialog.cpp" line="25"/>
+        <location filename="../src/guide_dialog.cpp" line="69"/>
         <source>Forward</source>
         <translation>Вперед</translation>
     </message>
     <message>
-        <location filename="../src/guide_dialog.cpp" line="29"/>
+        <location filename="../src/guide_dialog.cpp" line="73"/>
         <source>Home</source>
         <translation>Главная</translation>
     </message>
     <message>
-        <location filename="../src/guide_dialog.cpp" line="53"/>
+        <location filename="../src/guide_dialog.cpp" line="97"/>
         <source>Quick guide to Saladin:</source>
         <translation>Краткое руководство к  Saladin:</translation>
     </message>
     <message>
-        <location filename="../src/guide_dialog.cpp" line="82"/>
+        <location filename="../src/guide_dialog.cpp" line="127"/>
         <source>&amp;OK</source>
         <translation>&amp;Ок</translation>
     </message>
@@ -498,7 +498,7 @@ Alpha channel: %3</source>
     <message>
         <location filename="../src/main_window.cpp" line="69"/>
         <location filename="../src/main_window.cpp" line="199"/>
-        <location filename="../src/main_window.cpp" line="1058"/>
+        <location filename="../src/main_window.cpp" line="1075"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
@@ -543,7 +543,7 @@ Alpha channel: %3</source>
         <translation>Директория предыдущего уровня</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="774"/>
+        <location filename="../src/main_window.cpp" line="791"/>
         <source>Select Mask</source>
         <translatorcomment>Не уверен</translatorcomment>
         <translation>Выделить маску</translation>
@@ -554,7 +554,7 @@ Alpha channel: %3</source>
         <translation>Выделить всё</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="798"/>
+        <location filename="../src/main_window.cpp" line="815"/>
         <source>Unselect Mask</source>
         <translation>Снять выделение маски</translation>
     </message>
@@ -615,7 +615,7 @@ Alpha channel: %3</source>
     </message>
     <message>
         <location filename="../src/main_window.cpp" line="165"/>
-        <location filename="../src/main_window.cpp" line="1070"/>
+        <location filename="../src/main_window.cpp" line="1087"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
@@ -691,7 +691,7 @@ F5</translation>
     </message>
     <message>
         <location filename="../src/main_window.cpp" line="213"/>
-        <location filename="../src/main_window.cpp" line="1079"/>
+        <location filename="../src/main_window.cpp" line="1096"/>
         <source>Move</source>
         <translation>Переместить</translation>
     </message>
@@ -748,52 +748,52 @@ F6</translation>
         <translation>Развернуть панель инструментов</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="865"/>
+        <location filename="../src/main_window.cpp" line="882"/>
         <source>Cannot view files</source>
         <translation>Не удается просмотреть файлы</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="865"/>
+        <location filename="../src/main_window.cpp" line="882"/>
         <source>Only the internal viewer supports viewing multiple files.</source>
         <translation>Только внутренний просмотрщик поддерживает просмотр нескольких файлов.</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1147"/>
+        <location filename="../src/main_window.cpp" line="1164"/>
         <source>Create Folder</source>
         <translation>Создать папку</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1472"/>
+        <location filename="../src/main_window.cpp" line="1489"/>
         <source>&amp;Edit</source>
         <translation>&amp;Изменить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1473"/>
+        <location filename="../src/main_window.cpp" line="1490"/>
         <source>&amp;Navigate</source>
         <translation>&amp;Навигация</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1474"/>
+        <location filename="../src/main_window.cpp" line="1491"/>
         <source>&amp;View</source>
         <translation>&amp;Просмотр</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1475"/>
+        <location filename="../src/main_window.cpp" line="1492"/>
         <source>&amp;Selection</source>
         <translation>&amp;Выбор</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1476"/>
+        <location filename="../src/main_window.cpp" line="1493"/>
         <source>&amp;Functions</source>
         <translation>&amp;Функции</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1477"/>
+        <location filename="../src/main_window.cpp" line="1494"/>
         <source>&amp;Tools</source>
         <translation>&amp;Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1478"/>
+        <location filename="../src/main_window.cpp" line="1495"/>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
     </message>
@@ -924,163 +924,163 @@ F9</translation>
         <translation>Редактировать закладку...</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="776"/>
+        <location filename="../src/main_window.cpp" line="793"/>
         <source>Enter the pattern to select:</source>
         <translation>Введите шаблон для выделения:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="800"/>
+        <location filename="../src/main_window.cpp" line="817"/>
         <source>Enter the pattern to unselect:</source>
         <translation>Введите шаблон для снятия выделения:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="883"/>
+        <location filename="../src/main_window.cpp" line="900"/>
         <source>Create File</source>
         <translation>Создать файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="885"/>
+        <location filename="../src/main_window.cpp" line="902"/>
         <source>Create a new file:</source>
         <translation>Создать новый файл:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="928"/>
+        <location filename="../src/main_window.cpp" line="945"/>
         <source>Tool failed</source>
         <translation>Ошибка инструмента</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="929"/>
+        <location filename="../src/main_window.cpp" line="946"/>
         <source>The %1 tool could not be started.
 Make sure it is correctly configured in Saladin settings and try again.</source>
         <translation>Инструмент%1 не может быть запущен.
 Убедитесь, что он правильно настроен в настройках Saladin и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="957"/>
+        <location filename="../src/main_window.cpp" line="974"/>
         <source>Missing tool</source>
         <translation>Отсутствующий инструмент</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="957"/>
+        <location filename="../src/main_window.cpp" line="974"/>
         <source>There is no %1 tool configured.
 Select the tool in Saladin settings and try again.</source>
         <translation>Там нет%1 настроенного  инструмента.
 Выберите инструмент в настройках Saladin и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="968"/>
+        <location filename="../src/main_window.cpp" line="985"/>
         <source>file viewer</source>
         <translation>средство просмотра файла</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="970"/>
+        <location filename="../src/main_window.cpp" line="987"/>
         <source>text editor</source>
         <translation>текстовый редактор</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="972"/>
+        <location filename="../src/main_window.cpp" line="989"/>
         <source>console</source>
         <translation>консоль</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="974"/>
+        <location filename="../src/main_window.cpp" line="991"/>
         <source>file compare</source>
         <translation>сравнение файлов</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1020"/>
+        <location filename="../src/main_window.cpp" line="1037"/>
         <source>Drag &amp; Drop</source>
         <translatorcomment>or Drag &amp; Drop</translatorcomment>
         <translation>Drag &amp; Drop</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1020"/>
+        <location filename="../src/main_window.cpp" line="1037"/>
         <source>The source and target locations are the same.</source>
         <translation>Расположения источника и цели совпадают.</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1049"/>
+        <location filename="../src/main_window.cpp" line="1066"/>
         <source>Clone</source>
         <translation>Клонировать</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1052"/>
+        <location filename="../src/main_window.cpp" line="1069"/>
         <source>Clone &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>Клонировать &lt;b&gt;%1&lt;/b&gt;:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1054"/>
+        <location filename="../src/main_window.cpp" line="1071"/>
         <source>Clone &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>Клонировать &lt;b&gt;%1&lt;/b&gt; выделенные элементы:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1061"/>
+        <location filename="../src/main_window.cpp" line="1078"/>
         <source>Copy &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>Копировать &lt;b&gt;%1&lt;/b&gt;:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1063"/>
+        <location filename="../src/main_window.cpp" line="1080"/>
         <source>Copy &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>Копировать &lt;b&gt;%1&lt;/b&gt;выделенные элементы:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1073"/>
+        <location filename="../src/main_window.cpp" line="1090"/>
         <source>Rename &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>Переименовать &lt;b&gt;%1&lt;/b&gt;:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1075"/>
+        <location filename="../src/main_window.cpp" line="1092"/>
         <source>Rename &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>Переименовать &lt;b&gt;%1&lt;/b&gt; выделенные элементы:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1082"/>
+        <location filename="../src/main_window.cpp" line="1099"/>
         <source>Move &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>Переместить &lt;b&gt;%1&lt;/b&gt;:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1084"/>
+        <location filename="../src/main_window.cpp" line="1101"/>
         <source>Move &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>Переместить &lt;b&gt;%1&lt;/b&gt; выделенные элементы:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1110"/>
-        <location filename="../src/main_window.cpp" line="1237"/>
+        <location filename="../src/main_window.cpp" line="1127"/>
+        <location filename="../src/main_window.cpp" line="1254"/>
         <source>O&amp;verwrite without prompt</source>
         <translation>&amp;Перезаписать без запроса</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1149"/>
+        <location filename="../src/main_window.cpp" line="1166"/>
         <source>Create a new folder:</source>
         <translation>Создать новую папку:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1217"/>
+        <location filename="../src/main_window.cpp" line="1234"/>
         <source>Pack To Zip</source>
         <translation>Упакрваить в Zip</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1223"/>
+        <location filename="../src/main_window.cpp" line="1240"/>
         <source>Pack &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>Упаковать &lt;b&gt;%1&lt;/b&gt;:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1231"/>
+        <location filename="../src/main_window.cpp" line="1248"/>
         <source>Pack &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>Упаковать &lt;b&gt;%1&lt;/b&gt; выделенные элементы:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1359"/>
+        <location filename="../src/main_window.cpp" line="1376"/>
         <source>Add Bookmark</source>
         <translation>Добавить закладку</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1361"/>
+        <location filename="../src/main_window.cpp" line="1378"/>
         <source>Add current directory to the list of bookmarks:</source>
         <translation>Добавить текущий каталог в список закладок:</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1366"/>
+        <location filename="../src/main_window.cpp" line="1383"/>
         <source>&amp;Remember password</source>
         <translation>&amp;Запомнить пароль</translation>
     </message>
@@ -1317,49 +1317,49 @@ Select the tool in Saladin settings and try again.</source>
         <translation>Бросить выделенные элементы в &lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="828"/>
-        <location filename="../src/panel_widget.cpp" line="1130"/>
+        <location filename="../src/panel_widget.cpp" line="833"/>
+        <location filename="../src/panel_widget.cpp" line="1135"/>
         <source>Invalid Path</source>
         <translation>Неверный путь</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="828"/>
+        <location filename="../src/panel_widget.cpp" line="833"/>
         <source>The path you entered cannot be opened.
 Please check the spelling and try again.</source>
         <translation>Введенный путь не может быть открыт.
 Пожалуйста, проверьте правильность написания и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1130"/>
+        <location filename="../src/panel_widget.cpp" line="1135"/>
         <source>The path you selected cannot be opened.
 Make sure the device is available and try again.</source>
         <translation>Выбранный путь не может быть открыт.
 Убедитесь, что устройство доступно и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1190"/>
+        <location filename="../src/panel_widget.cpp" line="1195"/>
         <source>Invalid Bookmark</source>
         <translation>Неверная закладка</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1191"/>
+        <location filename="../src/panel_widget.cpp" line="1196"/>
         <source>The bookmark you selected cannot be opened.
 Make sure the device is available and try again.</source>
         <translation>Выбранная закладка не может быть открыта.
 Убедитесь, что устройство доступно и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1323"/>
+        <location filename="../src/panel_widget.cpp" line="1328"/>
         <source>%1 of %2 items selected (%3 of %4)</source>
         <translation>%1 из %2 выбранных элементов (%3 из %4)</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1335"/>
+        <location filename="../src/panel_widget.cpp" line="1340"/>
         <source>%1 - %2 of %3 free (%4%)</source>
         <translation>%1 - %2 из %3 свободно (%4%)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/panel_widget.cpp" line="1352"/>
+        <location filename="../src/panel_widget.cpp" line="1357"/>
         <source>%n bytes</source>
         <comment>before of</comment>
         <translation>
@@ -1369,7 +1369,7 @@ Make sure the device is available and try again.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/panel_widget.cpp" line="1352"/>
+        <location filename="../src/panel_widget.cpp" line="1357"/>
         <source>%n bytes</source>
         <comment>after of</comment>
         <translation>
@@ -1379,19 +1379,67 @@ Make sure the device is available and try again.</source>
         </translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1353"/>
+        <location filename="../src/panel_widget.cpp" line="1358"/>
         <source>%1 kB</source>
         <translation>%1 кБ</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1354"/>
+        <location filename="../src/panel_widget.cpp" line="1359"/>
         <source>%1 MB</source>
         <translation>%1 МБ</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1355"/>
+        <location filename="../src/panel_widget.cpp" line="1360"/>
         <source>%1 GB</source>
         <translation>%1 ГБ</translation>
+    </message>
+</context>
+<context>
+    <name>PluginManager</name>
+    <message>
+        <location filename="../src/plugin/plugin_manager.cpp" line="95"/>
+        <source>The plugin requires plugin API version %1, but this version of Saladin provides %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/plugin/plugin_manager.cpp" line="122"/>
+        <source>The plugin id duplicates an already collected plugin, it was skipped.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/plugin/plugin_manager.cpp" line="138"/>
+        <source>Not a valid Saladin plugin (plugin metadata is missing).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/plugin/plugin_manager.cpp" line="146"/>
+        <source>Not a valid Saladin plugin (the plugin interface id does not match).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/plugin/plugin_manager.cpp" line="163"/>
+        <source>The plugin metadata is missing the name field.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/plugin/plugin_manager.cpp" line="263"/>
+        <source>Not a valid Saladin plugin (the root object does not implement Saladin::Plugin).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/plugin/plugin_manager.cpp" line="277"/>
+        <source>Plugin initialization failed (initialize returned false).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/plugin/plugin_manager.cpp" line="286"/>
+        <source>The plugin threw an exception during initialization: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/plugin/plugin_manager.cpp" line="292"/>
+        <source>The plugin threw an unknown exception during initialization.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1561,199 +1609,254 @@ Make sure the device is available and try again.</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="30"/>
+        <location filename="../src/settings_dialog.cpp" line="34"/>
         <source>Saladin Settings</source>
         <translation>Настройки Saladin</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="47"/>
+        <location filename="../src/settings_dialog.cpp" line="51"/>
         <source>Configure settings of Saladin:</source>
         <translation>Настройка параметров Saladin:</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="64"/>
+        <location filename="../src/settings_dialog.cpp" line="68"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="84"/>
+        <location filename="../src/settings_dialog.cpp" line="79"/>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="93"/>
         <source>Regional Options</source>
         <translation>Региональные параметры</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="88"/>
+        <location filename="../src/settings_dialog.cpp" line="97"/>
         <source>&amp;Language of the user interface:</source>
         <translation>&amp;Язык интерфейса пользователя:</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="99"/>
+        <location filename="../src/settings_dialog.cpp" line="108"/>
         <source>Home Directories</source>
         <translation>Домашние каталоги</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="103"/>
+        <location filename="../src/settings_dialog.cpp" line="112"/>
         <source>Left pane:</source>
         <translation>Левая панель:</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="115"/>
+        <location filename="../src/settings_dialog.cpp" line="124"/>
         <source>Right pane:</source>
         <translation>Правая панель:</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="127"/>
+        <location filename="../src/settings_dialog.cpp" line="136"/>
         <source>&amp;Remember last directories on exit</source>
         <translation>&amp;Запомнить последние директории при выходе</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="130"/>
+        <location filename="../src/settings_dialog.cpp" line="139"/>
         <source>Appearance</source>
         <translation>Внешний вид</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="134"/>
+        <location filename="../src/settings_dialog.cpp" line="143"/>
         <source>&amp;User interface theme:</source>
         <translation>&amp;Тема интерфейса:</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="138"/>
+        <location filename="../src/settings_dialog.cpp" line="148"/>
         <source>Follow System</source>
         <translation>Как в системе</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="140"/>
+        <location filename="../src/settings_dialog.cpp" line="150"/>
         <source>Dark</source>
         <translation>Темная</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="147"/>
+        <location filename="../src/settings_dialog.cpp" line="157"/>
         <source>Fonts</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="151"/>
+        <location filename="../src/settings_dialog.cpp" line="161"/>
         <source>&amp;Binary view:</source>
         <translatorcomment>or &amp;Двоичный просмотр:</translatorcomment>
         <translation>&amp;Бинарный просмотр:</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="165"/>
-        <location filename="../src/settings_dialog.cpp" line="182"/>
+        <location filename="../src/settings_dialog.cpp" line="175"/>
+        <location filename="../src/settings_dialog.cpp" line="192"/>
         <source> pt</source>
         <translation> пт</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="168"/>
+        <location filename="../src/settings_dialog.cpp" line="178"/>
         <source>&amp;Text view:</source>
         <translation>&amp;Текстовый просмотр:</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="187"/>
+        <location filename="../src/settings_dialog.cpp" line="197"/>
         <source>Misc. Options</source>
         <translation>Разные параметры</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="191"/>
+        <location filename="../src/settings_dialog.cpp" line="201"/>
         <source>Confirm &amp;Drag &amp;&amp; Drop operations</source>
         <translation>Подтердить &amp;Drag &amp;&amp; Drop операцию</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="194"/>
+        <location filename="../src/settings_dialog.cpp" line="204"/>
         <source>Automatic Update</source>
         <translation>Автоматическое обновление</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="198"/>
+        <location filename="../src/settings_dialog.cpp" line="208"/>
         <source>&amp;Enable automatic checking for latest version of Saladin</source>
         <translation>&amp;Включить автоматическую проверку последней версии Saladin</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="70"/>
+        <location filename="../src/settings_dialog.cpp" line="548"/>
+        <source>No plugins found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="549"/>
+        <source>Put plugin DLLs into the plugins folder and restart Saladin.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="597"/>
+        <source>File:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="598"/>
+        <source>State:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="618"/>
+        <source>Loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="621"/>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="624"/>
+        <source>Incompatible: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="627"/>
+        <source>Failed to load: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="74"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="139"/>
+        <location filename="../src/settings_dialog.cpp" line="149"/>
         <source>Light</source>
         <translation>Светлая</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="209"/>
+        <location filename="../src/settings_dialog.cpp" line="219"/>
         <source>File Viewer</source>
         <translation>Средство просмотра файла</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="213"/>
+        <location filename="../src/settings_dialog.cpp" line="223"/>
         <source>Use the internal file viewer</source>
         <translation>Использовать встроенное средство просмотра файла</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="226"/>
+        <location filename="../src/settings_dialog.cpp" line="236"/>
         <source>Text Editor</source>
         <translation>Текстовый редактор</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="237"/>
+        <location filename="../src/settings_dialog.cpp" line="247"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="248"/>
+        <location filename="../src/settings_dialog.cpp" line="258"/>
         <source>Compare Files</source>
         <translation>Сравнение файлов</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="266"/>
+        <location filename="../src/settings_dialog.cpp" line="284"/>
+        <source>&amp;Open Plugins Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="304"/>
+        <source>Enabling or disabling plugins takes effect after Saladin is restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings_dialog.cpp" line="317"/>
         <source>&amp;OK</source>
         <translation>&amp;Ок</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="267"/>
+        <location filename="../src/settings_dialog.cpp" line="318"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Отмена</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="268"/>
+        <location filename="../src/settings_dialog.cpp" line="319"/>
         <source>&amp;Apply</source>
         <translation>&amp;Применить</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="330"/>
+        <location filename="../src/settings_dialog.cpp" line="381"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="330"/>
+        <location filename="../src/settings_dialog.cpp" line="381"/>
         <source>Language settings will be applied when the application is restarted.</source>
         <translation>Языковые настройки будут применены при перезапуске приложения.</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="371"/>
+        <location filename="../src/settings_dialog.cpp" line="433"/>
         <source>Select initial directory:</source>
         <translation>Выберите исходную директорию:</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="401"/>
+        <location filename="../src/settings_dialog.cpp" line="463"/>
         <source>Applications</source>
         <translation>Приложения</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="401"/>
+        <location filename="../src/settings_dialog.cpp" line="463"/>
         <source>All Files</source>
         <translation>Все файлы</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="403"/>
+        <location filename="../src/settings_dialog.cpp" line="465"/>
         <source>Select Tool</source>
         <translation>Выбрать инструмент</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="409"/>
+        <location filename="../src/settings_dialog.cpp" line="471"/>
         <source>System Default</source>
         <translation>Системные установки по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="434"/>
+        <location filename="../src/settings_dialog.cpp" line="496"/>
         <source>Browse</source>
         <translation>Обзор</translation>
     </message>
@@ -1761,22 +1864,22 @@ Make sure the device is available and try again.</source>
 <context>
     <name>ShellFolder</name>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="588"/>
+        <location filename="../src/shell/shell_folder.cpp" line="601"/>
         <source>Select the folder to open:</source>
         <translation>Выберите папку для открытия:</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="779"/>
+        <location filename="../src/shell/shell_folder.cpp" line="792"/>
         <source>The system did not report a reason.</source>
         <translation>Система не сообщила причину.</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="842"/>
+        <location filename="../src/shell/shell_folder.cpp" line="855"/>
         <source>Cannot open item</source>
         <translation>Не удалось открыть элемент</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="842"/>
+        <location filename="../src/shell/shell_folder.cpp" line="855"/>
         <source>Unable to open &apos;%1&apos;.
 
 %2</source>
@@ -1785,12 +1888,12 @@ Make sure the device is available and try again.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="923"/>
+        <location filename="../src/shell/shell_folder.cpp" line="936"/>
         <source>Cannot explore folder</source>
         <translation>Не удалось открыть папку</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="924"/>
+        <location filename="../src/shell/shell_folder.cpp" line="937"/>
         <source>Unable to open the folder in Windows Explorer.
 
 %1</source>
