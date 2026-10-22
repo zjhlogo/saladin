@@ -1,6 +1,6 @@
 // \file shell_selection.cpp
 // \author zhangjianhua
-// \date 2026/10/19
+// \date 2026/10/22
 
 #include "shell_selection.h"
 #include "shell_drop_data.h"
@@ -19,7 +19,7 @@ static ShellContextMenuProvider g_contextMenuProvider = nullptr;
 
 // 插件命令在 TrackPopupMenu 返回值中的保留 id 段起点。Shell 命令占用
 // 1000–0x7ffff（见 QueryContextMenu 调用），插件命令从 0x80000 起，二者不重叠。
-static const UINT PLUGIN_MENU_COMMAND_BASE = 0x80000;
+static constexpr UINT PLUGIN_MENU_COMMAND_BASE = 0x80000;
 
 void setShellContextMenuProvider(ShellContextMenuProvider provider)
 {

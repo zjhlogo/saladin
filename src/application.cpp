@@ -52,7 +52,7 @@ Application::Application(int& argc, char** argv)
     m_pluginManager = new PluginManager(this);
     m_pluginManager->scan();
 
-    mainWindow = new MainWindow();
+    g_mainWindow = new MainWindow();
 
     m_pluginManager->loadPlugins();
 
@@ -81,8 +81,8 @@ Application::~Application()
     delete m_pluginManager;
     m_pluginManager = nullptr;
 
-    delete mainWindow;
-    mainWindow = nullptr;
+    delete g_mainWindow;
+    g_mainWindow = nullptr;
 
     delete m_updateSection;
 
@@ -125,7 +125,7 @@ void Application::about()
                                " (at your option) any later version.")
                           + "</p>";
 
-        m_aboutBox = new AboutBox(tr("About Saladin"), message, mainWindow);
+        m_aboutBox = new AboutBox(tr("About Saladin"), message, g_mainWindow);
 
         m_notesSection = m_aboutBox->addSection(IconLoader::pixmap("web"), notesMessage);
 
@@ -161,10 +161,10 @@ void Application::showQuickGuide()
 
     if (!m_guideDialog)
     {
-        m_guideDialog = new GuideDialog(mainWindow);
+        m_guideDialog = new GuideDialog(g_mainWindow);
 
-        m_guideDialog->resize(mainWindow->width() / 2, mainWindow->height() - 100);
-        m_guideDialog->move(mainWindow->pos().x() + mainWindow->width() / 2 - 50, mainWindow->pos().y() + 50);
+        m_guideDialog->resize(g_mainWindow->width() / 2, g_mainWindow->height() - 100);
+        m_guideDialog->move(g_mainWindow->pos().x() + g_mainWindow->width() / 2 - 50, g_mainWindow->pos().y() + 50);
     }
 
     m_guideDialog->show();

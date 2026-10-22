@@ -23,7 +23,7 @@ namespace Saladin
 
     bool PanelApiImpl::isActive() const
     {
-        return ::mainWindow && ::mainWindow->sourcePane() == m_panel;
+        return ::g_mainWindow && ::g_mainWindow->sourcePane() == m_panel;
     }
 
     ShellFolder* PanelApiImpl::folder() const
@@ -132,14 +132,14 @@ namespace Saladin
 
     QWidget* PluginHostImpl::mainWindow() const
     {
-        return ::mainWindow;
+        return ::g_mainWindow;
     }
 
     PanelApi* PluginHostImpl::sourcePanel() const
     {
         int index = 0;
 
-        if (::mainWindow && ::mainWindow->sourcePane() && ::mainWindow->sourcePane()->getPanelLocation() != PanelWidget::LeftPane) index = 1;
+        if (::g_mainWindow && ::g_mainWindow->sourcePane() && ::g_mainWindow->sourcePane()->getPanelLocation() != PanelWidget::LeftPane) index = 1;
 
         return &m_pane[index];
     }
@@ -148,7 +148,7 @@ namespace Saladin
     {
         int index = 1;
 
-        if (::mainWindow && ::mainWindow->sourcePane() && ::mainWindow->sourcePane()->getPanelLocation() != PanelWidget::LeftPane) index = 0;
+        if (::g_mainWindow && ::g_mainWindow->sourcePane() && ::g_mainWindow->sourcePane()->getPanelLocation() != PanelWidget::LeftPane) index = 0;
 
         return &m_pane[index];
     }

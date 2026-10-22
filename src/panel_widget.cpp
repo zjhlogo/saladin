@@ -41,13 +41,13 @@ PanelWidget::PanelWidget(PaneLocation location, QWidget* parent)
 
     connect(m_strip, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(stripContextMenuRequested(const QPoint&)));
 
-    m_strip->addAuxiliaryAction(mainWindow->action("openHome"));
-    m_strip->addAuxiliaryAction(mainWindow->action("openRoot"));
-    m_strip->addAuxiliaryAction(mainWindow->action("openParent"));
+    m_strip->addAuxiliaryAction(g_mainWindow->action("openHome"));
+    m_strip->addAuxiliaryAction(g_mainWindow->action("openRoot"));
+    m_strip->addAuxiliaryAction(g_mainWindow->action("openParent"));
     if (location == LeftPane)
-        m_strip->addAuxiliaryAction(mainWindow->action("copyToRightPane"));
+        m_strip->addAuxiliaryAction(g_mainWindow->action("copyToRightPane"));
     else
-        m_strip->addAuxiliaryAction(mainWindow->action("copyToLeftPane"));
+        m_strip->addAuxiliaryAction(g_mainWindow->action("copyToLeftPane"));
 
     m_tabBar = new QTabBar(this);
     m_tabBar->setStyleSheet("QTabBar::tab { text-align: left; width: 100px; }");
@@ -80,18 +80,18 @@ PanelWidget::PanelWidget(PaneLocation location, QWidget* parent)
     m_bookmarkButton = new XmlUi::ActionButton(parent);
     m_bookmarkButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_bookmarkButton->setIconSize(QSize(16, 16));
-    m_bookmarkButton->setDefaultAction(mainWindow->action("showBookmarks"));
+    m_bookmarkButton->setDefaultAction(g_mainWindow->action("showBookmarks"));
     m_bookmarkButton->adjustText();
     editLayout->addWidget(m_bookmarkButton);
 
     m_historyButton = new XmlUi::ActionButton(parent);
     m_historyButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_historyButton->setIconSize(QSize(16, 16));
-    m_historyButton->setDefaultAction(mainWindow->action("showHistory"));
+    m_historyButton->setDefaultAction(g_mainWindow->action("showHistory"));
     m_historyButton->adjustText();
     editLayout->addWidget(m_historyButton);
 
-    addAction(mainWindow->action("addBookmark"));
+    addAction(g_mainWindow->action("addBookmark"));
 
     layout->addLayout(editLayout);
     layout->addSpacing(3);
@@ -185,7 +185,7 @@ void PanelWidget::saveSettings()
 
 void PanelWidget::populateDrives()
 {
-    mainWindow->driveStripManager()->registerToolStrip(m_strip, this, [this](int index) { driveSelected(index); });
+    g_mainWindow->driveStripManager()->registerToolStrip(m_strip, this, [this](int index) { driveSelected(index); });
 }
 
 bool PanelWidget::eventFilter(QObject* watched, QEvent* e)
@@ -629,7 +629,7 @@ bool PanelWidget::dragDropHelper(QDropEvent* e, bool doDrop)
 
                     if (targetFolder)
                     {
-                        mainWindow->transferSelection(selection,
+                        g_mainWindow->transferSelection(selection,
                                                       targetFolder,
                                                       m_dropData->dropAction() & Qt::CopyAction ? ShellSelection::Copy : ShellSelection::Move,
                                                       false);
@@ -663,8 +663,8 @@ bool PanelWidget::dragDropHelper(QDropEvent* e, bool doDrop)
                     targetPath = getFolder()->path();
                 }
 
-                mainWindow->raise();
-                mainWindow->activateWindow();
+                g_mainWindow->raise();
+                g_mainWindow->activateWindow();
 
                 if (QMessageBox::question(this,
                                           tr("Drag & Drop"),
@@ -868,13 +868,13 @@ void PanelWidget::browse()
 
 void PanelWidget::driveSelected(int index)
 {
-    DriveStripManager* manager = mainWindow->driveStripManager();
+    DriveStripManager* manager = g_mainWindow->driveStripManager();
     openDrive(manager->driveAt(index));
 }
 
 void PanelWidget::openDrive(const ShellDrive& drive)
 {
-    DriveStripManager* manager = mainWindow->driveStripManager();
+    DriveStripManager* manager = g_mainWindow->driveStripManager();
     ShellFolder* folder = manager->computer()->openRootFolder(drive);
     if (folder)
     {
@@ -1090,7 +1090,7 @@ void PanelWidget::compareWith(const QList<ShellItem>& items)
 
 void PanelWidget::showDrivesMenu()
 {
-    DriveStripManager* manager = mainWindow->driveStripManager();
+    DriveStripManager* manager = g_mainWindow->driveStripManager();
     manager->showDrivesMenu(m_strip);
 }
 
@@ -1154,10 +1154,10 @@ void PanelWidget::showBookmarks()
 
     if (!actions.isEmpty()) menu.addSeparator();
 
-    menu.addAction(mainWindow->action("addBookmark"));
-    menu.addAction(mainWindow->action("editBookmarks"));
+    menu.addAction(g_mainWindow->action("addBookmark"));
+    menu.addAction(g_mainWindow->action("editBookmarks"));
 
-    mainWindow->action("editBookmarks")->setEnabled(!actions.isEmpty());
+    g_mainWindow->action("editBookmarks")->setEnabled(!actions.isEmpty());
 
     QAction* action = menu.exec(m_bookmarkButton->mapToGlobal(m_bookmarkButton->rect().bottomLeft()));
     if (action)
@@ -1265,7 +1265,7 @@ void PanelWidget::viewContextMenuRequested(const QPoint& pos)
 
 void PanelWidget::stripContextMenuRequested(const QPoint& pos)
 {
-    DriveStripManager* manager = mainWindow->driveStripManager();
+    DriveStripManager* manager = g_mainWindow->driveStripManager();
 
     ShellDrive drive = manager->driveAt(m_strip, pos);
 
@@ -1277,7 +1277,7 @@ void PanelWidget::stripContextMenuRequested(const QPoint& pos)
     }
     else
     {
-        QMenu* menu = mainWindow->builder()->contextMenu("menuDrives");
+        QMenu* menu = g_mainWindow->builder()->contextMenu("menuDrives");
 
         if (menu) menu->popup(m_strip->mapToGlobal(pos));
     }
@@ -1315,7 +1315,7 @@ void PanelWidget::moveHeaderSection(int from, int to)
 
 void PanelWidget::updateStatus()
 {
-    DriveStripManager* manager = mainWindow->driveStripManager();
+    DriveStripManager* manager = g_mainWindow->driveStripManager();
     if (!manager) return;
 
     int selectedCount = m_model->selectedItemsCount();

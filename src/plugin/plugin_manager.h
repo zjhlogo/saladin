@@ -74,17 +74,17 @@ public:
     void loadPlugins();
 
     /** 退出前回调各插件的 shutdown() 并释放 UI 客户端；不卸载 DLL。 */
-    void shutdown();
+    void shutdown() const;
 
 public:
     /** 全部插件的描述信息（含停用与出错的），供插件管理页展示。 */
     QList<PluginInfo> pluginInfos() const;
 
     /** 把启用状态写入设置（重启后生效）；持久化随设置对话框的 save 完成。 */
-    void setEnabled(const QString& id, bool enabled);
+    static void setEnabled(const QString& id, bool enabled);
 
     /** 插件当前在设置中是否被停用。 */
-    bool isDisabledInSettings(const QString& id) const;
+    static bool isDisabledInSettings(const QString& id);
 
     /** 已成功加载的插件实例（按插件 id 查询）；未加载或已停用返回 nullptr。 */
     Saladin::Plugin* loadedPlugin(const QString& id) const;
@@ -100,15 +100,15 @@ private:
 
     void scanDirectory(const QString& path);
 
-    bool readMetadata(QPluginLoader* loader, PluginInfo& info) const;
+    static bool readMetadata(const QPluginLoader* loader, PluginInfo& info);
 
     void loadEntry(PluginEntry* entry);
 
-    void attachUi(PluginEntry* entry);
+    static void attachUi(PluginEntry* entry);
 
-    QList<QAction*> collectContextMenuActions(ShellFolder* folder, const QList<ShellItem>& items) const;
+    QList<QAction*> collectContextMenuActions(const ShellFolder* folder, const QList<ShellItem>& items) const;
 
-    static QList<QAction*> contextMenuProvider(ShellFolder* folder, const QList<ShellItem>& items);
+    static QList<QAction*> contextMenuProvider(const ShellFolder* folder, const QList<ShellItem>& items);
 
 private:
     QList<PluginEntry*> m_entries;

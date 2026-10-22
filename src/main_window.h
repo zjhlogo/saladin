@@ -158,4 +158,4 @@ private:
     PanelWidget* m_targetPane{};
 };
 
-extern MainWindow* mainWindow;
+extern MainWindow* g_mainWindow;

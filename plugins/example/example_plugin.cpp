@@ -52,7 +52,7 @@ QList<QAction*> ExamplePlugin::contextMenuActions(const QList<Saladin::FileInfo>
     updateSelectionInfo();
 
     // 返回空列表时右键菜单不会追加任何内容；空白处右键时 items 也为空。
-    if (items.isEmpty()) return QList<QAction*>();
+    if (items.isEmpty()) return {};
 
     if (!m_contextAction)
     {

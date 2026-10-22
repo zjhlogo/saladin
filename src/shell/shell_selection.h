@@ -1,6 +1,6 @@
 // \file shell_selection.h
 // \author zhangjianhua
-// \date 2026/10/19
+// \date 2026/10/22
 
 #pragma once
 
@@ -21,7 +21,7 @@ class ShellSelectionPrivate;
  * shell 层不依赖插件层。folder 是选中项所在的目录，items 是当前选中项
  * （空白处右键时为目录本身对应的选择）。
  */
-using ShellContextMenuProvider = QList<QAction*> (*)(ShellFolder* folder, const QList<ShellItem>& items);
+using ShellContextMenuProvider = QList<QAction*> (*)(const ShellFolder* folder, const QList<ShellItem>& items);
 
 void setShellContextMenuProvider(ShellContextMenuProvider provider);
 

@@ -389,9 +389,9 @@ void SearchDialog::viewCurrent()
     LocalSettings* settings = g_application->applicationSettings();
 
     if (settings->value("InternalViewer").toBool())
-        mainWindow->viewManager()->openView(folder->itemPidl(item));
+        g_mainWindow->viewManager()->openView(folder->itemPidl(item));
     else
-        mainWindow->startTool(MainWindow::ViewerTool, folder, item);
+        g_mainWindow->startTool(MainWindow::ViewerTool, folder, item);
 }
 
 void SearchDialog::viewAll()
@@ -413,7 +413,7 @@ void SearchDialog::viewAll()
     LocalSettings* settings = g_application->applicationSettings();
 
     if (settings->value("InternalViewer").toBool())
-        mainWindow->viewManager()->openView(pidls);
+        g_mainWindow->viewManager()->openView(pidls);
     else
         QMessageBox::warning(this, tr("Cannot view files"), tr("Only the internal viewer supports viewing multiple files."));
 }
@@ -425,7 +425,7 @@ void SearchDialog::editCurrent()
     ShellFolder* folder = m_model->folderAt(index);
     ShellItem item = m_model->itemAt(index);
 
-    mainWindow->startTool(MainWindow::EditorTool, folder, item);
+    g_mainWindow->startTool(MainWindow::EditorTool, folder, item);
 }
 
 void SearchDialog::gotoFile()
@@ -437,7 +437,7 @@ void SearchDialog::gotoFile()
 
     if (!item.isValid()) return;
 
-    mainWindow->gotoFile(folder->pidl(), item);
+    g_mainWindow->gotoFile(folder->pidl(), item);
 
     QDialog::accept();
 }

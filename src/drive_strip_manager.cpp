@@ -248,7 +248,7 @@ bool DriveStripManager::dragDropHelper(XmlUi::ToolStrip* strip, QDropEvent* e, b
 
                     if (targetFolder)
                     {
-                        mainWindow->transferSelection(selection,
+                        g_mainWindow->transferSelection(selection,
                                                       targetFolder,
                                                       m_dropData->dropAction() & Qt::CopyAction ? ShellSelection::Copy : ShellSelection::Move,
                                                       false);
@@ -264,10 +264,10 @@ bool DriveStripManager::dragDropHelper(XmlUi::ToolStrip* strip, QDropEvent* e, b
             {
                 QString targetPath = QString("%1:\\").arg(drive.letter());
 
-                mainWindow->raise();
-                mainWindow->activateWindow();
+                g_mainWindow->raise();
+                g_mainWindow->activateWindow();
 
-                if (QMessageBox::question(mainWindow,
+                if (QMessageBox::question(g_mainWindow,
                                           tr("Drag & Drop"),
                                           tr("Drop selected items to <b>%1</b>?").arg(targetPath),
                                           QMessageBox::Ok | QMessageBox::Cancel)

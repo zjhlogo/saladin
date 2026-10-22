@@ -524,7 +524,7 @@ void TextView::editFile()
         QString path = pidl().path();
         if (path.isEmpty()) return;
 
-        mainWindow->startTool(MainWindow::EditorTool, QString("\"%1\"").arg(path), QFileInfo(path).absolutePath());
+        g_mainWindow->startTool(MainWindow::EditorTool, QString("\"%1\"").arg(path), QFileInfo(path).absolutePath());
     }
 }
 

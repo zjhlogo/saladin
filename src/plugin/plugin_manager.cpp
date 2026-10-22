@@ -1,6 +1,6 @@
 // \file plugin_manager.cpp
 // \author zhangjianhua
-// \date 2026/10/21
+// \date 2026/10/22
 
 #include "plugin/plugin_manager.h"
 #include "application.h"
@@ -79,7 +79,7 @@ void PluginManager::scanDirectory(const QString& path)
     {
         QString filePath = dir.filePath(fileName);
 
-        PluginEntry* entry = new PluginEntry();
+        auto entry = new PluginEntry();
         entry->info.path = QDir::toNativeSeparators(filePath);
 
         auto loader = new QPluginLoader(filePath, this);
@@ -126,7 +126,7 @@ void PluginManager::scanDirectory(const QString& path)
     }
 }
 
-bool PluginManager::readMetadata(QPluginLoader* loader, PluginInfo& info) const
+bool PluginManager::readMetadata(const QPluginLoader* loader, PluginInfo& info)
 {
     QJsonObject root = loader->metaData();
     QJsonObject metaData = root.value("MetaData").toObject();
@@ -197,7 +197,7 @@ void PluginManager::loadPlugins()
 
 void PluginManager::attachUi(PluginEntry* entry)
 {
-    if (!mainWindow || entry->actions.isEmpty()) return;
+    if (!g_mainWindow || entry->actions.isEmpty()) return;
 
     auto client = new XmlUi::Client();
 
@@ -211,7 +211,10 @@ void PluginManager::attachUi(PluginEntry* entry)
         // 插件作者忘记前缀时自动补上，保证隔离始终成立。
         if (!id.startsWith(entry->info.id + QLatin1Char('.')))
         {
-            if (!id.isEmpty()) qWarning("Plugin '%s': action objectName '%s' is missing the plugin id prefix, it was added automatically", qPrintable(entry->info.id), qPrintable(id));
+            if (!id.isEmpty())
+                qWarning("Plugin '%s': action objectName '%s' is missing the plugin id prefix, it was added automatically",
+                         qPrintable(entry->info.id),
+                         qPrintable(id));
 
             id = entry->info.id + QLatin1Char('.') + id;
         }
@@ -240,7 +243,7 @@ void PluginManager::attachUi(PluginEntry* entry)
 
     entry->client = client;
 
-    mainWindow->builder()->addClient(client);
+    g_mainWindow->builder()->addClient(client);
 }
 
 void PluginManager::loadEntry(PluginEntry* entry)
@@ -267,7 +270,7 @@ void PluginManager::loadEntry(PluginEntry* entry)
     // 每个插件一份宿主实现，插件 id 的设置键命名空间随之隔离，
     // 避免多插件场景下相互覆盖。
     entry->host = new Saladin::PluginHostImpl();
-    if (mainWindow) entry->host->setPanels(mainWindow->pane(0), mainWindow->pane(1));
+    if (g_mainWindow) entry->host->setPanels(g_mainWindow->pane(0), g_mainWindow->pane(1));
     entry->host->setPluginId(entry->info.id);
 
     try
@@ -297,11 +300,11 @@ void PluginManager::loadEntry(PluginEntry* entry)
     entry->info.state = PluginLoaded;
 }
 
-void PluginManager::shutdown()
+void PluginManager::shutdown() const
 {
-    XmlUi::Builder* uiBuilder = mainWindow ? mainWindow->builder() : nullptr;
+    XmlUi::Builder* uiBuilder = g_mainWindow ? g_mainWindow->builder() : nullptr;
 
-    for (int i = m_entries.count() - 1; i >= 0; i--)
+    for (qsizetype i = m_entries.count() - 1; i >= 0; i--)
     {
         PluginEntry* entry = m_entries.at(i);
 
@@ -352,12 +355,13 @@ void PluginManager::setEnabled(const QString& id, bool enabled)
 
     if (enabled)
         disabled.removeAll(id);
-    else if (!disabled.contains(id)) disabled.append(id);
+    else if (!disabled.contains(id))
+        disabled.append(id);
 
     settings->setValue("DisabledPlugins", QVariant::fromValue(disabled));
 }
 
-bool PluginManager::isDisabledInSettings(const QString& id) const
+bool PluginManager::isDisabledInSettings(const QString& id)
 {
     return g_application->applicationSettings()->value("DisabledPlugins").toStringList().contains(id);
 }
@@ -372,7 +376,7 @@ Saladin::Plugin* PluginManager::loadedPlugin(const QString& id) const
     return nullptr;
 }
 
-QList<QAction*> PluginManager::collectContextMenuActions(ShellFolder* folder, const QList<ShellItem>& items) const
+QList<QAction*> PluginManager::collectContextMenuActions(const ShellFolder* folder, const QList<ShellItem>& items) const
 {
     QList<Saladin::FileInfo> infos;
 
@@ -403,9 +407,9 @@ QList<QAction*> PluginManager::collectContextMenuActions(ShellFolder* folder, co
     return result;
 }
 
-QList<QAction*> PluginManager::contextMenuProvider(ShellFolder* folder, const QList<ShellItem>& items)
+QList<QAction*> PluginManager::contextMenuProvider(const ShellFolder* folder, const QList<ShellItem>& items)
 {
-    if (!m_instance) return QList<QAction*>();
+    if (!m_instance) return {};
 
     return m_instance->collectContextMenuActions(folder, items);
 }

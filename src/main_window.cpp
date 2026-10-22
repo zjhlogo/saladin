@@ -1,6 +1,6 @@
 // \file main_window.cpp
 // \author zhangjianhua
-// \date 2026/10/19
+// \date 2026/10/22
 
 #include "main_window.h"
 #include "application.h"
@@ -20,16 +20,14 @@
 #include "xmlui/builder.h"
 #include "xmlui/tool_strip.h"
 
-MainWindow* mainWindow = nullptr;
+MainWindow* g_mainWindow = nullptr;
 
 MainWindow::MainWindow()
 {
-    mainWindow = this;
+    g_mainWindow = this;
     setWindowTitle(tr("Saladin"));
 
-    QAction* action;
-
-    action = new QAction(tr("About Saladin"), this);
+    auto action = new QAction(tr("About Saladin"), this);
     action->setShortcut(QKeySequence(Qt::Key_F1));
     connect(action, SIGNAL(triggered()), g_application, SLOT(about()));
     setAction("about", action);

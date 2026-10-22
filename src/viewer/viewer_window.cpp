@@ -127,12 +127,12 @@ void ViewerWindow::enableNavigation(bool isFirst, bool isLast)
 
 void ViewerWindow::previous()
 {
-    mainWindow->viewManager()->loadPrevious(this);
+    g_mainWindow->viewManager()->loadPrevious(this);
 }
 
 void ViewerWindow::next()
 {
-    mainWindow->viewManager()->loadNext(this);
+    g_mainWindow->viewManager()->loadNext(this);
 }
 
 void ViewerWindow::reload()
@@ -143,7 +143,7 @@ void ViewerWindow::reload()
 void ViewerWindow::switchToText()
 {
     if (m_view->type() != View::Text)
-        mainWindow->viewManager()->switchViewType(this, View::Text);
+        g_mainWindow->viewManager()->switchViewType(this, View::Text);
     else
         action("switchToText")->setChecked(true);
 }
@@ -151,7 +151,7 @@ void ViewerWindow::switchToText()
 void ViewerWindow::switchToBinary()
 {
     if (m_view->type() != View::Binary)
-        mainWindow->viewManager()->switchViewType(this, View::Binary);
+        g_mainWindow->viewManager()->switchViewType(this, View::Binary);
     else
         action("switchToBinary")->setChecked(true);
 }
@@ -159,7 +159,7 @@ void ViewerWindow::switchToBinary()
 void ViewerWindow::switchToImage()
 {
     if (m_view->type() != View::Image)
-        mainWindow->viewManager()->switchViewType(this, View::Image);
+        g_mainWindow->viewManager()->switchViewType(this, View::Image);
     else
         action("switchToImage")->setChecked(true);
 }
