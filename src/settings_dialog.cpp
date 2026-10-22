@@ -1,17 +1,16 @@
 // \file settings_dialog.cpp
 // \author zhangjianhua
-// \date 2026/10/18
+// \date 2026/10/22
 
+#include "settings_dialog.h"
 #include "application.h"
+#include "custom_widgets/side_tab_bar.h"
 #include "plugin/plugin_api.h"
 #include "plugin/plugin_manager.h"
-#include "settings_dialog.h"
 #include "shell/shell_folder.h"
 #include "utils/icon_loader.h"
 #include "utils/local_settings.h"
 #include "utils/separator_combo_box.h"
-#include "xmlui/gradient_widget.h"
-#include "xmlui/tool_strip.h"
 
 #include <QAbstractItemView>
 #include <QDesktopServices>
@@ -37,58 +36,32 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    auto promptWidget = new XmlUi::GradientWidget(this);
-    topLayout->addWidget(promptWidget);
-
-    auto promptLayout = new QHBoxLayout(promptWidget);
-    promptLayout->setSpacing(10);
-
-    m_promptPixmap = new QLabel(promptWidget);
-    promptLayout->addWidget(m_promptPixmap);
-
-    auto promptLabel = new QLabel(promptWidget);
-    promptLabel->setWordWrap(true);
-    promptLabel->setText(tr("Configure settings of Saladin:"));
-    promptLabel->setMinimumWidth(350);
-    promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
-    promptLayout->addWidget(promptLabel, 1);
-
-    auto separator = new QFrame(this);
-    separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    topLayout->addWidget(separator);
-
-    auto mainLayout = new QVBoxLayout();
+    auto mainLayout = new QHBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
-    mainLayout->setSpacing(4);
+    mainLayout->setSpacing(9);
     topLayout->addLayout(mainLayout);
 
-    auto strip = new XmlUi::ToolStrip(this);
-    mainLayout->addWidget(strip);
+    // Navigation tabs along the left edge of the dialog.
+    m_tabBar = new SideTabBar(this);
+    m_tabBar->addTab(tr("General"));
+    m_tabBar->addTab(tr("Tools"));
+    m_tabBar->addTab(tr("Plugins"));
+    mainLayout->addWidget(m_tabBar, 0, Qt::AlignTop);
 
-    m_generalAction = new QAction(tr("General"), this);
-    m_generalAction->setCheckable(true);
-    m_generalAction->setChecked(true);
-    connect(m_generalAction, SIGNAL(triggered()), this, SLOT(showGeneralTab()));
-    strip->addToolAction(m_generalAction);
-
-    m_toolsAction = new QAction(tr("Tools"), this);
-    m_toolsAction->setCheckable(true);
-    connect(m_toolsAction, SIGNAL(triggered()), this, SLOT(showToolsTab()));
-    strip->addToolAction(m_toolsAction);
-
-    m_pluginsAction = new QAction(tr("Plugins"), this);
-    m_pluginsAction->setCheckable(true);
-    connect(m_pluginsAction, SIGNAL(triggered()), this, SLOT(showPluginsTab()));
-    strip->addToolAction(m_pluginsAction);
+    auto sideSeparator = new QFrame(this);
+    sideSeparator->setFrameStyle(QFrame::VLine | QFrame::Sunken);
+    mainLayout->addWidget(sideSeparator);
 
     m_stackedWidget = new QStackedWidget(this);
-    mainLayout->addWidget(m_stackedWidget);
+    mainLayout->addWidget(m_stackedWidget, 1);
+
+    connect(m_tabBar, SIGNAL(currentChanged(int)), m_stackedWidget, SLOT(setCurrentIndex(int)));
 
     auto generalTab = new QWidget(m_stackedWidget);
     m_stackedWidget->addWidget(generalTab);
 
     auto generalLayout = new QVBoxLayout(generalTab);
-    generalLayout->setContentsMargins(0, 6, 0, 0);
+    generalLayout->setContentsMargins(0, 0, 0, 0);
 
     auto regionalGroup = new QGroupBox(tr("Regional Options"), generalTab);
     auto regionalLayout = new QGridLayout(regionalGroup);
@@ -214,7 +187,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_stackedWidget->addWidget(toolsTab);
 
     auto toolsLayout = new QVBoxLayout(toolsTab);
-    toolsLayout->setContentsMargins(0, 6, 0, 0);
+    toolsLayout->setContentsMargins(0, 0, 0, 0);
 
     auto viewerGroup = new QGroupBox(tr("File Viewer"), toolsTab);
     auto viewerLayout = new QGridLayout(viewerGroup);
@@ -272,7 +245,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_stackedWidget->addWidget(pluginsTab);
 
     auto pluginsLayout = new QHBoxLayout(pluginsTab);
-    pluginsLayout->setContentsMargins(0, 6, 0, 0);
+    pluginsLayout->setContentsMargins(0, 0, 0, 0);
 
     auto pluginListWidget = new QWidget(pluginsTab);
     auto pluginListLayout = new QVBoxLayout(pluginListWidget);
@@ -309,10 +282,12 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     populatePlugins();
 
-    mainLayout->addSpacing(7);
-
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply, Qt::Horizontal, this);
-    mainLayout->addWidget(buttonBox);
+
+    auto bottomLayout = new QHBoxLayout();
+    bottomLayout->setContentsMargins(9, 7, 9, 9);
+    bottomLayout->addWidget(buttonBox);
+    topLayout->addLayout(bottomLayout);
 
     buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&OK"));
     buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("&Cancel"));
@@ -362,7 +337,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_consoleEdit->setText(settings->value("ConsoleTool").toString());
     m_diffEdit->setText(settings->value("DiffTool").toString());
 
-    resize(450, 300);
+    resize(600, 360);
 }
 
 SettingsDialog::~SettingsDialog() = default;
@@ -500,33 +475,6 @@ QToolButton* SettingsDialog::browseButton(QWidget* parent, const char* slot) con
     return button;
 }
 
-void SettingsDialog::showGeneralTab() const
-{
-    m_stackedWidget->setCurrentIndex(0);
-
-    m_generalAction->setChecked(true);
-    m_toolsAction->setChecked(false);
-    m_pluginsAction->setChecked(false);
-}
-
-void SettingsDialog::showToolsTab() const
-{
-    m_stackedWidget->setCurrentIndex(1);
-
-    m_generalAction->setChecked(false);
-    m_toolsAction->setChecked(true);
-    m_pluginsAction->setChecked(false);
-}
-
-void SettingsDialog::showPluginsTab() const
-{
-    m_stackedWidget->setCurrentIndex(2);
-
-    m_generalAction->setChecked(false);
-    m_toolsAction->setChecked(false);
-    m_pluginsAction->setChecked(true);
-}
-
 void SettingsDialog::openPluginsFolder()
 {
     PluginManager* pluginManager = g_application->pluginManager();
@@ -545,8 +493,7 @@ void SettingsDialog::populatePlugins()
     if (m_pluginInfos.isEmpty())
     {
         m_pluginList->setEnabled(false);
-        m_pluginDetails->setText(tr("No plugins found.") + "<br><br>" +
-                                 tr("Put plugin DLLs into the plugins folder and restart Saladin."));
+        m_pluginDetails->setText(tr("No plugins found.") + "<br><br>" + tr("Put plugin DLLs into the plugins folder and restart Saladin."));
         return;
     }
 
@@ -632,11 +579,9 @@ QString SettingsDialog::pluginStateText(const PluginInfo& info) const
 
 void SettingsDialog::loadIcons() const
 {
-    m_promptPixmap->setPixmap(IconLoader::pixmap("configure", 22));
-
-    m_generalAction->setIcon(IconLoader::icon("configure"));
-    m_toolsAction->setIcon(IconLoader::icon("gear"));
-    m_pluginsAction->setIcon(IconLoader::icon("explore"));
+    m_tabBar->setTabIcon(0, IconLoader::icon("configure"));
+    m_tabBar->setTabIcon(1, IconLoader::icon("gear"));
+    m_tabBar->setTabIcon(2, IconLoader::icon("explore"));
 
     m_leftPaneButton->setIcon(IconLoader::icon("browse"));
     m_rightPaneButton->setIcon(IconLoader::icon("browse"));

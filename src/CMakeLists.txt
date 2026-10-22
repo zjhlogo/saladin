@@ -118,6 +118,16 @@ list(APPEND SALADIN_HEADERS
         utils/update_client.h
 )
 
+# --- custom_widgets/ -------------------------------------------------------
+
+list(APPEND SALADIN_SOURCES
+        custom_widgets/side_tab_bar.cpp
+)
+
+list(APPEND SALADIN_HEADERS
+        custom_widgets/side_tab_bar.h
+)
+
 # --- viewer/ ---------------------------------------------------------------
 
 list(APPEND SALADIN_SOURCES

@@ -11,6 +11,7 @@
 
 class QListWidget;
 class QListWidgetItem;
+class QTabBar;
 class SeparatorComboBox;
 
 class SettingsDialog : public QDialog
@@ -36,10 +37,6 @@ private slots:
 
     void openPluginsFolder();
 
-    void showGeneralTab() const;
-    void showToolsTab() const;
-    void showPluginsTab() const;
-
     void pluginSelected(int index);
 
     void loadIcons() const;
@@ -58,13 +55,9 @@ private:
     QToolButton* browseButton(QWidget* parent, const char* slot) const;
 
 private:
-    QLabel* m_promptPixmap{};
-
     QStackedWidget* m_stackedWidget{};
 
-    QAction* m_generalAction{};
-    QAction* m_toolsAction{};
-    QAction* m_pluginsAction{};
+    QTabBar* m_tabBar{};
 
     QToolButton* m_leftPaneButton{};
     QToolButton* m_rightPaneButton{};
