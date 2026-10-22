@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="/ftp/icons">
+    <file>ftp.svg</file>
+  </qresource>
+</RCC>

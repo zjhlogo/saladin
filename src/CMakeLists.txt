@@ -18,7 +18,6 @@ set(SALADIN_SOURCES
         main.cpp
         main_window.cpp
         multi_rename_widget.cpp
-        open_ftp_dialog.cpp
         operation_dialog.cpp
         panel_widget.cpp
         search_dialog.cpp
@@ -41,7 +40,6 @@ set(SALADIN_HEADERS
         guide_dialog.h
         main_window.h
         multi_rename_widget.h
-        open_ftp_dialog.h
         operation_dialog.h
         panel_widget.h
         search_dialog.h
@@ -215,13 +213,6 @@ qt_add_executable(saladin WIN32
 )
 
 target_include_directories(saladin PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-
-# Keep the translation catalogs current when the application is built directly
-# (they are the source of the copy deployed next to the executable, and the
-# fallback the application uses when the deployed copy is absent).
-if (TARGET saladin_sync_translations)
-    add_dependencies(saladin saladin_sync_translations)
-endif ()
 
 target_precompile_headers(saladin PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/precompiled.h")
 

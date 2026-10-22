@@ -1,16 +1,21 @@
-// \file open_ftp_dialog.h
+// \file ftp_dialog.h
 // \author zhangjianhua
-// \date 2026/10/19
+// \date 2026/10/22
 #pragma once
 
 #include <QDialog>
 
-class OpenFtpDialog : public QDialog
+class QCheckBox;
+class QLineEdit;
+class QSpinBox;
+
+// FTP 连接信息对话框（由宿主的 open_ftp_dialog 移植为插件自带实现）。
+class FtpDialog : public QDialog
 {
     Q_OBJECT
 public:
-    OpenFtpDialog(QWidget* parent);
-    ~OpenFtpDialog() override;
+    FtpDialog(const QIcon& icon, QWidget* parent);
+    ~FtpDialog() override;
 
 public:
     void setPath(const QString& path);

@@ -275,38 +275,38 @@
 <context>
     <name>FolderItemModel</name>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="603"/>
+        <location filename="../src/folder_item_model.cpp" line="633"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="605"/>
+        <location filename="../src/folder_item_model.cpp" line="635"/>
         <source>Ext</source>
         <translation>扩展名</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="607"/>
+        <location filename="../src/folder_item_model.cpp" line="637"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="609"/>
+        <location filename="../src/folder_item_model.cpp" line="639"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="611"/>
+        <location filename="../src/folder_item_model.cpp" line="641"/>
         <source>Attributes</source>
         <translation>属性</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="655"/>
-        <location filename="../src/folder_item_model.cpp" line="674"/>
+        <location filename="../src/folder_item_model.cpp" line="685"/>
+        <location filename="../src/folder_item_model.cpp" line="704"/>
         <source>&lt;DIR&gt;</source>
         <translation>&lt;DIR&gt;</translation>
     </message>
     <message>
-        <location filename="../src/folder_item_model.cpp" line="673"/>
+        <location filename="../src/folder_item_model.cpp" line="703"/>
         <source>&lt;LNK&gt;</source>
         <translation>&lt;LNK&gt;</translation>
     </message>
@@ -472,608 +472,603 @@ Alpha 通道：%3</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/main_window.cpp" line="28"/>
+        <location filename="../src/main_window.cpp" line="27"/>
         <source>Saladin</source>
         <translation>Saladin</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="32"/>
+        <location filename="../src/main_window.cpp" line="29"/>
         <source>About Saladin</source>
         <translation>关于 Saladin</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="37"/>
+        <location filename="../src/main_window.cpp" line="34"/>
         <source>Release Notes</source>
         <translation>发行说明</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="41"/>
+        <location filename="../src/main_window.cpp" line="38"/>
         <source>Quick Quide</source>
         <translation>快速指南</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="45"/>
+        <location filename="../src/main_window.cpp" line="42"/>
         <source>Settings...</source>
         <translation>设置…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="49"/>
+        <location filename="../src/main_window.cpp" line="46"/>
         <source>Close Tab</source>
         <translation>关闭标签页</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="54"/>
+        <location filename="../src/main_window.cpp" line="51"/>
         <source>Duplicate Tab</source>
         <translation>复制标签页</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="59"/>
+        <location filename="../src/main_window.cpp" line="56"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="64"/>
+        <location filename="../src/main_window.cpp" line="61"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="69"/>
-        <location filename="../src/main_window.cpp" line="199"/>
-        <location filename="../src/main_window.cpp" line="1075"/>
+        <location filename="../src/main_window.cpp" line="66"/>
+        <location filename="../src/main_window.cpp" line="196"/>
+        <location filename="../src/main_window.cpp" line="1067"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="72"/>
+        <location filename="../src/main_window.cpp" line="69"/>
         <source>Copy Files</source>
         <translation>复制文件</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="77"/>
+        <location filename="../src/main_window.cpp" line="74"/>
         <source>Copy File Names</source>
         <translation>复制文件名</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="82"/>
+        <location filename="../src/main_window.cpp" line="79"/>
         <source>Copy File Paths</source>
         <translation>复制文件路径</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="87"/>
+        <location filename="../src/main_window.cpp" line="84"/>
         <source>Copy File Paths Recursive</source>
         <translation>递归复制文件路径</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="92"/>
+        <location filename="../src/main_window.cpp" line="89"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="97"/>
+        <location filename="../src/main_window.cpp" line="94"/>
         <source>Refresh Drives</source>
         <translation>刷新驱动器</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="101"/>
+        <location filename="../src/main_window.cpp" line="98"/>
         <source>View Hidden Files</source>
         <translation>查看隐藏文件</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="103"/>
+        <location filename="../src/main_window.cpp" line="100"/>
         <source>Hidden</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="108"/>
+        <location filename="../src/main_window.cpp" line="105"/>
         <source>Same Directory</source>
         <translation>同一目录</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="113"/>
+        <location filename="../src/main_window.cpp" line="110"/>
         <source>Swap Panels</source>
         <translation>交换面板</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="118"/>
+        <location filename="../src/main_window.cpp" line="115"/>
         <source>Home Directory</source>
         <translation>主目录</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="123"/>
+        <location filename="../src/main_window.cpp" line="120"/>
         <source>Root Directory</source>
         <translation>根目录</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="128"/>
+        <location filename="../src/main_window.cpp" line="125"/>
         <source>Parent Directory</source>
         <translation>上级目录</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="132"/>
+        <location filename="../src/main_window.cpp" line="129"/>
         <source>Left -&gt; Right</source>
         <translation>左 -&gt; 右</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="136"/>
+        <location filename="../src/main_window.cpp" line="133"/>
         <source>Left &lt;- Right</source>
         <translation>左 &lt;- 右</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="140"/>
+        <location filename="../src/main_window.cpp" line="137"/>
         <source>Select Mask...</source>
         <translation>选择掩码…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="145"/>
+        <location filename="../src/main_window.cpp" line="142"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="150"/>
+        <location filename="../src/main_window.cpp" line="147"/>
         <source>Unselect Mask...</source>
         <translation>取消选择掩码…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="155"/>
+        <location filename="../src/main_window.cpp" line="152"/>
         <source>Unselect All</source>
         <translation>取消全选</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="160"/>
+        <location filename="../src/main_window.cpp" line="157"/>
         <source>Invert Selection</source>
         <translation>反转选择</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="165"/>
-        <location filename="../src/main_window.cpp" line="1087"/>
+        <location filename="../src/main_window.cpp" line="162"/>
+        <location filename="../src/main_window.cpp" line="1079"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="167"/>
+        <location filename="../src/main_window.cpp" line="164"/>
         <source>Rename
 F2</source>
         <translation>重命名
 F2</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="171"/>
+        <location filename="../src/main_window.cpp" line="168"/>
         <source>View</source>
         <comment>action name</comment>
         <translation>查看</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="172"/>
+        <location filename="../src/main_window.cpp" line="169"/>
         <source>View
 F3</source>
         <translation>查看
 F3</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="175"/>
+        <location filename="../src/main_window.cpp" line="172"/>
         <source>View Current File</source>
         <translation>查看当前文件</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="180"/>
+        <location filename="../src/main_window.cpp" line="177"/>
         <source>View Selected Files</source>
         <translation>查看所选文件</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="185"/>
+        <location filename="../src/main_window.cpp" line="182"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="186"/>
+        <location filename="../src/main_window.cpp" line="183"/>
         <source>Edit
 F4</source>
         <translation>编辑
 F4</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="189"/>
+        <location filename="../src/main_window.cpp" line="186"/>
         <source>Edit File</source>
         <translation>编辑文件</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="194"/>
+        <location filename="../src/main_window.cpp" line="191"/>
         <source>Create File...</source>
         <translation>新建文件…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="200"/>
+        <location filename="../src/main_window.cpp" line="197"/>
         <source>Copy
 F5</source>
         <translation>复制
 F5</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="203"/>
+        <location filename="../src/main_window.cpp" line="200"/>
         <source>Copy To Target Directory...</source>
         <translation>复制到目标目录…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="208"/>
+        <location filename="../src/main_window.cpp" line="205"/>
         <source>Clone In Source Directory...</source>
         <translation>在源目录中创建副本…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="213"/>
-        <location filename="../src/main_window.cpp" line="1096"/>
+        <location filename="../src/main_window.cpp" line="210"/>
+        <location filename="../src/main_window.cpp" line="1088"/>
         <source>Move</source>
         <translation>移动</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="214"/>
+        <location filename="../src/main_window.cpp" line="211"/>
         <source>Move
 F6</source>
         <translation>移动
 F6</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="217"/>
+        <location filename="../src/main_window.cpp" line="214"/>
         <source>Move To Target Directory...</source>
         <translation>移动到目标目录…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="222"/>
+        <location filename="../src/main_window.cpp" line="219"/>
         <source>Rename In Source Directory...</source>
         <translation>在源目录中重命名…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="227"/>
+        <location filename="../src/main_window.cpp" line="224"/>
         <source>Create Folder...</source>
         <translation>新建文件夹…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="229"/>
+        <location filename="../src/main_window.cpp" line="226"/>
         <source>Folder
 F7</source>
         <translation>文件夹
 F7</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="233"/>
+        <location filename="../src/main_window.cpp" line="230"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="234"/>
+        <location filename="../src/main_window.cpp" line="231"/>
         <source>Delete
 F8</source>
         <translation>删除
 F8</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="237"/>
+        <location filename="../src/main_window.cpp" line="234"/>
         <source>Move To Recycle Bin</source>
         <translation>移到回收站</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="242"/>
+        <location filename="../src/main_window.cpp" line="239"/>
         <source>Delete Permanently</source>
         <translation>永久删除</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="247"/>
+        <location filename="../src/main_window.cpp" line="244"/>
         <source>Open Console</source>
         <translation>打开控制台</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="249"/>
+        <location filename="../src/main_window.cpp" line="246"/>
         <source>Console
 F9</source>
         <translation>控制台
 F9</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="253"/>
+        <location filename="../src/main_window.cpp" line="250"/>
         <source>Pack...</source>
         <translation>打包…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="258"/>
+        <location filename="../src/main_window.cpp" line="255"/>
         <source>Open</source>
         <translation>打开</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="261"/>
+        <location filename="../src/main_window.cpp" line="258"/>
         <source>Open Directory</source>
         <translation>打开目录</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="266"/>
+        <location filename="../src/main_window.cpp" line="263"/>
         <source>Browse For Folder...</source>
         <translation>浏览文件夹…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="271"/>
-        <source>Connect To FTP...</source>
-        <translation>连接到 FTP…</translation>
-    </message>
-    <message>
-        <location filename="../src/main_window.cpp" line="276"/>
+        <location filename="../src/main_window.cpp" line="268"/>
         <source>Calculate Size</source>
         <translation>计算大小</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="278"/>
+        <location filename="../src/main_window.cpp" line="270"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="282"/>
+        <location filename="../src/main_window.cpp" line="274"/>
         <source>Compare</source>
         <translation>比较</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="285"/>
+        <location filename="../src/main_window.cpp" line="277"/>
         <source>Compare Files</source>
         <translation>比较文件</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="290"/>
+        <location filename="../src/main_window.cpp" line="282"/>
         <source>Compare Directories</source>
         <translation>比较目录</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="295"/>
+        <location filename="../src/main_window.cpp" line="287"/>
         <source>Search...</source>
         <translation>搜索…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="300"/>
+        <location filename="../src/main_window.cpp" line="292"/>
         <source>Explore</source>
         <translation>浏览</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="305"/>
+        <location filename="../src/main_window.cpp" line="297"/>
         <source>History</source>
         <translation>历史记录</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="310"/>
+        <location filename="../src/main_window.cpp" line="302"/>
         <source>Bookmarks</source>
         <translation>书签</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="315"/>
+        <location filename="../src/main_window.cpp" line="307"/>
         <source>Add Bookmark...</source>
         <translation>添加书签…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="320"/>
+        <location filename="../src/main_window.cpp" line="312"/>
         <source>Edit Bookmarks...</source>
         <translation>编辑书签…</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="324"/>
+        <location filename="../src/main_window.cpp" line="316"/>
         <source>Collapse Toolbar</source>
         <translation>折叠工具栏</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="328"/>
+        <location filename="../src/main_window.cpp" line="320"/>
         <source>Expand Toolbar</source>
         <translation>展开工具栏</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="791"/>
+        <location filename="../src/main_window.cpp" line="783"/>
         <source>Select Mask</source>
         <translation>选择掩码</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="793"/>
+        <location filename="../src/main_window.cpp" line="785"/>
         <source>Enter the pattern to select:</source>
         <translation>输入要选择的模式：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="815"/>
+        <location filename="../src/main_window.cpp" line="807"/>
         <source>Unselect Mask</source>
         <translation>取消选择掩码</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="817"/>
+        <location filename="../src/main_window.cpp" line="809"/>
         <source>Enter the pattern to unselect:</source>
         <translation>输入要取消选择的模式：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="882"/>
+        <location filename="../src/main_window.cpp" line="874"/>
         <source>Cannot view files</source>
         <translation>无法查看文件</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="882"/>
+        <location filename="../src/main_window.cpp" line="874"/>
         <source>Only the internal viewer supports viewing multiple files.</source>
         <translation>只有内置查看器支持查看多个文件。</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="900"/>
+        <location filename="../src/main_window.cpp" line="892"/>
         <source>Create File</source>
         <translation>新建文件</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="902"/>
+        <location filename="../src/main_window.cpp" line="894"/>
         <source>Create a new file:</source>
         <translation>新建文件：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="945"/>
+        <location filename="../src/main_window.cpp" line="937"/>
         <source>Tool failed</source>
         <translation>工具启动失败</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="946"/>
+        <location filename="../src/main_window.cpp" line="938"/>
         <source>The %1 tool could not be started.
 Make sure it is correctly configured in Saladin settings and try again.</source>
         <translation>无法启动 %1 工具。
 请确认已在 Saladin 设置中正确配置该工具，然后重试。</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="974"/>
+        <location filename="../src/main_window.cpp" line="966"/>
         <source>Missing tool</source>
         <translation>缺少工具</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="974"/>
+        <location filename="../src/main_window.cpp" line="966"/>
         <source>There is no %1 tool configured.
 Select the tool in Saladin settings and try again.</source>
         <translation>未配置 %1 工具。
 请在 Saladin 设置中选择该工具，然后重试。</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="985"/>
+        <location filename="../src/main_window.cpp" line="977"/>
         <source>file viewer</source>
         <translation>文件查看器</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="987"/>
+        <location filename="../src/main_window.cpp" line="979"/>
         <source>text editor</source>
         <translation>文本编辑器</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="989"/>
+        <location filename="../src/main_window.cpp" line="981"/>
         <source>console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="991"/>
+        <location filename="../src/main_window.cpp" line="983"/>
         <source>file compare</source>
         <translation>文件比较</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1037"/>
+        <location filename="../src/main_window.cpp" line="1029"/>
         <source>Drag &amp; Drop</source>
         <translation>拖放</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1037"/>
+        <location filename="../src/main_window.cpp" line="1029"/>
         <source>The source and target locations are the same.</source>
         <translation>源位置和目标位置相同。</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1066"/>
+        <location filename="../src/main_window.cpp" line="1058"/>
         <source>Clone</source>
         <translation>克隆</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1069"/>
+        <location filename="../src/main_window.cpp" line="1061"/>
         <source>Clone &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>克隆 &lt;b&gt;%1&lt;/b&gt;：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1071"/>
+        <location filename="../src/main_window.cpp" line="1063"/>
         <source>Clone &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>克隆 &lt;b&gt;%1&lt;/b&gt; 个选定项：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1078"/>
+        <location filename="../src/main_window.cpp" line="1070"/>
         <source>Copy &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>复制 &lt;b&gt;%1&lt;/b&gt;：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1080"/>
+        <location filename="../src/main_window.cpp" line="1072"/>
         <source>Copy &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>复制 &lt;b&gt;%1&lt;/b&gt; 个选定项：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1090"/>
+        <location filename="../src/main_window.cpp" line="1082"/>
         <source>Rename &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>重命名 &lt;b&gt;%1&lt;/b&gt;：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1092"/>
+        <location filename="../src/main_window.cpp" line="1084"/>
         <source>Rename &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>重命名 &lt;b&gt;%1&lt;/b&gt; 个选定项：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1099"/>
+        <location filename="../src/main_window.cpp" line="1091"/>
         <source>Move &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>移动 &lt;b&gt;%1&lt;/b&gt;：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1101"/>
+        <location filename="../src/main_window.cpp" line="1093"/>
         <source>Move &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>移动 &lt;b&gt;%1&lt;/b&gt; 个选定项：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1127"/>
-        <location filename="../src/main_window.cpp" line="1254"/>
+        <location filename="../src/main_window.cpp" line="1119"/>
+        <location filename="../src/main_window.cpp" line="1246"/>
         <source>O&amp;verwrite without prompt</source>
         <translation>覆盖时不提示(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1164"/>
+        <location filename="../src/main_window.cpp" line="1156"/>
         <source>Create Folder</source>
         <translation>新建文件夹</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1166"/>
+        <location filename="../src/main_window.cpp" line="1158"/>
         <source>Create a new folder:</source>
         <translation>新建文件夹：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1234"/>
+        <location filename="../src/main_window.cpp" line="1226"/>
         <source>Pack To Zip</source>
         <translation>压缩为 Zip</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1240"/>
+        <location filename="../src/main_window.cpp" line="1232"/>
         <source>Pack &lt;b&gt;%1&lt;/b&gt;:</source>
         <translation>压缩 &lt;b&gt;%1&lt;/b&gt;：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1248"/>
+        <location filename="../src/main_window.cpp" line="1240"/>
         <source>Pack &lt;b&gt;%1&lt;/b&gt; selected items:</source>
         <translation>压缩 &lt;b&gt;%1&lt;/b&gt; 个选定项：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1376"/>
+        <location filename="../src/main_window.cpp" line="1359"/>
         <source>Add Bookmark</source>
         <translation>添加书签</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1378"/>
+        <location filename="../src/main_window.cpp" line="1361"/>
         <source>Add current directory to the list of bookmarks:</source>
         <translation>将当前目录添加到书签列表：</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1383"/>
+        <location filename="../src/main_window.cpp" line="1366"/>
         <source>&amp;Remember password</source>
         <translation>记住密码(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1489"/>
+        <location filename="../src/main_window.cpp" line="1472"/>
         <source>&amp;Edit</source>
         <translation>编辑(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1490"/>
+        <location filename="../src/main_window.cpp" line="1473"/>
         <source>&amp;Navigate</source>
         <translation>导航(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1491"/>
+        <location filename="../src/main_window.cpp" line="1474"/>
         <source>&amp;View</source>
         <translation>视图(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1492"/>
+        <location filename="../src/main_window.cpp" line="1475"/>
         <source>&amp;Selection</source>
         <translation>选择(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1493"/>
+        <location filename="../src/main_window.cpp" line="1476"/>
         <source>&amp;Functions</source>
         <translation>功能(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1494"/>
+        <location filename="../src/main_window.cpp" line="1477"/>
         <source>&amp;Tools</source>
         <translation>工具(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="1495"/>
+        <location filename="../src/main_window.cpp" line="1478"/>
         <source>&amp;Help</source>
         <translation>帮助(&amp;H)</translation>
     </message>
@@ -1162,81 +1157,6 @@ Select the tool in Saladin settings and try again.</source>
     </message>
 </context>
 <context>
-    <name>OpenFtpDialog</name>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="41"/>
-        <source>&amp;Host name:</source>
-        <translation>主机名(&amp;H)：</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="49"/>
-        <source>Po&amp;rt:</source>
-        <translation>端口(&amp;R)：</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="65"/>
-        <source>Pa&amp;th:</source>
-        <translation>路径(&amp;T)：</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="73"/>
-        <source>&amp;Anonymous connection</source>
-        <translation>匿名连接(&amp;A)</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="77"/>
-        <source>&amp;User name:</source>
-        <translation>用户名(&amp;U)：</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="86"/>
-        <source>&amp;Password:</source>
-        <translation>密码(&amp;P)：</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="104"/>
-        <source>&amp;OK</source>
-        <translation>确定(&amp;O)</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="105"/>
-        <source>&amp;Cancel</source>
-        <translation>取消(&amp;C)</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="110"/>
-        <source>Connect To FTP</source>
-        <translation>连接到 FTP</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="112"/>
-        <source>Enter the FTP connection details:</source>
-        <translation>输入 FTP 连接详细信息：</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="171"/>
-        <location filename="../src/open_ftp_dialog.cpp" line="180"/>
-        <location filename="../src/open_ftp_dialog.cpp" line="187"/>
-        <source>Invalid value</source>
-        <translation>无效的值</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="171"/>
-        <source>Host name cannot be empty.</source>
-        <translation>主机名不能为空。</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="180"/>
-        <source>User name cannot be empty.</source>
-        <translation>用户名不能为空。</translation>
-    </message>
-    <message>
-        <location filename="../src/open_ftp_dialog.cpp" line="187"/>
-        <source>Password cannot be empty.</source>
-        <translation>密码不能为空。</translation>
-    </message>
-</context>
-<context>
     <name>OperationDialog</name>
     <message>
         <location filename="../src/operation_dialog.cpp" line="46"/>
@@ -1300,59 +1220,59 @@ Select the tool in Saladin settings and try again.</source>
 <context>
     <name>PanelWidget</name>
     <message>
-        <location filename="../src/panel_widget.cpp" line="670"/>
+        <location filename="../src/panel_widget.cpp" line="674"/>
         <source>Drag &amp; Drop</source>
         <translation>拖放(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="671"/>
+        <location filename="../src/panel_widget.cpp" line="675"/>
         <source>Drop selected items to &lt;b&gt;%1&lt;/b&gt;?</source>
         <translation>将所选项拖放到 &lt;b&gt;%1&lt;/b&gt;？</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="833"/>
-        <location filename="../src/panel_widget.cpp" line="1135"/>
+        <location filename="../src/panel_widget.cpp" line="869"/>
+        <location filename="../src/panel_widget.cpp" line="1171"/>
         <source>Invalid Path</source>
         <translation>无效路径</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="833"/>
+        <location filename="../src/panel_widget.cpp" line="869"/>
         <source>The path you entered cannot be opened.
 Please check the spelling and try again.</source>
         <translation>无法打开输入的路径。
 请检查拼写后重试。</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1135"/>
+        <location filename="../src/panel_widget.cpp" line="1171"/>
         <source>The path you selected cannot be opened.
 Make sure the device is available and try again.</source>
         <translation>无法打开所选路径。
 请确认设备可用后重试。</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1195"/>
+        <location filename="../src/panel_widget.cpp" line="1220"/>
         <source>Invalid Bookmark</source>
         <translation>无效书签</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1196"/>
+        <location filename="../src/panel_widget.cpp" line="1221"/>
         <source>The bookmark you selected cannot be opened.
 Make sure the device is available and try again.</source>
         <translation>无法打开所选书签。
 请确认设备可用后重试。</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1328"/>
+        <location filename="../src/panel_widget.cpp" line="1352"/>
         <source>%1 of %2 items selected (%3 of %4)</source>
         <translation>已选择 %2 项中的 %1 项（%3 / %4）</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1340"/>
+        <location filename="../src/panel_widget.cpp" line="1364"/>
         <source>%1 - %2 of %3 free (%4%)</source>
         <translation>%1 - %3 中可用 %2（%4%）</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/panel_widget.cpp" line="1357"/>
+        <location filename="../src/panel_widget.cpp" line="1381"/>
         <source>%n bytes</source>
         <comment>before of</comment>
         <translation>
@@ -1360,7 +1280,7 @@ Make sure the device is available and try again.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/panel_widget.cpp" line="1357"/>
+        <location filename="../src/panel_widget.cpp" line="1381"/>
         <source>%n bytes</source>
         <comment>after of</comment>
         <translation>
@@ -1368,17 +1288,17 @@ Make sure the device is available and try again.</source>
         </translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1358"/>
+        <location filename="../src/panel_widget.cpp" line="1382"/>
         <source>%1 kB</source>
         <translation>%1 kB</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1359"/>
+        <location filename="../src/panel_widget.cpp" line="1383"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../src/panel_widget.cpp" line="1360"/>
+        <location filename="../src/panel_widget.cpp" line="1384"/>
         <source>%1 GB</source>
         <translation>%1 GB</translation>
     </message>
@@ -1386,47 +1306,47 @@ Make sure the device is available and try again.</source>
 <context>
     <name>PluginManager</name>
     <message>
-        <location filename="../src/plugin/plugin_manager.cpp" line="95"/>
+        <location filename="../src/plugin/plugin_manager.cpp" line="102"/>
         <source>The plugin requires plugin API version %1, but this version of Saladin provides %2.</source>
         <translation>插件需要插件 API 版本 %1，但当前 Saladin 提供的是 %2。</translation>
     </message>
     <message>
-        <location filename="../src/plugin/plugin_manager.cpp" line="122"/>
+        <location filename="../src/plugin/plugin_manager.cpp" line="129"/>
         <source>The plugin id duplicates an already collected plugin, it was skipped.</source>
         <translation>插件标识与已收录的其他插件重复，已被跳过。</translation>
     </message>
     <message>
-        <location filename="../src/plugin/plugin_manager.cpp" line="138"/>
+        <location filename="../src/plugin/plugin_manager.cpp" line="145"/>
         <source>Not a valid Saladin plugin (plugin metadata is missing).</source>
         <translation>不是有效的 Saladin 插件（缺少插件元数据）。</translation>
     </message>
     <message>
-        <location filename="../src/plugin/plugin_manager.cpp" line="146"/>
+        <location filename="../src/plugin/plugin_manager.cpp" line="153"/>
         <source>Not a valid Saladin plugin (the plugin interface id does not match).</source>
         <translation>不是有效的 Saladin 插件（插件接口标识不符）。</translation>
     </message>
     <message>
-        <location filename="../src/plugin/plugin_manager.cpp" line="163"/>
+        <location filename="../src/plugin/plugin_manager.cpp" line="170"/>
         <source>The plugin metadata is missing the name field.</source>
         <translation>插件元数据缺少 name 字段。</translation>
     </message>
     <message>
-        <location filename="../src/plugin/plugin_manager.cpp" line="263"/>
+        <location filename="../src/plugin/plugin_manager.cpp" line="273"/>
         <source>Not a valid Saladin plugin (the root object does not implement Saladin::Plugin).</source>
         <translation>不是有效的 Saladin 插件（插件根对象未实现 Saladin::Plugin）。</translation>
     </message>
     <message>
-        <location filename="../src/plugin/plugin_manager.cpp" line="277"/>
+        <location filename="../src/plugin/plugin_manager.cpp" line="287"/>
         <source>Plugin initialization failed (initialize returned false).</source>
         <translation>插件初始化失败（initialize 返回 false）。</translation>
     </message>
     <message>
-        <location filename="../src/plugin/plugin_manager.cpp" line="286"/>
+        <location filename="../src/plugin/plugin_manager.cpp" line="296"/>
         <source>The plugin threw an exception during initialization: %1</source>
         <translation>插件初始化时抛出异常：%1</translation>
     </message>
     <message>
-        <location filename="../src/plugin/plugin_manager.cpp" line="292"/>
+        <location filename="../src/plugin/plugin_manager.cpp" line="302"/>
         <source>The plugin threw an unknown exception during initialization.</source>
         <translation>插件初始化时抛出未知异常。</translation>
     </message>
@@ -1598,253 +1518,248 @@ Make sure the device is available and try again.</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="34"/>
+        <location filename="../src/settings_dialog.cpp" line="33"/>
         <source>Saladin Settings</source>
         <translation>Saladin 设置</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="51"/>
-        <source>Configure settings of Saladin:</source>
-        <translation>配置 Saladin 的设置：</translation>
-    </message>
-    <message>
-        <location filename="../src/settings_dialog.cpp" line="68"/>
+        <location filename="../src/settings_dialog.cpp" line="46"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="74"/>
+        <location filename="../src/settings_dialog.cpp" line="47"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="79"/>
+        <location filename="../src/settings_dialog.cpp" line="48"/>
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="93"/>
+        <location filename="../src/settings_dialog.cpp" line="66"/>
         <source>Regional Options</source>
         <translation>区域选项</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="97"/>
+        <location filename="../src/settings_dialog.cpp" line="70"/>
         <source>&amp;Language of the user interface:</source>
         <translation>界面语言(&amp;L)：</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="108"/>
+        <location filename="../src/settings_dialog.cpp" line="81"/>
         <source>Home Directories</source>
         <translation>主目录</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="112"/>
+        <location filename="../src/settings_dialog.cpp" line="85"/>
         <source>Left pane:</source>
         <translation>左窗格：</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="124"/>
+        <location filename="../src/settings_dialog.cpp" line="97"/>
         <source>Right pane:</source>
         <translation>右窗格：</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="136"/>
+        <location filename="../src/settings_dialog.cpp" line="109"/>
         <source>&amp;Remember last directories on exit</source>
         <translation>退出时记住上次的目录(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="139"/>
+        <location filename="../src/settings_dialog.cpp" line="112"/>
         <source>Appearance</source>
         <translation>外观</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="143"/>
+        <location filename="../src/settings_dialog.cpp" line="116"/>
         <source>&amp;User interface theme:</source>
         <translation>界面主题(&amp;U)：</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="148"/>
+        <location filename="../src/settings_dialog.cpp" line="121"/>
         <source>Follow System</source>
         <translation>跟随系统</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="149"/>
+        <location filename="../src/settings_dialog.cpp" line="122"/>
         <source>Light</source>
         <translation>浅色</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="150"/>
+        <location filename="../src/settings_dialog.cpp" line="123"/>
         <source>Dark</source>
         <translation>深色</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="157"/>
+        <location filename="../src/settings_dialog.cpp" line="130"/>
         <source>Fonts</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="161"/>
+        <location filename="../src/settings_dialog.cpp" line="134"/>
         <source>&amp;Binary view:</source>
         <translation>二进制视图(&amp;B)：</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="175"/>
-        <location filename="../src/settings_dialog.cpp" line="192"/>
+        <location filename="../src/settings_dialog.cpp" line="148"/>
+        <location filename="../src/settings_dialog.cpp" line="165"/>
         <source> pt</source>
         <translation> 磅</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="178"/>
+        <location filename="../src/settings_dialog.cpp" line="151"/>
         <source>&amp;Text view:</source>
         <translation>文本视图(&amp;T)：</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="197"/>
+        <location filename="../src/settings_dialog.cpp" line="170"/>
         <source>Misc. Options</source>
         <translation>其他选项</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="201"/>
+        <location filename="../src/settings_dialog.cpp" line="174"/>
         <source>Confirm &amp;Drag &amp;&amp; Drop operations</source>
         <translation>确认拖放操作(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="204"/>
+        <location filename="../src/settings_dialog.cpp" line="177"/>
         <source>Automatic Update</source>
         <translation>自动更新</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="208"/>
+        <location filename="../src/settings_dialog.cpp" line="181"/>
         <source>&amp;Enable automatic checking for latest version of Saladin</source>
         <translation>启用 Saladin 最新版本自动检查(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="219"/>
+        <location filename="../src/settings_dialog.cpp" line="192"/>
         <source>File Viewer</source>
         <translation>文件查看器</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="223"/>
+        <location filename="../src/settings_dialog.cpp" line="196"/>
         <source>Use the internal file viewer</source>
         <translation>使用内置文件查看器</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="236"/>
+        <location filename="../src/settings_dialog.cpp" line="209"/>
         <source>Text Editor</source>
         <translation>文本编辑器</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="247"/>
+        <location filename="../src/settings_dialog.cpp" line="220"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="258"/>
+        <location filename="../src/settings_dialog.cpp" line="231"/>
         <source>Compare Files</source>
         <translation>比较文件</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="284"/>
+        <location filename="../src/settings_dialog.cpp" line="257"/>
         <source>&amp;Open Plugins Folder</source>
         <translation>打开插件目录(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="304"/>
+        <location filename="../src/settings_dialog.cpp" line="277"/>
         <source>Enabling or disabling plugins takes effect after Saladin is restarted.</source>
         <translation>启用或停用插件将在重新启动 Saladin 后生效。</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="317"/>
+        <location filename="../src/settings_dialog.cpp" line="292"/>
         <source>&amp;OK</source>
         <translation>确定(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="318"/>
+        <location filename="../src/settings_dialog.cpp" line="293"/>
         <source>&amp;Cancel</source>
         <translation>取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="319"/>
+        <location filename="../src/settings_dialog.cpp" line="294"/>
         <source>&amp;Apply</source>
         <translation>应用(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="381"/>
+        <location filename="../src/settings_dialog.cpp" line="356"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="381"/>
+        <location filename="../src/settings_dialog.cpp" line="356"/>
         <source>Language settings will be applied when the application is restarted.</source>
         <translation>语言设置将在应用程序重新启动后生效。</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="433"/>
+        <location filename="../src/settings_dialog.cpp" line="408"/>
         <source>Select initial directory:</source>
         <translation>选择初始目录：</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="463"/>
+        <location filename="../src/settings_dialog.cpp" line="438"/>
         <source>Applications</source>
         <translation>应用程序</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="463"/>
+        <location filename="../src/settings_dialog.cpp" line="438"/>
         <source>All Files</source>
         <translation>所有文件</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="465"/>
+        <location filename="../src/settings_dialog.cpp" line="440"/>
         <source>Select Tool</source>
         <translation>选择工具</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="471"/>
+        <location filename="../src/settings_dialog.cpp" line="446"/>
         <source>System Default</source>
         <translation>系统默认</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="496"/>
+        <location filename="../src/settings_dialog.cpp" line="471"/>
         <source>Browse</source>
         <translation>浏览</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="548"/>
+        <location filename="../src/settings_dialog.cpp" line="496"/>
         <source>No plugins found.</source>
         <translation>未找到插件。</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="549"/>
-        <source>Put plugin DLLs into the plugins folder and restart Saladin.</source>
-        <translation>请将插件 DLL 放入插件目录并重新启动 Saladin。</translation>
+        <location filename="../src/settings_dialog.cpp" line="496"/>
+        <source>Put each plugin into its own subfolder of the plugins folder and restart Saladin.</source>
+        <translation>请将每个插件放入插件目录下自己的子文件夹中，并重新启动 Saladin。</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="597"/>
+        <location filename="../src/settings_dialog.cpp" line="544"/>
         <source>File:</source>
         <translation>文件：</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="598"/>
+        <location filename="../src/settings_dialog.cpp" line="545"/>
         <source>State:</source>
         <translation>状态：</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="618"/>
+        <location filename="../src/settings_dialog.cpp" line="565"/>
         <source>Loaded</source>
         <translation>已加载</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="621"/>
+        <location filename="../src/settings_dialog.cpp" line="568"/>
         <source>Disabled</source>
         <translation>已停用</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="624"/>
+        <location filename="../src/settings_dialog.cpp" line="571"/>
         <source>Incompatible: %1</source>
         <translation>不兼容：%1</translation>
     </message>
     <message>
-        <location filename="../src/settings_dialog.cpp" line="627"/>
+        <location filename="../src/settings_dialog.cpp" line="574"/>
         <source>Failed to load: %1</source>
         <translation>加载失败：%1</translation>
     </message>
@@ -1852,22 +1767,22 @@ Make sure the device is available and try again.</source>
 <context>
     <name>ShellFolder</name>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="601"/>
+        <location filename="../src/shell/shell_folder.cpp" line="615"/>
         <source>Select the folder to open:</source>
         <translation>选择要打开的文件夹：</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="792"/>
+        <location filename="../src/shell/shell_folder.cpp" line="806"/>
         <source>The system did not report a reason.</source>
         <translation>系统未报告原因。</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="855"/>
+        <location filename="../src/shell/shell_folder.cpp" line="869"/>
         <source>Cannot open item</source>
         <translation>无法打开项目</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="855"/>
+        <location filename="../src/shell/shell_folder.cpp" line="869"/>
         <source>Unable to open &apos;%1&apos;.
 
 %2</source>
@@ -1876,12 +1791,12 @@ Make sure the device is available and try again.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="936"/>
+        <location filename="../src/shell/shell_folder.cpp" line="950"/>
         <source>Cannot explore folder</source>
         <translation>无法浏览文件夹</translation>
     </message>
     <message>
-        <location filename="../src/shell/shell_folder.cpp" line="937"/>
+        <location filename="../src/shell/shell_folder.cpp" line="951"/>
         <source>Unable to open the folder in Windows Explorer.
 
 %1</source>

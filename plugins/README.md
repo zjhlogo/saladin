@@ -11,7 +11,7 @@ Saladin 支持用 **C++ + Qt** 编写原生插件（DLL）来扩展程序功能�
 - **读写双栏面板**：查询当前目录、条目、选中项，跳转目录，刷新面板；
 - **插件私有设置**：键自动加 `Plugin.<插件id>.` 前缀，持久化在用户 `settings.dat`，跨会话保留；
 - **可选设置页**：在设置对话框的“插件”页嵌入自己的配置控件；
-- **主题图标**：经 `PluginHost::themeIcon()` 取与当前主题着色一致的内置 Material 图标。
+- **主题图标**：经 `PluginHost::themeIcon()` 取与当前主题着色一致的内置 Material 图标（图标归宿主持有）；宿主没有的图标应打包进插件自己的 `.qrc` 并按相同规则着色（Material SVG 渲染后以调色板 `WindowText` 颜色 `SourceIn` 填色，参考 `plugins/ftp`）。
 
 暂不支持：面板事件回调（目录切换/选区变化通知）、自定义查看器类型、跨线程调用。所有 API 必须在 **GUI 线程**调用。
 
@@ -22,11 +22,21 @@ Saladin 支持用 **C++ + Qt** 编写原生插件（DLL）来扩展程序功能�
 1. 系统目录：`<exe 目录>\plugins`（安装器分发）
 2. 用户目录：`<AppData>\Saladin\plugins`（设置对话框 → 插件 → “打开插件目录”）
 
+标准布局是**每个插件一个子目录**（以插件目标/DLL 名命名），插件的 DLL 与其资源（UI XML、翻译等）都放在自己的文件夹里：
+
+```
+plugins\
+  ftp_plugin\
+    ftp_plugin.dll
+    plugin.xml
+    translations\ftp_zh_CN.qm
+```
+
 `.dll` 文件旁需要（或内嵌）`metadata.json`。在设置对话框中停用的插件记录在 `DisabledPlugins`，**重启后生效**；运行期宿主不会卸载插件 DLL。
 
 ## 最小示例
 
-一个插件 = 一个继承 `QObject` + `Saladin::Plugin` 的类 + 元数据 JSON + 可选的 UI XML。完整可编译的参考实现在 [`plugins/example/`](example/)。
+一个插件 = 一个继承 `QObject` + `Saladin::Plugin` 的类 + 元数据 JSON + 可选的 UI XML。完整可编译的参考实现在 [`plugins/example/`](example/)；仓库自带的 FTP 插件（[`plugins/ftp/`](ftp/)，"连接到 FTP" 动作 + 连接对话框 + 自带翻译目录）是一个更完整的实际例子。
 
 ### 1. 插件类
 
@@ -114,13 +124,34 @@ public:
 
 ### 4. CMake
 
+插件部署在自己的子目录（以插件目标名，即 DLL 文件名命名）：
+
 ```cmake
 qt_add_plugin(myplugin SHARED myplugin.h myplugin.cpp metadata.json plugin.xml)
 target_include_directories(myplugin PRIVATE "<Saladin 源码目录>/src")
 target_link_libraries(myplugin PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
-set_target_properties(myplugin PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "<Saladin 源码目录>/release/plugins")
+
+# DLL 与其资源都放在 "<输出目录>/plugins/myplugin/"（Debug 对应 debug/...）。
+foreach(_cfg DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+    if(_cfg STREQUAL "DEBUG")
+        set(_dir "<Saladin 源码目录>/debug/plugins/myplugin")
+    else()
+        set(_dir "<Saladin 源码目录>/release/plugins/myplugin")
+    endif()
+    set_target_properties(myplugin PROPERTIES
+            "LIBRARY_OUTPUT_DIRECTORY_${_cfg}" "${_dir}"
+            "ARCHIVE_OUTPUT_DIRECTORY_${_cfg}" "${_dir}"
+            "RUNTIME_OUTPUT_DIRECTORY_${_cfg}" "${_dir}")
+endforeach()
+
+# plugin.xml（metadata.json 的 "ui"）运行时从 DLL 所在目录读取，随 DLL 一起复制。
+add_custom_command(TARGET myplugin POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                "${CMAKE_CURRENT_SOURCE_DIR}/plugin.xml"
+                "$<TARGET_FILE_DIR:myplugin>")
 ```
+
+完整可参考 `plugins/example/CMakeLists.txt`（无翻译）与 `plugins/ftp/CMakeLists.txt`（带翻译的部署与安装规则）。
 
 插件与宿主必须使用**同一套 Qt 与同一编译器配置**（MSVC Release 对 Release，Debug 对 Debug）。Debug/Release 或位数不匹配时插件会加载失败，错误会显示在设置对话框的插件页中，不影响宿主运行。
 
@@ -165,5 +196,5 @@ set_target_properties(myplugin PROPERTIES
 - **动作没出现在主窗口**：检查 `objectName` 前缀与 plugin.xml 的 `action id` 是否一致、`metadata.json` 是否配置了 `ui`。
 - **右键菜单项为灰色**：动作处于禁用态，宿主按 `isEnabled()` 渲染。
 - **异常**：`initialize`/`shutdown`/`contextMenuActions` 中的异常会被宿主捕获并跳过该插件，但不要依赖这一点。
-- **翻译**：插件用自己的 `.qm`（`QTranslator`），宿主不管理插件翻译。
+- **翻译**：插件用自己的 `.qm`（`QTranslator`），宿主不管理插件翻译。要为插件启用：在 `metadata.json` 中加 `"translations": true`，运行 `python tools/update_translations.py` 生成/刷新 `plugins/<插件>/translations/<插件id>_<lang>.ts`（语言跟随主程序的 `saladin_*.ts`），用 *Qt Linguist* 完成翻译后运行 `python tools/release_translations.py` 编译 `.qm` 并部署到 `<输出目录>/plugins/<插件目标名>/translations/`，运行时按宿主语言自动加载（完整示例见 `plugins/ftp/ftp_plugin.cpp` 的 `loadTranslation()`）。
 - **图标随主题变化**：`themeIcon()` 返回的图标不会自动更新，主题切换后可重新获取。

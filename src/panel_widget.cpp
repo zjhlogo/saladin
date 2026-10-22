@@ -9,7 +9,6 @@
 #include "folder_item_model.h"
 #include "folder_item_view.h"
 #include "main_window.h"
-#include "open_ftp_dialog.h"
 #include "shell/shell_computer.h"
 #include "shell/shell_drop_data.h"
 #include "shell/shell_folder.h"
@@ -1206,32 +1205,20 @@ void PanelWidget::showBookmarks()
 
 void PanelWidget::setBookmark(const Bookmark& bookmark)
 {
-    if (!bookmark.user().isEmpty())
+    // FTP 书签用保存的账号信息直接连接（连接界面在 FTP 插件中，宿主无法
+    // 复用其对话框）；未保存密码的书签由 Shell 的 FTP 文件夹自行询问凭据。
+    ShellFolder* folder = bookmark.createFolder(this);
+    if (folder->isValid())
     {
-        OpenFtpDialog dialog(this);
-        dialog.setPath(bookmark.path());
-        dialog.setUser(bookmark.user());
-        dialog.setPassword(bookmark.password());
-
-        if (dialog.exec() != QDialog::Accepted) return;
-
-        setDirectory(dialog.path());
+        setFolder(folder);
+        activateView();
     }
     else
     {
-        ShellFolder* folder = bookmark.createFolder(this);
-        if (folder->isValid())
-        {
-            setFolder(folder);
-            activateView();
-        }
-        else
-        {
-            delete folder;
-            QMessageBox::warning(this,
-                                 tr("Invalid Bookmark"),
-                                 tr("The bookmark you selected cannot be opened.\nMake sure the device is available and try again."));
-        }
+        delete folder;
+        QMessageBox::warning(this,
+                             tr("Invalid Bookmark"),
+                             tr("The bookmark you selected cannot be opened.\nMake sure the device is available and try again."));
     }
 }
 

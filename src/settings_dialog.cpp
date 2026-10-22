@@ -493,7 +493,7 @@ void SettingsDialog::populatePlugins()
     if (m_pluginInfos.isEmpty())
     {
         m_pluginList->setEnabled(false);
-        m_pluginDetails->setText(tr("No plugins found.") + "<br><br>" + tr("Put plugin DLLs into the plugins folder and restart Saladin."));
+        m_pluginDetails->setText(tr("No plugins found.") + "<br><br>" + tr("Put each plugin into its own subfolder of the plugins folder and restart Saladin."));
         return;
     }
 

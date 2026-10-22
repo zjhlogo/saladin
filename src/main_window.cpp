@@ -6,7 +6,6 @@
 #include "application.h"
 #include "bookmarks_dialog.h"
 #include "drive_strip_manager.h"
-#include "open_ftp_dialog.h"
 #include "operation_dialog.h"
 #include "panel_widget.h"
 #include "search_dialog.h"
@@ -265,11 +264,6 @@ MainWindow::MainWindow()
     action->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_O));
     connect(action, SIGNAL(triggered()), this, SLOT(browse()));
     setAction("browse", action);
-
-    action = new QAction(tr("Connect To FTP..."), this);
-    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_F));
-    connect(action, SIGNAL(triggered()), this, SLOT(openFtpSite()));
-    setAction("openFtpSite", action);
 
     action = new QAction(tr("Calculate Size"), this);
     action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
@@ -1278,15 +1272,6 @@ void MainWindow::browse()
     m_sourcePane->browse();
 }
 
-void MainWindow::openFtpSite()
-{
-    OpenFtpDialog dialog(this);
-
-    if (dialog.exec() != QDialog::Accepted) return;
-
-    m_sourcePane->setDirectory(dialog.path());
-}
-
 void MainWindow::calculateSize()
 {
     m_sourcePane->calculateSize();
@@ -1552,7 +1537,6 @@ void MainWindow::loadIcons()
     action("popupOpen")->setIcon(IconLoader::icon("browse"));
     action("openDirectory")->setIcon(IconLoader::icon("open"));
     action("browse")->setIcon(IconLoader::icon("browse"));
-    action("openFtpSite")->setIcon(IconLoader::icon("ftp"));
     action("calculateSize")->setIcon(IconLoader::icon("calculate"));
     action("popupCompare")->setIcon(IconLoader::icon("compare"));
     action("compareFiles")->setIcon(IconLoader::icon("compare"));

@@ -74,7 +74,6 @@ MAPPING = {
     "find-text": "search",
     "folder-compare": "folder_copy",
     "folder-new": "create_new_folder",
-    "ftp": "cloud",
     "fullscreen": "fullscreen",
     "gear": "build",
     "goto": "my_location",

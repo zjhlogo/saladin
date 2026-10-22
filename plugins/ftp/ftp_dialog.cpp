@@ -1,19 +1,38 @@
-// \file open_ftp_dialog.cpp
+// \file ftp_dialog.cpp
 // \author zhangjianhua
-// \date 2026/10/19
+// \date 2026/10/22
 
-#include "open_ftp_dialog.h"
-#include "utils/icon_loader.h"
-#include "xmlui/gradient_widget.h"
+#include "ftp_dialog.h"
 
-OpenFtpDialog::OpenFtpDialog(QWidget* parent)
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QVBoxLayout>
+
+FtpDialog::FtpDialog(const QIcon& icon, QWidget* parent)
     : QDialog(parent)
 {
     auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    auto promptWidget = new XmlUi::GradientWidget(this);
+    // 宿主对话框顶部的 XmlUi::GradientWidget 由宿主样式按主题着色（浅色
+    // 主题强制白色、深色主题跟随窗口底色）。插件不能依赖宿主内部类，这里
+    // 用相同的规则着色，两种主题下都与宿主对话框观感一致。
+    auto promptWidget = new QWidget(this);
+
+    QPalette promptPalette = promptWidget->palette();
+    if (promptPalette.color(QPalette::Window).lightness() >= 128) promptPalette.setColor(QPalette::Window, Qt::white);
+    promptWidget->setPalette(promptPalette);
+    promptWidget->setAutoFillBackground(true);
+
     topLayout->addWidget(promptWidget);
 
     auto promptLayout = new QHBoxLayout(promptWidget);
@@ -108,19 +127,25 @@ OpenFtpDialog::OpenFtpDialog(QWidget* parent)
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     setWindowTitle(tr("Connect To FTP"));
-    promptPixmap->setPixmap(IconLoader::pixmap("ftp", 22));
     promptLabel->setText(tr("Enter the FTP connection details:"));
+
+    // 与宿主 IconLoader::pixmap 一致的高分屏渲染：按设备像素比请求位图，
+    // 再把比率标记回 QPixmap。
+    qreal ratio = devicePixelRatioF();
+    QPixmap pixmap = icon.pixmap(QSize(22, 22) * ratio);
+    pixmap.setDevicePixelRatio(ratio);
+    promptPixmap->setPixmap(pixmap);
 
     promptLabel->setMinimumWidth(350);
     promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
     setMaximumHeight(sizeHint().height());
 }
 
-OpenFtpDialog::~OpenFtpDialog()
+FtpDialog::~FtpDialog()
 {
 }
 
-void OpenFtpDialog::setPath(const QString& path)
+void FtpDialog::setPath(const QString& path)
 {
     QUrl url(path);
 
@@ -129,20 +154,20 @@ void OpenFtpDialog::setPath(const QString& path)
     m_pathEdit->setText(url.path());
 }
 
-void OpenFtpDialog::setUser(const QString& user)
+void FtpDialog::setUser(const QString& user)
 {
     m_anonymousCheckBox->setChecked(false);
     m_userEdit->setText(user);
     m_userEdit->setFocus();
 }
 
-void OpenFtpDialog::setPassword(const QString& password)
+void FtpDialog::setPassword(const QString& password)
 {
     m_passwordEdit->setText(password);
     if (password.isEmpty()) m_passwordEdit->setFocus();
 }
 
-QString OpenFtpDialog::path()
+QString FtpDialog::path()
 {
     QUrl url;
 
@@ -163,7 +188,7 @@ QString OpenFtpDialog::path()
     return url.toString();
 }
 
-void OpenFtpDialog::accept()
+void FtpDialog::accept()
 {
     QString host = m_hostEdit->text();
     if (host.isEmpty())

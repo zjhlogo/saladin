@@ -97,7 +97,6 @@
     <separator/>
     <action id="openDirectory"/>
     <action id="browse"/>
-    <action id="openFtpSite"/>
     <separator/>
     <action id="calculateSize"/>
     <separator/>
@@ -144,7 +143,6 @@
   <menu id="menuOpen">
     <action id="openDirectory"/>
     <action id="browse"/>
-    <action id="openFtpSite"/>
   </menu>
   <menu id="menuCompare">
     <action id="compareFiles"/>

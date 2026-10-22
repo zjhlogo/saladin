@@ -10,6 +10,7 @@
 #include <QList>
 #include <QObject>
 
+class QDir;
 class QPluginLoader;
 class ShellFolder;
 class ShellItem;
@@ -50,6 +51,9 @@ struct PluginEntry
  * 目录约定：
  * - 系统目录 "<exe 目录>\plugins"（随安装分发，先扫描）；
  * - 用户目录 "<AppData>\Saladin\plugins"（用户随手放置，同 id 时不覆盖系统目录中的插件）。
+ *
+ * 两个目录使用同一布局：每个插件一个子目录（"<plugins>\<插件>\*.dll"），
+ * 插件的 DLL 与其 UI XML、翻译等资源都放在自己的独立文件夹里；同 id 先到先得。
  *
  * 启用状态持久化在 settings.dat 的 "DisabledPlugins"（QStringList，插件 id），
  * 停用/启用在重启后生效。
@@ -99,6 +103,9 @@ private:
     QStringList pluginPaths() const;
 
     void scanDirectory(const QString& path);
+
+    /** 收集单个插件子目录中的插件 DLL（scanDirectory 对每个子目录各调用一次）。 */
+    void collectPlugins(const QDir& dir);
 
     static bool readMetadata(const QPluginLoader* loader, PluginInfo& info);
 

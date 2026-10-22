@@ -75,6 +75,13 @@ void PluginManager::scanDirectory(const QString& path)
 
     if (!dir.exists()) return;
 
+    // 每个插件一个子目录，DLL 与其资源（UI XML、翻译等）都放在自己的文件夹里。
+    foreach (QString subDirName, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name))
+        collectPlugins(QDir(dir.filePath(subDirName)));
+}
+
+void PluginManager::collectPlugins(const QDir& dir)
+{
     foreach (QString fileName, dir.entryList(QStringList("*.dll"), QDir::Files, QDir::Name))
     {
         QString filePath = dir.filePath(fileName);

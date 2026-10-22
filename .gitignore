@@ -3,10 +3,11 @@ build/
 debug/
 release/
 tmp/
-translations/*.qm
+*.qm
 
 # CMake
 CMakeUserPresets.json
 
 # Visual Studio
 .vs/
+tools/__pycache__

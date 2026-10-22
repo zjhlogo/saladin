@@ -1,0 +1,10 @@
+{
+    "name": "ftp",
+    "displayName": "FTP",
+    "version": "1.0.0",
+    "apiVersion": "1.0",
+    "author": "Saladin",
+    "description": "FTP 插件：提供\"连接到 FTP\"入口，弹出连接信息对话框后跳转到 FTP 站点。",
+    "ui": "plugin.xml",
+    "translations": true
+}

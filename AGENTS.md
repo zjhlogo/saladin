@@ -39,7 +39,7 @@ src/                  应用源码（目标 saladin）
 translations/         saladin_*.ts / *.qm、locale.ini
 cmake/                DeployQtRuntime.cmake
 plugins/              插件工程（每个插件一个子目录与 CMakeLists，见 plugins/README.md）
-tools/                开发期辅助脚本（如 Qt-Material 资源生成），不参与构建
+tools/                开发期辅助脚本（Qt-Material 资源生成、翻译的 lupdate/lrelease 等），不参与构建
 ```
 
 ## 代码约定
@@ -48,6 +48,6 @@ tools/                开发期辅助脚本（如 Qt-Material 资源生成），
 - **moc/uic/rcc**：工程开启 AUTOMOC/AUTOUIC/AUTORCC。含 `Q_OBJECT` 的头必须已在 `SALADIN_HEADERS` 中列出才会被 moc 处理。
 - **UI 构建**：菜单/工具条/动作由 XML（`src/resources/*.xml`）+ `xmlui` 库生成，不是 Qt Designer `.ui` 文件；改 UI 通常是"XML + 对应类"两处配合。
 - **图标**：工具栏/菜单/对话框图标是 `src/icons/material/` 下的 Material Symbols 单色 SVG（与 Qt-Material 的 Material Design 风格一致），运行时由 `IconLoader` 按当前主题文字色着色，**一套即可覆盖明暗主题**。文件名就是 `IconLoader::icon("...")` 用的图标名；新增或替换图标时改 `tools/generate_material_icons.py` 里的 `MAPPING` 并重新生成，详见 `src/icons/material/README.md`。`src/icons`、`src/icons/dark` 只保留程序图标 `saladin-*.png`。
-- **翻译**：用户可见字符串一律 `tr()`。新增语言：新建 `translations/saladin_<lang>.ts`，注册到 `SALADIN_LANGUAGES`（`CMakeLists.txt`）与 `translations/locale.ini`。更新译文后构建 `saladin_lrelease` 目标（或整目标 `release_translations`）重新生成 `.qm`。
+- **翻译**：用户可见字符串一律 `tr()`。新增语言：新建 `translations/saladin_<lang>.ts`，注册到 `SALADIN_LANGUAGES`（`CMakeLists.txt`）与 `translations/locale.ini`。更新译文后运行 `python tools/release_translations.py` 重新生成 `.qm`（重新收集源码字符串用 `python tools/update_translations.py`；两个脚本自动定位 Qt 的 lupdate/lrelease，也可用 `--qt-bin` 指定）。插件翻译：插件 `metadata.json` 设 `"translations": true` 后由同样的两个脚本维护（`plugins/<插件>/translations/`，release 脚本会部署到 `<输出目录>/plugins/<插件目标名>/translations/`）。
 - **文件命名**：`snake_case.cpp/.h`
 - **shell/ 子系统**：大量 COM 对象与 PIDL 手工生命周期管理，修改时注意 AddRef/Release 配对与 `::CoTaskMemFree` 的使用。

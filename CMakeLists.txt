@@ -124,7 +124,10 @@ add_subdirectory(src)
 # Plugins
 #
 # User-visible extension DLLs, loaded at runtime from "<exe dir>/plugins"
-# (system-wide) or "<AppData>/Saladin/plugins" (per user). See plugins/README.md.
+# (system-wide) or "<AppData>/Saladin/plugins" (per user). Every plugin is
+# deployed into its own folder below plugins/ - "<plugins>/<target>/" holds
+# the DLL together with its resources (UI XML, translations). See
+# plugins/README.md.
 # ---------------------------------------------------------------------------
 
 option(SALADIN_BUILD_EXAMPLE_PLUGIN "Build the example Saladin plugin" ON)
@@ -133,77 +136,44 @@ if(SALADIN_BUILD_EXAMPLE_PLUGIN)
     add_subdirectory(plugins/example)
 endif()
 
+option(SALADIN_BUILD_FTP_PLUGIN "Build the FTP Saladin plugin (Connect To FTP)" ON)
+
+if(SALADIN_BUILD_FTP_PLUGIN)
+    add_subdirectory(plugins/ftp)
+endif()
+
 # ---------------------------------------------------------------------------
 # Translations
 #
-# Must come after add_subdirectory(src): the lupdate target reads the source
-# list of the "saladin" target.
+# The translation catalogs are maintained outside CMake with two helper
+# scripts, which replace the former "saladin_lupdate", "saladin_lrelease" and
+# "saladin_sync_translations" build targets (plus their global aliases
+# "update_translations" and "release_translations"):
 #
-#   cmake --build build --target saladin_lupdate       # recollect the strings
-#                                                      # from the sources into
-#                                                      # the .ts files
-#   cmake --build build --target saladin_lrelease      # recompile .ts -> .qm
+#   python tools/update_translations.py    # recollect the strings from the
+#                                          # sources into the .ts files
+#   python tools/release_translations.py   # recompile .ts -> .qm
 #
-# Both targets also exist under their global aliases "update_translations"
-# and "release_translations" (added by Qt's LinguistTools macros). The lupdate
-# run passes -no-obsolete so strings removed from the sources are dropped from
-# the catalogs; remove the option to keep them as "vanished" entries instead.
+# Both scripts locate the Qt Linguist tools on their own (see tools/). The .qm
+# files are written directly into the source tree - the same translations/
+# directory the Qt runtime deployment copies next to the executable - so no
+# separate sync step is needed, and a normal build depends neither on Python
+# nor on the Linguist tools.
 # ---------------------------------------------------------------------------
 
-set(SALADIN_LANGUAGES de es hu pl pt_BR ru zh_CN)
+set(SALADIN_LANGUAGES zh_CN)
 
-set(SALADIN_TS_FILES "")
+# The .qm files are committed to the repository and only rebuilt on demand
+# with the script above; complain about missing ones at configure time.
+set(SALADIN_QM_FILES "")
 foreach(lang IN LISTS SALADIN_LANGUAGES)
-    list(APPEND SALADIN_TS_FILES "${CMAKE_CURRENT_SOURCE_DIR}/translations/saladin_${lang}.ts")
+    set(qm "${CMAKE_CURRENT_SOURCE_DIR}/translations/saladin_${lang}.qm")
+    if(EXISTS "${qm}")
+        list(APPEND SALADIN_QM_FILES "${qm}")
+    else()
+        message(WARNING "Missing translation: ${qm} - run 'python tools/release_translations.py' to generate it")
+    endif()
 endforeach()
-
-find_package(Qt6 QUIET COMPONENTS LinguistTools)
-
-if(TARGET Qt6::lrelease)
-    # Recollect the user-visible strings into the .ts catalogs. The sources
-    # (and include paths) are taken from the "saladin" target itself, so no
-    # separate file list has to be maintained here.
-    qt_add_lupdate(
-        SOURCE_TARGETS saladin
-        TS_FILES ${SALADIN_TS_FILES}
-        LUPDATE_TARGET saladin_lupdate
-        OPTIONS -no-obsolete)
-
-    # Compile the .ts sources into .qm files in the build tree; the
-    # "saladin_lrelease" target is part of ALL and "release_translations"
-    # rebuilds only the translations.
-    qt_add_lrelease(
-        TS_FILES ${SALADIN_TS_FILES}
-        QM_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/translations"
-        QM_FILES_OUTPUT_VARIABLE SALADIN_QM_FILES
-        LRELEASE_TARGET saladin_lrelease)
-
-    # lrelease writes the catalogs into the build tree, but the runtime
-    # language files are deployed next to the executable as
-    # "<executable dir>/translations" (see "Qt runtime deployment"), which with
-    # this project's in-source-tree output layout is served from the
-    # translations/ directory below the source tree. Copy the generated
-    # catalogs back so the deployed copy is never made from a stale .qm file.
-    add_custom_target(saladin_sync_translations ALL
-        COMMAND "${CMAKE_COMMAND}"
-            "-DQM_BUILD_DIR=${CMAKE_BINARY_DIR}/translations"
-            "-DQM_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}/translations"
-            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SyncTranslations.cmake"
-        COMMENT "Syncing translation catalogs to the source tree"
-        VERBATIM)
-    add_dependencies(saladin_sync_translations saladin_lrelease)
-else()
-    # No Linguist tools available - fall back to the .qm files in the source tree.
-    set(SALADIN_QM_FILES "")
-    foreach(lang IN LISTS SALADIN_LANGUAGES)
-        set(qm "${CMAKE_CURRENT_SOURCE_DIR}/translations/saladin_${lang}.qm")
-        if(EXISTS "${qm}")
-            list(APPEND SALADIN_QM_FILES "${qm}")
-        else()
-            message(WARNING "Missing translation: ${qm}")
-        endif()
-    endforeach()
-endif()
 
 install(FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/translations/locale.ini"

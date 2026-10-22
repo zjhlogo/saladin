@@ -24,7 +24,7 @@ Saladin 由 Michał Męciński 创建（2011-2017）。本仓库包含对原始�
 - **Windows** 10 或更高版本
 - **Qt 6.6+**，包含 *Core、Gui、Widgets、Network、Xml、Svg* 模块 —— 包括开发头文件（构建需要 Qt 私有头文件）
 - **CMake 3.21+**
-- 编译器：**MSVC**（Visual Studio 2022 或更高版本）或 **MinGW-w64**
+- 编译器：**MSVC**（Visual Studio 2022 或更高版本）
 
 ### 配置与构建
 
@@ -33,14 +33,6 @@ MSVC（Visual Studio 生成器）：
 ```bat
 cmake -S . -B build -G "Visual Studio 18 2026" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/msvc2022_64
 cmake --build build --config Release
-```
-
-MinGW（在普通命令提示符下使用 Ninja 最快）：
-
-```bat
-set PATH=C:\Qt\6.12.0\mingw_64\bin;C:\Qt\Tools\mingw1310_64\bin;%PATH%
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/mingw_64
-cmake --build build --parallel
 ```
 
 ### 输出与运行
@@ -68,9 +60,11 @@ cmake --install build --config Release
 
 ## 翻译
 
-可翻译字符串位于 `translations/saladin_*.ts`。安装了 Qt *Linguist* 工具时会自动生成编译后的 `.qm` 文件（目标 `saladin_lrelease`；否则使用仓库中已提交的 `.qm` 文件）。运行时语言文件（`saladin_*.qm`、`locale.ini`）会随构建被复制到可执行文件旁的 `translations/` 子目录，程序启动时优先使用该副本；只有在它不存在时才回退到可执行文件上一级的 `translations/`（`cmake --install` 的 `bin/` + `translations/` 布局）。要新增语言，请新建 `.ts` 文件，并在 `SALADIN_LANGUAGES`（`CMakeLists.txt`）和 `translations/locale.ini` 中注册。
+可翻译字符串位于 `translations/saladin_*.ts`，编译后的 `.qm` 文件已提交到仓库，因此**正常构建不需要 Python 或 Qt *Linguist* 工具**。运行时语言文件（`saladin_*.qm`、`locale.ini`）会随构建被复制到可执行文件旁的 `translations/` 子目录，程序启动时优先使用该副本；只有在它不存在时才回退到可执行文件上一级的 `translations/`（`cmake --install` 的 `bin/` + `translations/` 布局）。要新增语言，请新建 `.ts` 文件，并在 `SALADIN_LANGUAGES`（`CMakeLists.txt`）和 `translations/locale.ini` 中注册。
 
-代码变更后重新收集源码中的字符串：`cmake --build build --target saladin_lupdate`（lupdate 会基于 `saladin` 目标的源码列表刷新全部 `.ts`，并自动清理已删除字符串对应的废弃条目；等价的全局目标为 `update_translations`）。仅重新编译语言文件（`.ts` → `.qm`）：`cmake --build build --target saladin_lrelease`。
+代码变更后重新收集源码中的字符串：`python tools/update_translations.py`（扫描 `src/` 与启用翻译的插件源码，刷新所有 `.ts`，并自动清理已删除字符串对应的废弃条目；`--keep-obsolete` 可将其保留为 vanished 条目）。仅重新编译语言文件（`.ts` → `.qm`，直接写回源码树）：`python tools/release_translations.py`，它还会把 `.qm` 部署到 `release|debug` 输出目录（应用 → `translations/`，插件 → `plugins/<插件目标名>/translations/`），并剪除已不再存在的语言的过期目录。两个脚本会自动定位 Qt 安装中的 `lupdate` / `lrelease`，也可用 `--qt-bin` 显式指定（查找顺序见 `tools/qt_linguist.py`）。
+
+插件也可以自带翻译（如 FTP 插件）：在插件 `metadata.json` 中设置 `"translations": true`，脚本即会维护 `plugins/<插件>/translations/<插件id>_<lang>.ts/.qm`；插件运行时从自己文件夹下的 `translations/`（`<exe 目录>/plugins/<插件目标名>/translations`）按宿主语言加载，详见 [plugins/README.md](plugins/README.md)。
 
 ## 许可证
 

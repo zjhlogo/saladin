@@ -5,8 +5,10 @@
 # It never links against the saladin executable itself.
 #############################################################################
 
-# The host scans "<executable dir>/plugins", which mirrors the in-source-tree
-# output layout of the saladin target (release/ or debug/).
+# The host scans "<executable dir>/plugins\<plugin folder>", which mirrors the
+# in-source-tree output layout of the saladin target (release/ or debug/):
+# each plugin lives in its own subdirectory below plugins/, named after the
+# plugin target (its DLL), so the DLL and its resources travel together.
 qt_add_plugin(example_plugin SHARED
         example_plugin.h
         example_plugin.cpp
@@ -22,15 +24,15 @@ target_link_libraries(example_plugin PRIVATE
         Qt6::Widgets
 )
 
-# The host scans "<executable dir>/plugins", which mirrors the in-source-tree
-# output layout of the saladin target (release/ or debug/). MODULE libraries
-# place their DLL by LIBRARY_OUTPUT_DIRECTORY (the import .lib goes to ARCHIVE,
-# so all three are set, exactly like Qt's own plugin helpers do).
+# MODULE libraries place their DLL by LIBRARY_OUTPUT_DIRECTORY (the import .lib
+# goes to ARCHIVE, so all three are set, exactly like Qt's own plugin helpers
+# do). Debug goes to debug/plugins/example_plugin, everything else to
+# release/plugins/example_plugin.
 foreach(_cfg DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
     if(_cfg STREQUAL "DEBUG")
-        set(_dir "${CMAKE_SOURCE_DIR}/debug/plugins")
+        set(_dir "${CMAKE_SOURCE_DIR}/debug/plugins/example_plugin")
     else()
-        set(_dir "${CMAKE_SOURCE_DIR}/release/plugins")
+        set(_dir "${CMAKE_SOURCE_DIR}/release/plugins/example_plugin")
     endif()
     set_target_properties(example_plugin PROPERTIES
             "LIBRARY_OUTPUT_DIRECTORY_${_cfg}" "${_dir}"
@@ -39,4 +41,18 @@ foreach(_cfg DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
     )
 endforeach()
 
-install(TARGETS example_plugin LIBRARY DESTINATION bin/plugins RUNTIME DESTINATION bin/plugins)
+# The UI layout referenced by "ui" in metadata.json is read at runtime from the
+# DLL's own directory (the host resolves it relative to the plugin path), so it
+# is copied into the plugin folder after the link and travels with the plugin
+# wherever it is deployed.
+add_custom_command(TARGET example_plugin POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                "${CMAKE_CURRENT_SOURCE_DIR}/plugin.xml"
+                "$<TARGET_FILE_DIR:example_plugin>"
+)
+
+install(TARGETS example_plugin
+        LIBRARY DESTINATION bin/plugins/example_plugin
+        RUNTIME DESTINATION bin/plugins/example_plugin)
+
+install(FILES plugin.xml DESTINATION bin/plugins/example_plugin)

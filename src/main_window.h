@@ -104,7 +104,6 @@ private slots:
 
     void packToZip();
     void browse();
-    void openFtpSite();
     void calculateSize();
     void compareFiles();
     void compareDirectories();

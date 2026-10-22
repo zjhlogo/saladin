@@ -1,0 +1,11 @@
+<xmlui>
+  <!-- 插件 UI 布局：引用宿主已存在的容器 id，Builder 会把这里的元素合并进去。
+       action id 必须与 createActions() 返回动作的 objectName 一致。
+       保持原宿主内置动作的摆放：工具条不放置，只在工具菜单与"打开"弹出菜单。 -->
+  <menu id="menuBarTools">
+    <action id="ftp.connect"/>
+  </menu>
+  <menu id="menuOpen">
+    <action id="ftp.connect"/>
+  </menu>
+</xmlui>
