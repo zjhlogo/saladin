@@ -14,7 +14,7 @@ class FtpDialog : public QDialog
 {
     Q_OBJECT
 public:
-    FtpDialog(const QIcon& icon, QWidget* parent);
+    FtpDialog(QWidget* parent);
     ~FtpDialog() override;
 
 public:

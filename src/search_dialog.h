@@ -52,7 +52,6 @@ private slots:
 private:
     ShellFolder* m_folder{};
 
-    QLabel* m_promptLabel{};
     QLabel* m_locationLabel{};
     QLabel* m_patternLabel{};
     QGroupBox* m_resultsBox{};

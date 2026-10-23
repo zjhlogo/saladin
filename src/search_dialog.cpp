@@ -13,7 +13,6 @@
 #include "utils/local_settings.h"
 #include "viewer/view_manager.h"
 #include "xmlui/builder.h"
-#include "xmlui/gradient_widget.h"
 #include "xmlui/tool_strip.h"
 
 SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
@@ -23,23 +22,6 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
-
-    auto promptWidget = new XmlUi::GradientWidget(this);
-    topLayout->addWidget(promptWidget);
-
-    auto promptLayout = new QHBoxLayout(promptWidget);
-    promptLayout->setSpacing(10);
-
-    auto promptPixmap = new QLabel(promptWidget);
-    promptLayout->addWidget(promptPixmap);
-
-    auto promptLabel = m_promptLabel = new QLabel(promptWidget);
-    promptLabel->setWordWrap(true);
-    promptLayout->addWidget(promptLabel, 1);
-
-    auto separator = new QFrame(this);
-    separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    topLayout->addWidget(separator);
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
@@ -191,11 +173,6 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     status->addWidget(m_itemsStatus, 1);
 
     setWindowTitle(tr("Search"));
-    promptPixmap->setPixmap(IconLoader::pixmap("find", 22));
-    promptLabel->setText(tr("Search for files:"));
-
-    promptLabel->setMinimumWidth(350);
-    promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
 
     m_locationEdit->setText(folder->path());
 
@@ -247,7 +224,6 @@ void SearchDialog::retranslateUi()
 {
     setWindowTitle(tr("Search"));
 
-    m_promptLabel->setText(tr("Search for files:"));
     m_locationLabel->setText(tr("Directory:"));
     m_patternLabel->setText(tr("&Pattern:"));
     m_resultsBox->setTitle(tr("Search Results"));

@@ -3,8 +3,6 @@
 // \date 2026/10/19
 
 #include "goto_dialog.h"
-#include "utils/icon_loader.h"
-#include "xmlui/gradient_widget.h"
 
 GoToDialog::GoToDialog(int lines, int current, QWidget* parent)
     : QDialog(parent)
@@ -14,23 +12,6 @@ GoToDialog::GoToDialog(int lines, int current, QWidget* parent)
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
-
-    auto promptWidget = new XmlUi::GradientWidget(this);
-    topLayout->addWidget(promptWidget);
-
-    QHBoxLayout* promptLayout = new QHBoxLayout(promptWidget);
-    promptLayout->setSpacing(10);
-
-    auto promptPixmap = new QLabel(promptWidget);
-    promptLayout->addWidget(promptPixmap);
-
-    auto promptLabel = new QLabel(promptWidget);
-    promptLabel->setWordWrap(true);
-    promptLayout->addWidget(promptLabel, 1);
-
-    QFrame* separator = new QFrame(this);
-    separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    topLayout->addWidget(separator);
 
     QBoxLayout* mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
@@ -61,12 +42,6 @@ GoToDialog::GoToDialog(int lines, int current, QWidget* parent)
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-
-    promptPixmap->setPixmap(IconLoader::pixmap("goto", 22));
-
-    promptLabel->setText(tr("Go to the specified line (1 - %1):").arg(lines));
-    promptLabel->setMinimumWidth(350);
-    promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
 
     setMaximumHeight(sizeHint().height());
 

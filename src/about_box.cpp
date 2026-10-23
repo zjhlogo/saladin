@@ -3,9 +3,7 @@
 // \date 2026/10/19
 
 #include "about_box.h"
-#include "application.h"
 #include "utils/icon_loader.h"
-#include "xmlui/gradient_widget.h"
 
 #include <QScreen>
 
@@ -19,27 +17,6 @@ AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent
     auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
-
-    auto promptWidget = new XmlUi::GradientWidget(this);
-    topLayout->addWidget(promptWidget);
-
-    auto promptLayout = new QHBoxLayout(promptWidget);
-    promptLayout->setSpacing(10);
-
-    auto promptPixmap = new QLabel(promptWidget);
-    promptPixmap->setPixmap(Application::windowIcon().pixmap(QSize(48, 48)));
-    promptLayout->addWidget(promptPixmap, 0, Qt::AlignTop | Qt::AlignLeft);
-
-    auto promptLabel = new QLabel(promptWidget);
-    promptLabel->setWordWrap(true);
-    promptLabel->setText(message);
-    promptLabel->setMinimumWidth(350);
-    promptLabel->setOpenExternalLinks(true);
-    promptLayout->addWidget(promptLabel, 1, Qt::AlignTop);
-
-    auto separator = new QFrame(this);
-    separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    topLayout->addWidget(separator);
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
@@ -58,6 +35,11 @@ AboutBox::AboutBox(const QString& title, const QString& message, QWidget* parent
     m_sectionsLayout = new QVBoxLayout(m_sectionsWidget);
     m_sectionsLayout->setContentsMargins(6, 6, 6, 6);
     m_sectionsLayout->setSpacing(6);
+
+    auto messageLabel = new QLabel(message, m_sectionsWidget);
+    messageLabel->setWordWrap(true);
+    messageLabel->setOpenExternalLinks(true);
+    m_sectionsLayout->addWidget(messageLabel);
 
     m_sectionsLayout->addStretch(1);
 

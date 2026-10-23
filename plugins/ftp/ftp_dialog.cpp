@@ -6,7 +6,6 @@
 
 #include <QCheckBox>
 #include <QDialogButtonBox>
-#include <QFrame>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -16,38 +15,12 @@
 #include <QSpinBox>
 #include <QVBoxLayout>
 
-FtpDialog::FtpDialog(const QIcon& icon, QWidget* parent)
+FtpDialog::FtpDialog(QWidget* parent)
     : QDialog(parent)
 {
     auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
-
-    // 宿主对话框顶部的 XmlUi::GradientWidget 由宿主样式按主题着色（浅色
-    // 主题强制白色、深色主题跟随窗口底色）。插件不能依赖宿主内部类，这里
-    // 用相同的规则着色，两种主题下都与宿主对话框观感一致。
-    auto promptWidget = new QWidget(this);
-
-    QPalette promptPalette = promptWidget->palette();
-    if (promptPalette.color(QPalette::Window).lightness() >= 128) promptPalette.setColor(QPalette::Window, Qt::white);
-    promptWidget->setPalette(promptPalette);
-    promptWidget->setAutoFillBackground(true);
-
-    topLayout->addWidget(promptWidget);
-
-    auto promptLayout = new QHBoxLayout(promptWidget);
-    promptLayout->setSpacing(10);
-
-    auto promptPixmap = new QLabel(promptWidget);
-    promptLayout->addWidget(promptPixmap);
-
-    auto promptLabel = new QLabel(promptWidget);
-    promptLabel->setWordWrap(true);
-    promptLayout->addWidget(promptLabel, 1);
-
-    auto separator = new QFrame(this);
-    separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    topLayout->addWidget(separator);
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
@@ -127,17 +100,6 @@ FtpDialog::FtpDialog(const QIcon& icon, QWidget* parent)
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     setWindowTitle(tr("Connect To FTP"));
-    promptLabel->setText(tr("Enter the FTP connection details:"));
-
-    // 与宿主 IconLoader::pixmap 一致的高分屏渲染：按设备像素比请求位图，
-    // 再把比率标记回 QPixmap。
-    qreal ratio = devicePixelRatioF();
-    QPixmap pixmap = icon.pixmap(QSize(22, 22) * ratio);
-    pixmap.setDevicePixelRatio(ratio);
-    promptPixmap->setPixmap(pixmap);
-
-    promptLabel->setMinimumWidth(350);
-    promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
     setMaximumHeight(sizeHint().height());
 }
 

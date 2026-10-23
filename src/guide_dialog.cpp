@@ -7,7 +7,6 @@
 #include "utils/icon_loader.h"
 #include "utils/theme_helper.h"
 #include "xmlui/builder.h"
-#include "xmlui/gradient_widget.h"
 #include "xmlui/tool_strip.h"
 
 namespace
@@ -83,26 +82,6 @@ GuideDialog::GuideDialog(QWidget* parent)
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
 
-    auto promptWidget = new XmlUi::GradientWidget(this);
-    topLayout->addWidget(promptWidget);
-
-    auto promptLayout = new QHBoxLayout(promptWidget);
-    promptLayout->setSpacing(10);
-
-    m_promptPixmap = new QLabel(promptWidget);
-    promptLayout->addWidget(m_promptPixmap);
-
-    auto promptLabel = m_promptLabel = new QLabel(promptWidget);
-    promptLabel->setWordWrap(true);
-    promptLabel->setText(tr("Quick guide to Saladin:"));
-    promptLabel->setMinimumWidth(350);
-    promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
-    promptLayout->addWidget(promptLabel, 1);
-
-    auto separator = new QFrame(this);
-    separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    topLayout->addWidget(separator);
-
     auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);
     mainLayout->setSpacing(4);
@@ -158,7 +137,6 @@ void GuideDialog::retranslateUi()
     action("goForward")->setText(tr("Forward"));
     action("goHome")->setText(tr("Home"));
 
-    m_promptLabel->setText(tr("Quick guide to Saladin:"));
     m_okButton->setText(tr("&OK"));
 
     // The guide pages are localized in the resource system; reload the home
@@ -216,6 +194,4 @@ void GuideDialog::loadIcons()
     action("goBack")->setIcon(IconLoader::icon("arrow-left"));
     action("goForward")->setIcon(IconLoader::icon("arrow-right"));
     action("goHome")->setIcon(IconLoader::icon("home"));
-
-    m_promptPixmap->setPixmap(IconLoader::pixmap("help", 22));
 }

@@ -7,7 +7,6 @@
 #include "operation_dialog.h"
 #include "utils/icon_loader.h"
 #include "xmlui/builder.h"
-#include "xmlui/gradient_widget.h"
 #include "xmlui/tool_strip.h"
 
 #include <algorithm>
@@ -35,27 +34,6 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
     auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(0);
-
-    auto promptWidget = new XmlUi::GradientWidget(this);
-    topLayout->addWidget(promptWidget);
-
-    auto promptLayout = new QHBoxLayout(promptWidget);
-    promptLayout->setSpacing(10);
-
-    auto promptPixmap = new QLabel(promptWidget);
-    promptPixmap->setPixmap(IconLoader::pixmap("edit", 22));
-    promptLayout->addWidget(promptPixmap);
-
-    auto promptLabel = new QLabel(promptWidget);
-    promptLabel->setWordWrap(true);
-    promptLabel->setText(tr("Edit your list of bookmarks:"));
-    promptLabel->setMinimumWidth(350);
-    promptLabel->setFixedHeight(promptLabel->heightForWidth(350));
-    promptLayout->addWidget(promptLabel, 1);
-
-    auto separator = new QFrame(this);
-    separator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    topLayout->addWidget(separator);
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->setContentsMargins(9, 9, 9, 9);

@@ -37,10 +37,6 @@ private:
     void retranslateUi();
 
 private:
-    QLabel* m_promptPixmap{};
-
-    QLabel* m_promptLabel{};
-
     QPushButton* m_okButton{};
 
     QTextBrowser* m_browser{};

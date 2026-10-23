@@ -118,7 +118,7 @@ void FtpPlugin::connectToFtp()
 {
     if (!m_host) return;
 
-    FtpDialog dialog(themeIcon(), m_host->mainWindow());
+    FtpDialog dialog(m_host->mainWindow());
 
     if (dialog.exec() != QDialog::Accepted) return;
 
