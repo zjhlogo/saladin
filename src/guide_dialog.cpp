@@ -92,7 +92,7 @@ GuideDialog::GuideDialog(QWidget* parent)
     m_promptPixmap = new QLabel(promptWidget);
     promptLayout->addWidget(m_promptPixmap);
 
-    auto promptLabel = new QLabel(promptWidget);
+    auto promptLabel = m_promptLabel = new QLabel(promptWidget);
     promptLabel->setWordWrap(true);
     promptLabel->setText(tr("Quick guide to Saladin:"));
     promptLabel->setMinimumWidth(350);
@@ -125,6 +125,7 @@ GuideDialog::GuideDialog(QWidget* parent)
     mainLayout->addWidget(buttonBox);
 
     buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&OK"));
+    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 
@@ -141,6 +142,29 @@ GuideDialog::GuideDialog(QWidget* parent)
 }
 
 GuideDialog::~GuideDialog() = default;
+
+void GuideDialog::changeEvent(QEvent* e)
+{
+    QDialog::changeEvent(e);
+
+    if (e->type() == QEvent::LanguageChange) retranslateUi();
+}
+
+void GuideDialog::retranslateUi()
+{
+    setWindowTitle(tr("Quick Guide"));
+
+    action("goBack")->setText(tr("Back"));
+    action("goForward")->setText(tr("Forward"));
+    action("goHome")->setText(tr("Home"));
+
+    m_promptLabel->setText(tr("Quick guide to Saladin:"));
+    m_okButton->setText(tr("&OK"));
+
+    // The guide pages are localized in the resource system; reload the home
+    // page so the content matches the new interface language as well.
+    goHome();
+}
 
 void GuideDialog::goBack()
 {

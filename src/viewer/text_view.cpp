@@ -570,6 +570,20 @@ void TextView::setFullScreen(bool on)
     }
 }
 
+void TextView::retranslateUi()
+{
+    action("lineNumbers")->setText(tr("Line Numbers"));
+    action("wordWrap")->setText(tr("Word Wrap"));
+    action("selectEncoding")->setText(tr("Encoding"));
+    action("copy")->setText(tr("&Copy"));
+    action("selectAll")->setText(tr("Select &All"));
+    action("find")->setText(tr("&Find..."));
+    action("findNext")->setText(tr("Find &Next"));
+    action("findPrevious")->setText(tr("Find &Previous"));
+    action("goToLine")->setText(tr("&Go To Line..."));
+    action("editFile")->setText(tr("Edit File"));
+}
+
 void TextView::loadIcons()
 {
     action("lineNumbers")->setIcon(IconLoader::icon("line-numbers"));

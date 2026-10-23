@@ -12,6 +12,8 @@ class FolderItemView;
 class SearchItemModel;
 class SearchProxyModel;
 class ElidedLabel;
+class QGroupBox;
+class QLabel;
 
 class SearchDialog : public QDialog, public XmlUi::Client
 {
@@ -23,6 +25,10 @@ public:
 public: // overrides
     void accept() override;
     void reject() override;
+    void changeEvent(QEvent* e) override;
+
+private:
+    void retranslateUi();
 
 private slots:
     void textToggled(bool on);
@@ -46,6 +52,11 @@ private slots:
 private:
     ShellFolder* m_folder{};
 
+    QLabel* m_promptLabel{};
+    QLabel* m_locationLabel{};
+    QLabel* m_patternLabel{};
+    QGroupBox* m_resultsBox{};
+
     QLineEdit* m_locationEdit{};
     QComboBox* m_patternComboBox{};
 
@@ -62,4 +73,6 @@ private:
 
     ElidedLabel* m_searchStatus{};
     ElidedLabel* m_itemsStatus{};
+
+    bool m_searchStarted{};
 };

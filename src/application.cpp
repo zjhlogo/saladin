@@ -35,10 +35,7 @@ Application::Application(int& argc, char** argv)
 
     QString language = m_settings->value("Language").toString();
     if (language.isEmpty()) language = QLocale::system().name();
-    QLocale::setDefault(QLocale(language));
-
-    loadTranslation("qt", true);
-    loadTranslation("saladin", false);
+    setLanguage(language);
 
     // The theme selected in the settings is authoritative: "light" always use the light palette, "dark" always uses the dark one and "system" follows the
     // Windows color scheme. Anything else (e.g. a missing value) is treated as "system".
@@ -302,7 +299,7 @@ QString Application::version() const
     return {"1.0"};
 }
 
-bool Application::loadTranslation(const QString& name, bool tryQtDir)
+QTranslator* Application::loadTranslation(const QString& name, bool tryQtDir)
 {
     QString fullName = name + "_" + QLocale().name();
 
@@ -331,11 +328,52 @@ bool Application::loadTranslation(const QString& name, bool tryQtDir)
             continue;
         }
 
-        installTranslator(translator);
-        return true;
+        return translator;
     }
 
-    return false;
+    return nullptr;
+}
+
+void Application::setLanguage(const QString& language)
+{
+    QString newLanguage = language.isEmpty() ? QLocale::system().name() : language;
+
+    if (newLanguage == m_language && (m_qtTranslator || m_applicationTranslator)) return;
+
+    m_language = newLanguage;
+
+    QLocale::setDefault(QLocale(newLanguage));
+
+    if (m_qtTranslator)
+    {
+        removeTranslator(m_qtTranslator);
+        delete m_qtTranslator;
+        m_qtTranslator = nullptr;
+    }
+
+    if (m_applicationTranslator)
+    {
+        removeTranslator(m_applicationTranslator);
+        delete m_applicationTranslator;
+        m_applicationTranslator = nullptr;
+    }
+
+    m_qtTranslator = loadTranslation("qt", true);
+    m_applicationTranslator = loadTranslation("saladin", false);
+
+    if (m_qtTranslator) installTranslator(m_qtTranslator);
+    if (m_applicationTranslator) installTranslator(m_applicationTranslator);
+
+    // installTranslator()/removeTranslator() normally deliver LanguageChange to
+    // all top-level widgets, but switching to a language without a catalog
+    // installs no translator at all. Send the event explicitly so every window
+    // is retranslated either way. The event is idempotent, so the duplicate
+    // delivery performed by Qt is harmless.
+    QEvent languageChange(QEvent::LanguageChange);
+    foreach (QWidget* widget, topLevelWidgets())
+        QCoreApplication::sendEvent(widget, &languageChange);
+
+    emit languageChanged();
 }
 
 void Application::initializeDefaultPaths()

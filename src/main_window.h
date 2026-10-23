@@ -146,6 +146,8 @@ private:
     void createToolStrip();
     void createMenuBar();
 
+    void retranslateUi();
+
 private:
     DriveStripManager* m_driveStripManager{};
 

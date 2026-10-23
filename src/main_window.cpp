@@ -538,6 +538,8 @@ bool MainWindow::eventFilter(QObject* object, QEvent* e)
 void MainWindow::changeEvent(QEvent* e)
 {
     QMainWindow::changeEvent(e);
+
+    if (e->type() == QEvent::LanguageChange) retranslateUi();
 }
 
 void MainWindow::setSourcePane(int index)
@@ -1433,6 +1435,124 @@ void MainWindow::otherOpenParent()
     ShellItem item;
     ShellFolder* folder = m_sourcePane->getFolder()->parentFolder(item);
     if (folder) m_targetPane->setFolder(folder);
+}
+
+void MainWindow::retranslateUi()
+{
+    setWindowTitle(tr("Saladin"));
+
+    action("about")->setText(tr("About Saladin"));
+    action("releaseNotes")->setText(tr("Release Notes"));
+    action("showQuickGuide")->setText(tr("Quick Quide"));
+    action("configure")->setText(tr("Settings..."));
+
+    action("closeTab")->setText(tr("Close Tab"));
+    action("duplicateTab")->setText(tr("Duplicate Tab"));
+
+    action("paste")->setText(tr("Paste"));
+    action("cut")->setText(tr("Cut"));
+    action("popupEditCopy")->setText(tr("Copy"));
+    action("copy")->setText(tr("Copy Files"));
+    action("copyNames")->setText(tr("Copy File Names"));
+    action("copyPaths")->setText(tr("Copy File Paths"));
+    action("copyPathsRecursive")->setText(tr("Copy File Paths Recursive"));
+
+    action("refresh")->setText(tr("Refresh"));
+    action("refreshDrives")->setText(tr("Refresh Drives"));
+
+    action("viewHidden")->setText(tr("View Hidden Files"));
+    action("viewHidden")->setIconText(tr("Hidden"));
+
+    action("viewSameDirectory")->setText(tr("Same Directory"));
+    action("swapPanes")->setText(tr("Swap Panels"));
+
+    action("openHome")->setText(tr("Home Directory"));
+    action("openRoot")->setText(tr("Root Directory"));
+    action("openParent")->setText(tr("Parent Directory"));
+    action("copyToRightPane")->setText(tr("Left -> Right"));
+    action("copyToLeftPane")->setText(tr("Left <- Right"));
+
+    action("selectMask")->setText(tr("Select Mask..."));
+    action("selectAll")->setText(tr("Select All"));
+    action("unselectMask")->setText(tr("Unselect Mask..."));
+    action("unselectAll")->setText(tr("Unselect All"));
+    action("invertSelection")->setText(tr("Invert Selection"));
+
+    action("renameCurrent")->setText(tr("Rename"));
+    action("renameCurrent")->setIconText(tr("Rename\nF2"));
+
+    action("popupView")->setText(tr("View", "action name"));
+    action("popupView")->setIconText(tr("View\nF3"));
+    action("viewCurrent")->setText(tr("View Current File"));
+    action("viewSelected")->setText(tr("View Selected Files"));
+
+    action("popupEdit")->setText(tr("Edit"));
+    action("popupEdit")->setIconText(tr("Edit\nF4"));
+    action("editCurrent")->setText(tr("Edit File"));
+    action("editNew")->setText(tr("Create File..."));
+
+    action("popupCopy")->setText(tr("Copy"));
+    action("popupCopy")->setIconText(tr("Copy\nF5"));
+    action("copySelected")->setText(tr("Copy To Target Directory..."));
+    action("cloneSelected")->setText(tr("Clone In Source Directory..."));
+
+    action("popupMove")->setText(tr("Move"));
+    action("popupMove")->setIconText(tr("Move\nF6"));
+    action("moveSelected")->setText(tr("Move To Target Directory..."));
+    action("renameSelected")->setText(tr("Rename In Source Directory..."));
+
+    action("createFolder")->setText(tr("Create Folder..."));
+    action("createFolder")->setIconText(tr("Folder\nF7"));
+
+    action("popupDelete")->setText(tr("Delete"));
+    action("popupDelete")->setIconText(tr("Delete\nF8"));
+    action("moveToTrashCan")->setText(tr("Move To Recycle Bin"));
+    action("deleteSelected")->setText(tr("Delete Permanently"));
+
+    action("openTerminal")->setText(tr("Open Console"));
+    action("openTerminal")->setIconText(tr("Console\nF9"));
+
+    action("packToZip")->setText(tr("Pack..."));
+    action("popupOpen")->setText(tr("Open"));
+    action("openDirectory")->setText(tr("Open Directory"));
+    action("browse")->setText(tr("Browse For Folder..."));
+
+    action("calculateSize")->setText(tr("Calculate Size"));
+    action("calculateSize")->setIconText(tr("Size"));
+
+    action("popupCompare")->setText(tr("Compare"));
+    action("compareFiles")->setText(tr("Compare Files"));
+    action("compareDirectories")->setText(tr("Compare Directories"));
+
+    action("search")->setText(tr("Search..."));
+    action("explore")->setText(tr("Explore"));
+
+    action("showHistory")->setText(tr("History"));
+    action("showBookmarks")->setText(tr("Bookmarks"));
+    action("addBookmark")->setText(tr("Add Bookmark..."));
+    action("editBookmarks")->setText(tr("Edit Bookmarks..."));
+
+    action("hideToolStrip")->setText(tr("Collapse Toolbar"));
+    action("showToolStrip")->setText(tr("Expand Toolbar"));
+
+    if (auto menuBar = qobject_cast<QMenuBar*>(menuWidget()))
+    {
+        const QList<QAction*> menus = menuBar->actions();
+
+        if (menus.count() >= 7)
+        {
+            menus[0]->setText(tr("&Edit"));
+            menus[1]->setText(tr("&Navigate"));
+            menus[2]->setText(tr("&View"));
+            menus[3]->setText(tr("&Selection"));
+            menus[4]->setText(tr("&Functions"));
+            menus[5]->setText(tr("&Tools"));
+            menus[6]->setText(tr("&Help"));
+        }
+    }
+
+    for (int i = 0; i < 2; i++)
+        m_panes[i]->retranslateUi();
 }
 
 void MainWindow::hideToolStrip()

@@ -196,6 +196,26 @@ void ViewerWindow::showEvent(QShowEvent* e)
     if (!e->spontaneous() && !(windowState() & Qt::WindowFullScreen)) storeGeometry(true);
 }
 
+void ViewerWindow::changeEvent(QEvent* e)
+{
+    QMainWindow::changeEvent(e);
+
+    if (e->type() == QEvent::LanguageChange) retranslateUi();
+}
+
+void ViewerWindow::retranslateUi()
+{
+    action("previous")->setText(tr("Previous"));
+    action("next")->setText(tr("Next"));
+    action("reload")->setText(tr("Reload"));
+    action("switchToText")->setText(tr("Text"));
+    action("switchToBinary")->setText(tr("Binary"));
+    action("switchToImage")->setText(tr("Image"));
+    action("fullScreen")->setText(tr("Full Screen"));
+
+    if (m_view) m_view->retranslateUi();
+}
+
 void ViewerWindow::initializeGeometry()
 {
     LocalSettings* settings = g_application->applicationSettings();

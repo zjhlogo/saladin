@@ -63,11 +63,11 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     auto generalLayout = new QVBoxLayout(generalTab);
     generalLayout->setContentsMargins(0, 0, 0, 0);
 
-    auto regionalGroup = new QGroupBox(tr("Regional Options"), generalTab);
+    auto regionalGroup = m_regionalGroup = new QGroupBox(tr("Regional Options"), generalTab);
     auto regionalLayout = new QGridLayout(regionalGroup);
     generalLayout->addWidget(regionalGroup);
 
-    auto languageLabel = new QLabel(tr("&Language of the user interface:"), regionalGroup);
+    auto languageLabel = m_languageLabel = new QLabel(tr("&Language of the user interface:"), regionalGroup);
     regionalLayout->addWidget(languageLabel, 0, 0);
 
     m_languageComboBox = new SeparatorComboBox(regionalGroup);
@@ -78,11 +78,11 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     regionalLayout->setColumnStretch(2, 1);
 
-    auto directoriesGroup = new QGroupBox(tr("Home Directories"), generalTab);
+    auto directoriesGroup = m_directoriesGroup = new QGroupBox(tr("Home Directories"), generalTab);
     auto directoriesLayout = new QGridLayout(directoriesGroup);
     generalLayout->addWidget(directoriesGroup);
 
-    auto leftPaneLabel = new QLabel(tr("Left pane:"), directoriesGroup);
+    auto leftPaneLabel = m_leftPaneLabel = new QLabel(tr("Left pane:"), directoriesGroup);
     directoriesLayout->addWidget(leftPaneLabel, 0, 0);
 
     m_leftPaneEdit = new QLineEdit(directoriesGroup);
@@ -94,7 +94,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_leftPaneButton = browseButton(directoriesGroup, SLOT(browseLeftPane()));
     directoriesLayout->addWidget(m_leftPaneButton, 0, 2);
 
-    auto rightPaneLabel = new QLabel(tr("Right pane:"), directoriesGroup);
+    auto rightPaneLabel = m_rightPaneLabel = new QLabel(tr("Right pane:"), directoriesGroup);
     directoriesLayout->addWidget(rightPaneLabel, 1, 0);
 
     m_rightPaneEdit = new QLineEdit(directoriesGroup);
@@ -109,11 +109,11 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_rememberCheckBox = new QCheckBox(tr("&Remember last directories on exit"), directoriesGroup);
     directoriesLayout->addWidget(m_rememberCheckBox, 2, 1);
 
-    auto appearanceGroup = new QGroupBox(tr("Appearance"), generalTab);
+    auto appearanceGroup = m_appearanceGroup = new QGroupBox(tr("Appearance"), generalTab);
     auto appearanceLayout = new QGridLayout(appearanceGroup);
     generalLayout->addWidget(appearanceGroup);
 
-    auto themeLabel = new QLabel(tr("&User interface theme:"), appearanceGroup);
+    auto themeLabel = m_themeLabel = new QLabel(tr("&User interface theme:"), appearanceGroup);
     appearanceLayout->addWidget(themeLabel, 0, 0);
 
     m_themeComboBox = new SeparatorComboBox(appearanceGroup);
@@ -127,11 +127,11 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     appearanceLayout->setColumnStretch(2, 1);
 
-    auto fontsGroup = new QGroupBox(tr("Fonts"), generalTab);
+    auto fontsGroup = m_fontsGroup = new QGroupBox(tr("Fonts"), generalTab);
     auto fontsLayout = new QGridLayout(fontsGroup);
     generalLayout->addWidget(fontsGroup);
 
-    auto binaryLabel = new QLabel(tr("&Binary view:"), fontsGroup);
+    auto binaryLabel = m_binaryLabel = new QLabel(tr("&Binary view:"), fontsGroup);
     fontsLayout->addWidget(binaryLabel, 0, 0);
 
     m_binaryFontComboBox = new QFontComboBox(fontsGroup);
@@ -148,7 +148,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_binaryFontSpinBox->setSuffix(tr(" pt"));
     fontsLayout->addWidget(m_binaryFontSpinBox, 0, 2);
 
-    auto textLabel = new QLabel(tr("&Text view:"), fontsGroup);
+    auto textLabel = m_textLabel = new QLabel(tr("&Text view:"), fontsGroup);
     fontsLayout->addWidget(textLabel, 1, 0);
 
     m_textFontComboBox = new QFontComboBox(fontsGroup);
@@ -167,14 +167,14 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     fontsLayout->setColumnStretch(3, 1);
 
-    auto miscGroup = new QGroupBox(tr("Misc. Options"), generalTab);
+    auto miscGroup = m_miscGroup = new QGroupBox(tr("Misc. Options"), generalTab);
     auto miscLayout = new QVBoxLayout(miscGroup);
     generalLayout->addWidget(miscGroup);
 
     m_confirmDndCheckBox = new QCheckBox(tr("Confirm &Drag && Drop operations"), miscGroup);
     miscLayout->addWidget(m_confirmDndCheckBox);
 
-    auto updateGroup = new QGroupBox(tr("Automatic Update"), generalTab);
+    auto updateGroup = m_updateGroup = new QGroupBox(tr("Automatic Update"), generalTab);
     auto updateLayout = new QGridLayout(updateGroup);
     generalLayout->addWidget(updateGroup);
 
@@ -189,7 +189,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     auto toolsLayout = new QVBoxLayout(toolsTab);
     toolsLayout->setContentsMargins(0, 0, 0, 0);
 
-    auto viewerGroup = new QGroupBox(tr("File Viewer"), toolsTab);
+    auto viewerGroup = m_viewerGroup = new QGroupBox(tr("File Viewer"), toolsTab);
     auto viewerLayout = new QGridLayout(viewerGroup);
     toolsLayout->addWidget(viewerGroup);
 
@@ -206,7 +206,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     connect(m_internalViewerCheckBox, SIGNAL(toggled(bool)), m_viewerEdit, SLOT(setDisabled(bool)));
     connect(m_internalViewerCheckBox, SIGNAL(toggled(bool)), m_viewerButton, SLOT(setDisabled(bool)));
 
-    auto editorGroup = new QGroupBox(tr("Text Editor"), toolsTab);
+    auto editorGroup = m_editorGroup = new QGroupBox(tr("Text Editor"), toolsTab);
     auto editorLayout = new QGridLayout(editorGroup);
     toolsLayout->addWidget(editorGroup);
 
@@ -217,7 +217,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_editorButton = browseButton(editorGroup, SLOT(browseEditor()));
     editorLayout->addWidget(m_editorButton, 0, 1);
 
-    auto consoleGroup = new QGroupBox(tr("Console"), toolsTab);
+    auto consoleGroup = m_consoleGroup = new QGroupBox(tr("Console"), toolsTab);
     auto consoleLayout = new QGridLayout(consoleGroup);
     toolsLayout->addWidget(consoleGroup);
 
@@ -228,7 +228,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_consoleButton = browseButton(consoleGroup, SLOT(browseConsole()));
     consoleLayout->addWidget(m_consoleButton, 0, 1);
 
-    auto diffGroup = new QGroupBox(tr("Compare Files"), toolsTab);
+    auto diffGroup = m_diffGroup = new QGroupBox(tr("Compare Files"), toolsTab);
     auto diffLayout = new QGridLayout(diffGroup);
     toolsLayout->addWidget(diffGroup);
 
@@ -274,7 +274,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     m_pluginWidgetLayout->setContentsMargins(0, 0, 0, 0);
     pluginDetailsLayout->addWidget(pluginSettingsWidget);
 
-    auto restartLabel = new QLabel(tr("Enabling or disabling plugins takes effect after Saladin is restarted."), pluginDetailsWidget);
+    auto restartLabel = m_pluginRestartLabel = new QLabel(tr("Enabling or disabling plugins takes effect after Saladin is restarted."), pluginDetailsWidget);
     restartLabel->setWordWrap(true);
     pluginDetailsLayout->addWidget(restartLabel);
 
@@ -282,7 +282,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     populatePlugins();
 
-    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply, Qt::Horizontal, this);
+    auto buttonBox = m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply, Qt::Horizontal, this);
 
     auto bottomLayout = new QHBoxLayout();
     bottomLayout->setContentsMargins(9, 7, 9, 9);
@@ -342,6 +342,78 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
 SettingsDialog::~SettingsDialog() = default;
 
+void SettingsDialog::changeEvent(QEvent* e)
+{
+    QDialog::changeEvent(e);
+
+    if (e->type() == QEvent::LanguageChange) retranslateUi();
+}
+
+void SettingsDialog::retranslateUi()
+{
+    setWindowTitle(tr("Saladin Settings"));
+
+    m_tabBar->setTabText(0, tr("General"));
+    m_tabBar->setTabText(1, tr("Tools"));
+    m_tabBar->setTabText(2, tr("Plugins"));
+
+    m_regionalGroup->setTitle(tr("Regional Options"));
+    m_languageLabel->setText(tr("&Language of the user interface:"));
+    m_languageComboBox->setItemText(0, tr("System Default"));
+
+    m_directoriesGroup->setTitle(tr("Home Directories"));
+    m_leftPaneLabel->setText(tr("Left pane:"));
+    m_rightPaneLabel->setText(tr("Right pane:"));
+    m_rememberCheckBox->setText(tr("&Remember last directories on exit"));
+
+    m_appearanceGroup->setTitle(tr("Appearance"));
+    m_themeLabel->setText(tr("&User interface theme:"));
+    m_themeComboBox->setItemText(0, tr("Follow System"));
+    m_themeComboBox->setItemText(1, tr("Light"));
+    m_themeComboBox->setItemText(2, tr("Dark"));
+
+    m_fontsGroup->setTitle(tr("Fonts"));
+    m_binaryLabel->setText(tr("&Binary view:"));
+    m_textLabel->setText(tr("&Text view:"));
+    m_binaryFontSpinBox->setSuffix(tr(" pt"));
+    m_textFontSpinBox->setSuffix(tr(" pt"));
+
+    m_miscGroup->setTitle(tr("Misc. Options"));
+    m_confirmDndCheckBox->setText(tr("Confirm &Drag && Drop operations"));
+
+    m_updateGroup->setTitle(tr("Automatic Update"));
+    m_updateCheckBox->setText(tr("&Enable automatic checking for latest version of Saladin"));
+
+    m_viewerGroup->setTitle(tr("File Viewer"));
+    m_internalViewerCheckBox->setText(tr("Use the internal file viewer"));
+    m_editorGroup->setTitle(tr("Text Editor"));
+    m_consoleGroup->setTitle(tr("Console"));
+    m_diffGroup->setTitle(tr("Compare Files"));
+
+    m_pluginRestartLabel->setText(tr("Enabling or disabling plugins takes effect after Saladin is restarted."));
+
+    m_buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&OK"));
+    m_buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("&Cancel"));
+    m_buttonBox->button(QDialogButtonBox::Apply)->setText(tr("&Apply"));
+
+    m_leftPaneButton->setToolTip(tr("Browse"));
+    m_rightPaneButton->setToolTip(tr("Browse"));
+    m_viewerButton->setToolTip(tr("Browse"));
+    m_editorButton->setToolTip(tr("Browse"));
+    m_consoleButton->setToolTip(tr("Browse"));
+    m_diffButton->setToolTip(tr("Browse"));
+
+    if (m_pluginInfos.isEmpty())
+    {
+        m_pluginDetails->setText(tr("No plugins found.") + "<br><br>"
+                                 + tr("Put each plugin into its own subfolder of the plugins folder and restart Saladin."));
+    }
+    else
+    {
+        updatePluginDetails(m_pluginList->currentRow());
+    }
+}
+
 void SettingsDialog::accept()
 {
     if (apply()) QDialog::accept();
@@ -352,8 +424,6 @@ bool SettingsDialog::apply()
     LocalSettings* settings = g_application->applicationSettings();
 
     QString language = m_languageComboBox->itemData(m_languageComboBox->currentIndex()).toString();
-    if (language != settings->value("Language").toString())
-        QMessageBox::warning(this, tr("Warning"), tr("Language settings will be applied when the application is restarted."));
     settings->setValue("Language", language);
 
     settings->setValue("HomeDirectory1", QVariant::fromValue(m_pidls[0].path()));
@@ -389,6 +459,10 @@ bool SettingsDialog::apply()
     }
 
     settings->save();
+
+    // Apply the selected language without restarting the application. This also
+    // retranslates this dialog, the main window and any open viewer windows.
+    g_application->setLanguage(language);
 
     return true;
 }

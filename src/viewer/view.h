@@ -47,6 +47,11 @@ public:
 
     virtual void setFullScreen(bool on);
 
+    // Re-applies the translated texts to the actions and menus owned by the
+    // view. Views are QObjects, so they do not receive LanguageChange and are
+    // retranslated by their ViewerWindow.
+    virtual void retranslateUi();
+
 signals:
     void statusChanged(const QString& status);
 

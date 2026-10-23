@@ -1052,6 +1052,16 @@ void PanelWidget::updateEditPalette()
     // m_edit->setPalette(palette);
 }
 
+void PanelWidget::retranslateUi()
+{
+    // The model produces the header labels and the "<DIR>"/"<LNK>" markers
+    // from tr() while painting, so a repaint is enough for those. The status
+    // texts are formatted eagerly and need to be rebuilt.
+    m_view->header()->viewport()->update();
+    m_view->viewport()->update();
+    updateStatus();
+}
+
 void PanelWidget::selectAll()
 {
     m_model->selectAll();

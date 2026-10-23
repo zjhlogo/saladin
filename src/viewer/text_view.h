@@ -24,6 +24,8 @@ public: // overrides
 
     void storeSettings() override;
 
+    void retranslateUi() override;
+
     void setFullScreen(bool on) override;
 
     bool eventFilter(QObject* obj, QEvent* e) override;

@@ -24,6 +24,8 @@ public:
 protected: // overrides
     void showEvent(QShowEvent* e) override;
 
+    void changeEvent(QEvent* e) override;
+
 private slots:
     void previous();
     void next();
@@ -43,6 +45,8 @@ private slots:
 private:
     void initializeGeometry();
     void storeGeometry(bool offset);
+
+    void retranslateUi();
 
 private:
     View* m_view;

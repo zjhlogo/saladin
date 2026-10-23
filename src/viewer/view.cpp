@@ -57,6 +57,10 @@ View* View::createView(Type type, QObject* parent, QWidget* parentWidget)
     }
 }
 
+void View::retranslateUi()
+{
+}
+
 void View::setFullScreen(bool on)
 {
     QLayout* layout = mainWidget()->layout();

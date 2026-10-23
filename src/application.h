@@ -16,6 +16,7 @@ class UpdateClient;
 class AboutBox;
 class AboutBoxSection;
 class GuideDialog;
+class QTranslator;
 
 class Application : public QApplication
 {
@@ -55,16 +56,25 @@ public slots:
 
     void settingsChanged();
 
+    // Applies the given locale immediately: installs the matching translation
+    // catalogs and retranslates every top-level window. An empty value selects
+    // the system locale.
+    void setLanguage(const QString& language);
+
     void updateTheme(ThemeHelper::AppTheme theme);
 
 signals:
     void themeChanged();
 
+    // Emitted after a new language has been applied. Widgets that build their
+    // own user-visible strings outside of changeEvent() can connect to this.
+    void languageChanged();
+
 private slots:
     void updateColorScheme();
 
 private:
-    bool loadTranslation(const QString& name, bool tryQtDir);
+    QTranslator* loadTranslation(const QString& name, bool tryQtDir);
 
     void initializeDefaultPaths();
 
@@ -77,6 +87,11 @@ private:
 
 private:
     QString m_translationsPath;
+
+    QString m_language;
+
+    QTranslator* m_qtTranslator{};
+    QTranslator* m_applicationTranslator{};
 
     QString m_dataPath;
     QString m_cachePath;

@@ -33,7 +33,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     auto promptPixmap = new QLabel(promptWidget);
     promptLayout->addWidget(promptPixmap);
 
-    auto promptLabel = new QLabel(promptWidget);
+    auto promptLabel = m_promptLabel = new QLabel(promptWidget);
     promptLabel->setWordWrap(true);
     promptLayout->addWidget(promptLabel, 1);
 
@@ -49,7 +49,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     auto gridLayout = new QGridLayout();
     mainLayout->addLayout(gridLayout);
 
-    auto locationLabel = new QLabel(tr("Directory:"), this);
+    auto locationLabel = m_locationLabel = new QLabel(tr("Directory:"), this);
     gridLayout->addWidget(locationLabel, 0, 0);
 
     m_locationEdit = new QLineEdit(this);
@@ -58,7 +58,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
 
     locationLabel->setBuddy(m_locationEdit);
 
-    auto patternLabel = new QLabel(tr("&Pattern:"), this);
+    auto patternLabel = m_patternLabel = new QLabel(tr("&Pattern:"), this);
     gridLayout->addWidget(patternLabel, 1, 0);
 
     m_patternComboBox = new QComboBox(this);
@@ -103,7 +103,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
     connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-    auto resultsBox = new QGroupBox(tr("Search Results"), this);
+    auto resultsBox = m_resultsBox = new QGroupBox(tr("Search Results"), this);
     mainLayout->addWidget(resultsBox);
 
     auto resultsLayout = new QVBoxLayout(resultsBox);
@@ -236,6 +236,45 @@ SearchDialog::~SearchDialog()
     settings->setValue("SearchDialogSize", size());
 }
 
+void SearchDialog::changeEvent(QEvent* e)
+{
+    QDialog::changeEvent(e);
+
+    if (e->type() == QEvent::LanguageChange) retranslateUi();
+}
+
+void SearchDialog::retranslateUi()
+{
+    setWindowTitle(tr("Search"));
+
+    m_promptLabel->setText(tr("Search for files:"));
+    m_locationLabel->setText(tr("Directory:"));
+    m_patternLabel->setText(tr("&Pattern:"));
+    m_resultsBox->setTitle(tr("Search Results"));
+
+    if (m_textCheckBox) m_textCheckBox->setText(tr("&Text:"));
+    if (m_caseCheckBox) m_caseCheckBox->setText(tr("&Match case"));
+
+    action("popupView")->setText(tr("View", "action name"));
+    action("viewCurrent")->setText(tr("View Current File"));
+    action("viewAll")->setText(tr("View All Files"));
+    action("editCurrent")->setText(tr("Edit"));
+    action("gotoFile")->setText(tr("Go To File"));
+    action("copyNames")->setText(tr("Copy File Names"));
+
+    m_buttonBox->button(QDialogButtonBox::Ok)->setText(tr("&Search"));
+
+    if (m_model->isSearching())
+        m_buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("&Abort"));
+    else if (m_searchStarted)
+        m_buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("&Close"));
+    else
+        m_buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("&Cancel"));
+
+    m_view->header()->viewport()->update();
+    m_view->viewport()->update();
+}
+
 void SearchDialog::textToggled(bool on)
 {
     m_textComboBox->setEnabled(on);
@@ -305,6 +344,8 @@ void SearchDialog::accept()
 
     m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     m_buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("&Abort"));
+
+    m_searchStarted = true;
 
     m_searchStatus->setText(tr("Searching..."));
 

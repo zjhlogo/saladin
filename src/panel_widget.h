@@ -93,6 +93,8 @@ public slots:
 
     void updateEditPalette();
 
+    void retranslateUi();
+
 signals:
     void headerSectionResized(int index, int size);
     void headerSectionMoved(int from, int to);

@@ -23,6 +23,8 @@ public: // overrides
 
     void storeSettings() override;
 
+    void retranslateUi() override;
+
 private slots:
     void updateActions();
 

@@ -213,6 +213,13 @@ void BinaryView::contextMenuRequested(const QPoint& pos)
     if (menu) menu->popup(m_edit->mapToGlobal(pos));
 }
 
+void BinaryView::retranslateUi()
+{
+    action("hexMode")->setText(tr("Hex Mode"));
+    action("copy")->setText(tr("&Copy"));
+    action("selectAll")->setText(tr("Select &All"));
+}
+
 void BinaryView::loadIcons()
 {
     action("hexMode")->setIcon(IconLoader::icon("hex-mode"));

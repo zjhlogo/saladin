@@ -17,6 +17,9 @@ public:
     GuideDialog(QWidget* parent);
     ~GuideDialog() override;
 
+public: // overrides
+    void changeEvent(QEvent* e) override;
+
 private slots:
     void goBack();
     void goForward();
@@ -31,7 +34,14 @@ private slots:
     void loadIcons();
 
 private:
+    void retranslateUi();
+
+private:
     QLabel* m_promptPixmap{};
+
+    QLabel* m_promptLabel{};
+
+    QPushButton* m_okButton{};
 
     QTextBrowser* m_browser{};
 };

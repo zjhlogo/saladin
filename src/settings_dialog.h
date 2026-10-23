@@ -12,6 +12,9 @@
 class QListWidget;
 class QListWidgetItem;
 class QTabBar;
+class QGroupBox;
+class QLabel;
+class QDialogButtonBox;
 class SeparatorComboBox;
 
 class SettingsDialog : public QDialog
@@ -23,6 +26,7 @@ public:
 
 public: // overrides
     void accept() override;
+    void changeEvent(QEvent* e) override;
 
 private slots:
     bool apply();
@@ -45,6 +49,8 @@ private:
     void browsePane(QLineEdit* edit, int index);
     void browseTool(QLineEdit* edit);
 
+    void retranslateUi();
+
     void loadLanguages() const;
 
     void populatePlugins();
@@ -58,6 +64,33 @@ private:
     QStackedWidget* m_stackedWidget{};
 
     QTabBar* m_tabBar{};
+
+    QGroupBox* m_regionalGroup{};
+    QLabel* m_languageLabel{};
+
+    QGroupBox* m_directoriesGroup{};
+    QLabel* m_leftPaneLabel{};
+    QLabel* m_rightPaneLabel{};
+
+    QGroupBox* m_appearanceGroup{};
+    QLabel* m_themeLabel{};
+
+    QGroupBox* m_fontsGroup{};
+    QLabel* m_binaryLabel{};
+    QLabel* m_textLabel{};
+
+    QGroupBox* m_miscGroup{};
+
+    QGroupBox* m_updateGroup{};
+
+    QGroupBox* m_viewerGroup{};
+    QGroupBox* m_editorGroup{};
+    QGroupBox* m_consoleGroup{};
+    QGroupBox* m_diffGroup{};
+
+    QDialogButtonBox* m_buttonBox{};
+
+    QLabel* m_pluginRestartLabel{};
 
     QToolButton* m_leftPaneButton{};
     QToolButton* m_rightPaneButton{};

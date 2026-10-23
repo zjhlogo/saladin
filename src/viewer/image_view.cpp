@@ -329,6 +329,21 @@ void ImageView::contextMenuRequested(const QPoint& pos)
     if (menu) menu->popup(m_label->mapToGlobal(pos));
 }
 
+void ImageView::retranslateUi()
+{
+    action("copy")->setText(tr("&Copy"));
+    action("zoomFit")->setText(tr("Zoom To &Fit"));
+    action("zoomIn")->setText(tr("Zoom &In"));
+    action("zoomOut")->setText(tr("Zoom &Out"));
+    action("zoomOriginal")->setText(tr("Original &Size"));
+    action("rotateLeft")->setText(tr("Rotate &Left"));
+    action("rotateRight")->setText(tr("Rotate &Right"));
+    action("blackBackground")->setText(tr("&Black Background"));
+    action("viewInformation")->setText(tr("Information"));
+
+    updateStatus();
+}
+
 void ImageView::loadIcons()
 {
     action("copy")->setIcon(IconLoader::icon("edit-copy"));
