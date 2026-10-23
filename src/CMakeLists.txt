@@ -223,9 +223,6 @@ target_link_libraries(saladin PRIVATE
         Qt6::Network
         Qt6::Xml
         Qt6::Svg
-        Qt6::CorePrivate
-        Qt6::GuiPrivate
-        Qt6::WidgetsPrivate
         shell32
         shlwapi
         crypt32

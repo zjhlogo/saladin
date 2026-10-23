@@ -6,7 +6,7 @@
 # Quick start (Qt 6 + MSVC):
 #
 #   rmdir /s /q build
-#   cmake -S . -B build -G "Visual Studio 18 2026" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/msvc2022_64
+#   cmake -S . -B build -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/msvc2022_64
 #   cmake --build build --config Release
 #
 # From a normal prompt -G Ninja is faster.
@@ -34,8 +34,7 @@ enable_language(RC)
 # ---------------------------------------------------------------------------
 
 find_package(Qt6 6.6 REQUIRED COMPONENTS
-    Core Gui Widgets Network Xml Svg
-    CorePrivate GuiPrivate WidgetsPrivate)
+    Core Gui Widgets Network Xml Svg)
 
 # Enables AUTOMOC and AUTOUIC and selects a suitable C++ standard.
 qt_standard_project_setup()

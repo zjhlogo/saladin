@@ -34,6 +34,9 @@ protected: // overrides
 
     void currentChanged(const QModelIndex& current, const QModelIndex& previous) override;
 
+    void paintEvent(QPaintEvent* event) override;
+
 private:
     QPersistentModelIndex m_anchor;
+    QRect m_dropIndicatorRect;
 };

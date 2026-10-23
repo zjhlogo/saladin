@@ -4,7 +4,8 @@
 
 #include "folder_item_view.h"
 
-#include <private/qtreeview_p.h>
+#include <QPainter>
+#include <QStyleOption>
 
 FolderItemView::FolderItemView(QWidget* parent)
     : QTreeView(parent)
@@ -77,24 +78,23 @@ void FolderItemView::setDragging(bool dragging)
     {
         stopAutoScroll();
         setState(NoState);
+        m_dropIndicatorRect = QRect();
         viewport()->update();
     }
 }
 
 void FolderItemView::highlightDropItem(const QModelIndex& index)
 {
-    auto d = static_cast<QTreeViewPrivate*>(d_ptr.data());
-
     if (index.isValid())
     {
         QRect rect = visualRect(index.sibling(index.row(), 0));
         QRect rect2 = visualRect(index.sibling(index.row(), model()->columnCount() - 1));
         rect.setRight(rect2.right());
-        d->dropIndicatorRect = rect.adjusted(0, 0, -1, -1);
+        m_dropIndicatorRect = rect.adjusted(0, 0, -1, -1);
     }
     else
     {
-        d->dropIndicatorRect = QRect();
+        m_dropIndicatorRect = QRect();
     }
 
     viewport()->update();
@@ -102,15 +102,32 @@ void FolderItemView::highlightDropItem(const QModelIndex& index)
 
 void FolderItemView::checkAutoScroll(const QPoint& pos)
 {
-    auto d = static_cast<QTreeViewPrivate*>(d_ptr.data());
-
-    if (!d->autoScroll) return;
+    if (!hasAutoScroll()) return;
 
     QRect area = viewport()->visibleRegion().boundingRect();
+    const int margin = autoScrollMargin();
 
-    if ((pos.y() - area.top() < d->autoScrollMargin) || (area.bottom() - pos.y() < d->autoScrollMargin) || (pos.x() - area.left() < d->autoScrollMargin)
-        || (area.right() - pos.x() < d->autoScrollMargin))
+    if ((pos.y() - area.top() < margin) || (area.bottom() - pos.y() < margin) || (pos.x() - area.left() < margin)
+        || (area.right() - pos.x() < margin))
     {
         startAutoScroll();
     }
+}
+
+void FolderItemView::paintEvent(QPaintEvent* event)
+{
+    QTreeView::paintEvent(event);
+
+    if (!m_dropIndicatorRect.isValid()) return;
+
+    QPainter painter(viewport());
+
+    QStyleOption opt;
+    opt.rect = m_dropIndicatorRect;
+    opt.palette = palette();
+    opt.state = QStyle::State_None;
+    if (viewport()->isEnabled()) opt.state |= QStyle::State_Enabled;
+    if (isActiveWindow()) opt.state |= QStyle::State_Active;
+
+    style()->drawPrimitive(QStyle::PE_IndicatorItemViewItemDrop, &opt, &painter, this);
 }
