@@ -4,13 +4,13 @@
 
 #include "settings_dialog.h"
 #include "application.h"
+#include "custom_widgets/separator_combo_box.h"
 #include "custom_widgets/side_tab_bar.h"
 #include "plugin/plugin_api.h"
 #include "plugin/plugin_manager.h"
 #include "shell/shell_folder.h"
 #include "utils/icon_loader.h"
 #include "utils/local_settings.h"
-#include "utils/separator_combo_box.h"
 
 #include <QAbstractItemView>
 #include <QDesktopServices>

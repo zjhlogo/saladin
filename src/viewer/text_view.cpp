@@ -4,7 +4,7 @@
 
 #include "text_view.h"
 #include "application.h"
-#include "find_bar.h"
+#include "custom_widgets/find_bar.h"
 #include "main_window.h"
 #include "text_loader.h"
 #include "utils/icon_loader.h"

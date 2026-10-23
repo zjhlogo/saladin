@@ -237,37 +237,37 @@
 <context>
     <name>FindBar</name>
     <message>
-        <location filename="../src/find_bar.cpp" line="20"/>
+        <location filename="../src/custom_widgets/find_bar.cpp" line="20"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
-        <location filename="../src/find_bar.cpp" line="28"/>
+        <location filename="../src/custom_widgets/find_bar.cpp" line="28"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../src/find_bar.cpp" line="34"/>
+        <location filename="../src/custom_widgets/find_bar.cpp" line="34"/>
         <source>Find:</source>
         <translation>查找：</translation>
     </message>
     <message>
-        <location filename="../src/find_bar.cpp" line="52"/>
+        <location filename="../src/custom_widgets/find_bar.cpp" line="52"/>
         <source>Find Previous</source>
         <translation>查找上一个</translation>
     </message>
     <message>
-        <location filename="../src/find_bar.cpp" line="60"/>
+        <location filename="../src/custom_widgets/find_bar.cpp" line="60"/>
         <source>Find Next</source>
         <translation>查找下一个</translation>
     </message>
     <message>
-        <location filename="../src/find_bar.cpp" line="68"/>
+        <location filename="../src/custom_widgets/find_bar.cpp" line="68"/>
         <source>&amp;Match case</source>
         <translation>区分大小写(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../src/find_bar.cpp" line="78"/>
+        <location filename="../src/custom_widgets/find_bar.cpp" line="78"/>
         <source>Text not found</source>
         <translation>未找到文本</translation>
     </message>
@@ -1076,82 +1076,82 @@ Select the tool in Saladin settings and try again.</source>
 <context>
     <name>MultiRenameWidget</name>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="15"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="15"/>
         <source>&amp;Name:</source>
         <translation>名称(&amp;N)：</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="23"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="23"/>
         <source>&amp;Extension:</source>
         <translation>扩展名(&amp;E)：</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="31"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="31"/>
         <source>&amp;Search:</source>
         <translation>查找(&amp;S)：</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="39"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="39"/>
         <source>&amp;Replace:</source>
         <translation>替换(&amp;R)：</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="50"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="50"/>
         <source>&amp;Regular expressions</source>
         <translation>正则表达式(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="53"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="53"/>
         <source>Case sensi&amp;tive</source>
         <translation>区分大小写(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="58"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="58"/>
         <source>C&amp;ase:</source>
         <translation>大小写(&amp;A)：</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="62"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="62"/>
         <source>Unchanged</source>
         <translation>保持不变</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="63"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="63"/>
         <source>Lower (file name.ext)</source>
         <translation>小写 (file name.ext)</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="64"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="64"/>
         <source>Upper (FILE NAME.EXT)</source>
         <translation>大写 (FILE NAME.EXT)</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="65"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="65"/>
         <source>Mixed (FILE NAME.ext)</source>
         <translation>混合 (FILE NAME.ext)</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="66"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="66"/>
         <source>Sentence (File name.ext)</source>
         <translation>句首大写 (File name.ext)</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="67"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="67"/>
         <source>Title (File Name.ext)</source>
         <translation>词首大写 (File Name.ext)</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="72"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="72"/>
         <source>Preview:</source>
         <translation>预览：</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="84"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="84"/>
         <source>Old Name</source>
         <translation>原名称</translation>
     </message>
     <message>
-        <location filename="../src/multi_rename_widget.cpp" line="85"/>
+        <location filename="../src/custom_widgets/multi_rename_widget.cpp" line="85"/>
         <source>New Name</source>
         <translation>新名称</translation>
     </message>

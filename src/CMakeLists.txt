@@ -10,14 +10,12 @@ set(SALADIN_SOURCES
         bookmark.cpp
         bookmarks_dialog.cpp
         drive_strip_manager.cpp
-        find_bar.cpp
         folder_item_delegate.cpp
         folder_item_model.cpp
         folder_item_view.cpp
         guide_dialog.cpp
         main.cpp
         main_window.cpp
-        multi_rename_widget.cpp
         operation_dialog.cpp
         panel_widget.cpp
         search_dialog.cpp
@@ -33,13 +31,11 @@ set(SALADIN_HEADERS
         bookmark_p.h
         bookmarks_dialog.h
         drive_strip_manager.h
-        find_bar.h
         folder_item_delegate.h
         folder_item_model.h
         folder_item_view.h
         guide_dialog.h
         main_window.h
-        multi_rename_widget.h
         operation_dialog.h
         panel_widget.h
         search_dialog.h
@@ -92,12 +88,9 @@ list(APPEND SALADIN_HEADERS
 
 list(APPEND SALADIN_SOURCES
         utils/data_serializer.cpp
-        utils/elided_label.cpp
         utils/format_helper.cpp
         utils/icon_loader.cpp
         utils/local_settings.cpp
-        utils/path_line_editor.cpp
-        utils/separator_combo_box.cpp
         utils/text_encoding.cpp
         utils/theme_helper.cpp
         utils/update_client.cpp
@@ -105,12 +98,9 @@ list(APPEND SALADIN_SOURCES
 
 list(APPEND SALADIN_HEADERS
         utils/data_serializer.h
-        utils/elided_label.h
         utils/format_helper.h
         utils/icon_loader.h
         utils/local_settings.h
-        utils/path_line_editor.h
-        utils/separator_combo_box.h
         utils/text_encoding.h
         utils/theme_helper.h
         utils/update_client.h
@@ -119,10 +109,20 @@ list(APPEND SALADIN_HEADERS
 # --- custom_widgets/ -------------------------------------------------------
 
 list(APPEND SALADIN_SOURCES
+        custom_widgets/elided_label.cpp
+        custom_widgets/find_bar.cpp
+        custom_widgets/multi_rename_widget.cpp
+        custom_widgets/path_line_editor.cpp
+        custom_widgets/separator_combo_box.cpp
         custom_widgets/side_tab_bar.cpp
 )
 
 list(APPEND SALADIN_HEADERS
+        custom_widgets/elided_label.h
+        custom_widgets/find_bar.h
+        custom_widgets/multi_rename_widget.h
+        custom_widgets/path_line_editor.h
+        custom_widgets/separator_combo_box.h
         custom_widgets/side_tab_bar.h
 )
 

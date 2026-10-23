@@ -4,6 +4,8 @@
 
 #include "panel_widget.h"
 #include "application.h"
+#include "custom_widgets/elided_label.h"
+#include "custom_widgets/path_line_editor.h"
 #include "drive_strip_manager.h"
 #include "folder_item_delegate.h"
 #include "folder_item_model.h"
@@ -14,10 +16,8 @@
 #include "shell/shell_folder.h"
 #include "shell/shell_item.h"
 #include "shell/shell_pidl.h"
-#include "utils/elided_label.h"
 #include "utils/icon_loader.h"
 #include "utils/local_settings.h"
-#include "utils/path_line_editor.h"
 #include "xmlui/builder.h"
 
 #include <QDir>

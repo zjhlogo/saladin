@@ -3,7 +3,7 @@
 // \date 2026/10/19
 
 #include "operation_dialog.h"
-#include "multi_rename_widget.h"
+#include "custom_widgets/multi_rename_widget.h"
 #include "utils/icon_loader.h"
 #include "xmlui/gradient_widget.h"
 

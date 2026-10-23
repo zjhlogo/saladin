@@ -4,8 +4,8 @@
 
 #include "viewer_window.h"
 #include "application.h"
+#include "custom_widgets/elided_label.h"
 #include "main_window.h"
-#include "utils/elided_label.h"
 #include "utils/icon_loader.h"
 #include "utils/local_settings.h"
 #include "viewer/view_manager.h"
