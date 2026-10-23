@@ -145,6 +145,7 @@ private:
 
     void createToolStrip();
     void createMenuBar();
+    void updateMenuBar();
 
     void retranslateUi();
 

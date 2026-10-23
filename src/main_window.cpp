@@ -1589,13 +1589,12 @@ void MainWindow::createMenuBar()
     auto menuBar = new QMenuBar(this);
     setMenuWidget(menuBar);
 
-    menuBar->addMenu(builder()->contextMenu("menuBarEdit"))->setText(tr("&Edit"));
-    menuBar->addMenu(builder()->contextMenu("menuBarNavigate"))->setText(tr("&Navigate"));
-    menuBar->addMenu(builder()->contextMenu("menuBarView"))->setText(tr("&View"));
-    menuBar->addMenu(builder()->contextMenu("menuBarSelect"))->setText(tr("&Selection"));
-    menuBar->addMenu(builder()->contextMenu("menuBarFunctions"))->setText(tr("&Functions"));
-    menuBar->addMenu(builder()->contextMenu("menuBarTools"))->setText(tr("&Tools"));
-    menuBar->addMenu(builder()->contextMenu("menuBarHelp"))->setText(tr("&Help"));
+    // Builder::rebuildAll()（插件 addClient/removeClient 时触发）会把所有 context menu
+    // deleteLater() 清空；工具条由 Builder 自动重新填充，而菜单栏是手工挂上去的，
+    // 必须监听 reset 重新填充，否则启动加载插件后菜单栏变为空白。
+    connect(builder(), &XmlUi::Builder::reset, this, &MainWindow::updateMenuBar, Qt::UniqueConnection);
+
+    updateMenuBar();
 
     auto button = new QToolButton(menuBar);
     button->setAutoRaise(true);
@@ -1605,6 +1604,26 @@ void MainWindow::createMenuBar()
     button->setDefaultAction(action("showToolStrip"));
 
     menuBar->setCornerWidget(button, Qt::TopRightCorner);
+}
+
+void MainWindow::updateMenuBar()
+{
+    auto menuBar = qobject_cast<QMenuBar*>(menuWidget());
+    if (!menuBar) return;
+
+    // 旧菜单在 Builder::rebuildAll() 里已被 deleteLater()，这里只把它们从菜单栏摘除。
+    const QList<QAction*> oldMenus = menuBar->actions();
+
+    for (QAction* menuAction : oldMenus)
+        menuBar->removeAction(menuAction);
+
+    menuBar->addMenu(builder()->contextMenu("menuBarEdit"))->setText(tr("&Edit"));
+    menuBar->addMenu(builder()->contextMenu("menuBarNavigate"))->setText(tr("&Navigate"));
+    menuBar->addMenu(builder()->contextMenu("menuBarView"))->setText(tr("&View"));
+    menuBar->addMenu(builder()->contextMenu("menuBarSelect"))->setText(tr("&Selection"));
+    menuBar->addMenu(builder()->contextMenu("menuBarFunctions"))->setText(tr("&Functions"));
+    menuBar->addMenu(builder()->contextMenu("menuBarTools"))->setText(tr("&Tools"));
+    menuBar->addMenu(builder()->contextMenu("menuBarHelp"))->setText(tr("&Help"));
 }
 
 void MainWindow::loadIcons()
