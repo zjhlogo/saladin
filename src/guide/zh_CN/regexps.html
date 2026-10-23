@@ -1,0 +1,135 @@
+<html>
+<head>
+  <title>正则表达式</title>
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>正则表达式</h1>
+
+<p>在重命名或克隆多个文件并启用正则表达式选项时，可以在查找模式中使用以下正则表达式：</p>
+
+<table width="100%">
+<tr>
+ <th>表达式</th>
+ <th>说明</th>
+</tr>
+<tr>
+ <td valign="top">.</td>
+ <td>匹配任意单个字符。</td>
+</tr>
+<tr>
+ <td valign="top">\</td>
+ <td>转义反斜杠后面的字符。</td>
+</tr>
+<tr>
+ <td valign="top">\x<i>hhhh</i></td>
+ <td>匹配与十六进制数 <i>hhhh</i> 对应的 Unicode 字符。</td>
+</tr>
+<tr>
+ <td valign="top">\0<i>ooo</i></td>
+ <td>匹配与八进制数 <i>ooo</i> 对应的 ASCII 字符。</td>
+</tr>
+<tr>
+ <td valign="top">\d</td>
+ <td>匹配一个数字。</td>
+</tr>
+<tr>
+ <td valign="top">\D</td>
+ <td>匹配一个非数字字符。</td>
+</tr>
+<tr>
+ <td valign="top">\s</td>
+ <td>匹配一个空白字符。</td>
+</tr>
+<tr>
+ <td valign="top">\S</td>
+ <td>匹配一个非空白字符。</td>
+</tr>
+<tr>
+ <td valign="top">\w</td>
+ <td>匹配一个单词字符（字母、数字或下划线）。</td>
+</tr>
+<tr>
+ <td valign="top">\W</td>
+ <td>匹配一个非单词字符。</td>
+</tr>
+<tr>
+ <td valign="top">[...]</td>
+ <td>匹配集合中列出的任意字符。在集合中可以使用短横线表示字符范围，例如 [0-9] 匹配任意数字。</td>
+</tr>
+<tr>
+ <td valign="top">[^...]</td>
+ <td>匹配未在集合中列出的任意字符。</td>
+</tr>
+<tr>
+ <td valign="top">|</td>
+ <td>匹配其分隔的两个表达式之一。</td>
+</tr>
+<tr>
+ <td valign="top"><i>E</i>?</td>
+ <td>匹配 <i>E</i> 出现零次或一次（<i>E</i> 为单个字符、字符集或分组）。</td>
+</tr>
+<tr>
+ <td valign="top"><i>E</i>*</td>
+ <td>匹配 <i>E</i> 出现零次或多次。</td>
+</tr>
+<tr>
+ <td valign="top"><i>E</i>+</td>
+ <td>匹配 <i>E</i> 出现一次或多次。</td>
+</tr>
+<tr>
+ <td valign="top"><i>E</i>{<i>n</i>}</td>
+ <td>匹配 <i>E</i> 恰好出现 <i>n</i> 次。</td>
+</tr>
+<tr>
+ <td valign="top"><i>E</i>{<i>n</i>,}</td>
+ <td>匹配 <i>E</i> 至少出现 <i>n</i> 次。</td>
+</tr>
+<tr>
+ <td valign="top"><i>E</i>{,<i>m</i>}</td>
+ <td>匹配 <i>E</i> 至多出现 <i>m</i> 次。</td>
+</tr>
+<tr>
+ <td valign="top"><i>E</i>{<i>n</i>,<i>m</i>}</td>
+ <td>匹配 <i>E</i> 至少出现 <i>n</i> 次且至多出现 <i>m</i> 次。</td>
+</tr>
+<tr>
+ <td valign="top">(...)</td>
+ <td>将子表达式组合在一起，以便对其量化并捕获。</td>
+</tr>
+<tr>
+ <td valign="top">\1, \2, ...</td>
+ <td>反向引用；匹配与第一、第二等括号组之前匹配到的相同文本。也可以在替换文本中使用它插入捕获的分组。</td>
+</tr>
+<tr>
+ <td valign="top">^</td>
+ <td>仅匹配字符串的开头。</td>
+</tr>
+<tr>
+ <td valign="top">$</td>
+ <td>仅匹配字符串的结尾。</td>
+</tr>
+<tr>
+ <td valign="top">\b</td>
+ <td>仅匹配单词边界（单词的开头或结尾）。</td>
+</tr>
+<tr>
+ <td valign="top">\B</td>
+ <td>仅匹配非单词边界。</td>
+</tr>
+<tr>
+ <td valign="top">(?=<i>E</i>)</td>
+ <td>正向先行断言；仅当 <i>E</i> 在当前位置匹配时匹配。</td>
+</tr>
+<tr>
+ <td valign="top">(?!<i>E</i>)</td>
+ <td>负向先行断言；仅当 <i>E</i> 在当前位置不匹配时匹配。</td>
+</tr>
+<tr>
+ <td valign="top">(?:<i>E</i>)</td>
+ <td>非捕获分组。</td>
+</tr>
+</table>
+</body>
+</html>

@@ -11,14 +11,14 @@
   <file>en/tools.html</file>
   <file>en/viewer.html</file>
   <file>en/wildcards.html</file>
-  <file>es/functions.html</file>
-  <file>es/index.html</file>
-  <file>es/lists.html</file>
-  <file>es/masks.html</file>
-  <file>es/regexps.html</file>
-  <file>es/shortcuts.html</file>
-  <file>es/tools.html</file>
-  <file>es/viewer.html</file>
-  <file>es/wildcards.html</file>
+  <file>zh_CN/functions.html</file>
+  <file>zh_CN/index.html</file>
+  <file>zh_CN/lists.html</file>
+  <file>zh_CN/masks.html</file>
+  <file>zh_CN/regexps.html</file>
+  <file>zh_CN/shortcuts.html</file>
+  <file>zh_CN/tools.html</file>
+  <file>zh_CN/viewer.html</file>
+  <file>zh_CN/wildcards.html</file>
 </qresource>
 </RCC>

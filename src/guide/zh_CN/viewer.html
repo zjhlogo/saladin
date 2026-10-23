@@ -1,0 +1,194 @@
+<html>
+<head>
+  <title>内置查看器</title>
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>内置查看器</h1>
+
+<p>可以使用 <b><img src="../../icons/view-16.png" /> 查看</b> 命令（<b>F3</b>）打开内置查看器。使用 <b><img src="../../icons/view-selected-16.png" /> 查看所选文件</b> 命令（<b>Shift+F3</b>）可以快速查看当前所有选中的文件。打开多个文件后，可以在查看器中使用 <b><img src="../../icons/find-previous-16.png" /> 上一个</b>命令（<b>P</b> 或 <b>Alt+LEFT</b>）和 <b><img src="../../icons/find-next-16.png" /> 下一个</b>命令（<b>N</b> 或 <b>Alt+RIGHT</b>）在所选文件之间切换。</p>
+
+<p>查看器会自动识别文件格式，并以以下模式之一显示：</p>
+
+<ul>
+<li>文本</li>
+<li>二进制</li>
+<li>图像</li>
+</ul>
+
+<p>你可以使用 <b>1</b>、<b>2</b> 和 <b>3</b> 键或工具栏按钮在这些模式之间切换。也可以使用 <b><img src="../../icons/refresh-16.png" /> 重新加载</b> 命令（<b>Ctrl+R</b>）重新加载文件以反映最新更改。</p>
+
+<p>在文本模式下，文件将使用自动检测的编码显示，例如 UTF-8、ANSI（Windows 中配置的默认编码）、Unicode 或 Unicode BE（大端序）。如果编码检测不正确，可以从 <b><img src="../../icons/encoding-16.png" /> 编码</b> 菜单中选择适当的编码。可以选择一段文本并将其复制到剪贴板，并使用 <b><img src="../../icons/word-wrap-16.png" /> 自动换行</b> 选项（<b>W</b>）启用或禁用长行环绕到窗口边缘。还可以使用 <b><img src="../../icons/find-text-16.png" /> 查找</b> 命令（<b>Ctrl+F</b>），通过搜索栏快速查找文件中的任意文本。你也可以使用 <b><img src="../../icons/goto-16.png" /> 转到行</b> 命令（<b>Ctrl+G</b>）跳转到指定行，并使用 <b><img src="../../icons/goto-16.png" /> 行号</b> 命令（<b>L</b>）切换行号的显示。要在文本编辑器中打开当前查看的文件，请使用 <b><img src="../../icons/edit-16.png" /> 编辑文件</b> 命令（<b>F4</b>）。</p>
+
+<p>在二进制模式下，文件以每行固定 80 字节显示，不可打印字符替换为点号。你可以启用 <b><img src="../../icons/hex-mode-16.png" /> 十六进制模式</b> 选项（<b>H</b>），以每行 16 字节显示，并附带每个字节的偏移量和十六进制值。在此模式下也可以选择一段文本并将其复制到剪贴板。</p>
+
+<p>在图像模式下，可以显示 PNG、JPEG、GIF、BMP、TIFF、ICO 或 SVG 图像。你可以将整个图像复制到剪贴板。可以启用 <b><img src="../../icons/zoom-fit-16.png" /> 适应窗口</b> 选项（<b>F</b>），在图像过大时自动缩放以适合窗口。你还可以放大和缩小图像、向左或向右旋转 90 度，以及在黑色和白色之间切换图像背景色。要显示图像信息（如格式、大小和颜色数），请使用 <b><img src="../../icons/info-16.png" /> 信息</b> 命令（<b>I</b>）。你还可以使用 <b><img src="../../icons/fullscreen-16.png" /> 全屏</b> 命令（<b>F11</b>）将查看器切换到全屏模式。</p>
+
+<p>你可以在 <b><img src="../../icons/configure-16.png" /> Saladin 设置</b> 中更改文本和二进制视图使用的字体和文字大小。二进制视图使用的字体必须是等宽字体。如果系统中安装了带连字的字体（例如 <a href="https://github.com/tonsky/FiraCode">Fira Code</a>），也可以使用它们。</p>
+
+<p>内置查看器键盘快捷键一览：</p>
+<table width="100%">
+<tr>
+ <th>按键</th>
+ <th width="20"></th>
+ <th>功能</th>
+</tr>
+<tr>
+ <td>1</td>
+ <td><img src="../../icons/type-text-16.png" /></td>
+ <td>切换到文本模式。</td>
+</tr>
+<tr>
+ <td>2</td>
+ <td><img src="../../icons/type-binary-16.png" /></td>
+ <td>切换到二进制模式。</td>
+</tr>
+<tr>
+ <td>3</td>
+ <td><img src="../../icons/type-image-16.png" /></td>
+ <td>切换到图像模式。</td>
+</tr>
+<tr>
+ <td>A</td>
+ <td></td>
+ <td>选择 ANSI 编码（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>B</td>
+ <td><img src="../../icons/black-background-16.png" /></td>
+ <td>在黑色和白色之间切换背景色。</td>
+</tr>
+<tr>
+ <td>F</td>
+ <td><img src="../../icons/zoom-fit-16.png" /></td>
+ <td>使图像适应窗口（仅图像模式）。</td>
+</tr>
+<tr>
+ <td>H</td>
+ <td><img src="../../icons/hex-mode-16.png" /></td>
+ <td>启用或禁用十六进制显示（仅二进制模式）。</td>
+</tr>
+<tr>
+ <td>I</td>
+ <td><img src="../../icons/info-16.png" /></td>
+ <td>显示图像信息（仅图像模式）。</td>
+</tr>
+<tr>
+ <td>L</td>
+ <td><img src="../../icons/goto-16.png" /></td>
+ <td>切换行号的显示（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>R</td>
+ <td><img src="../../icons/rotate-left-16.png" /></td>
+ <td>将图像逆时针旋转（仅图像模式）。</td>
+</tr>
+<tr>
+ <td>N</td>
+ <td><img src="../../icons/find-next-16.png" /></td>
+ <td>查看下一个选中的文件。</td>
+</tr>
+<tr>
+ <td>O</td>
+ <td></td>
+ <td>选择 OEM 编码（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>P</td>
+ <td><img src="../../icons/find-previous-16.png" /></td>
+ <td>查看上一个选中的文件。</td>
+</tr>
+<tr>
+ <td>.</td>
+ <td><img src="../../icons/rotate-right-16.png" /></td>
+ <td>将图像顺时针旋转（仅图像模式）。</td>
+</tr>
+<tr>
+ <td>U</td>
+ <td></td>
+ <td>选择 UTF-8 编码（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>W</td>
+ <td><img src="../../icons/word-wrap-16.png" /></td>
+ <td>启用或禁用自动换行（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>F3</td>
+ <td><img src="../../icons/find-next-16.png" /></td>
+ <td>查找上次搜索文本的下一个匹配项（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>Shift+F3</td>
+ <td><img src="../../icons/find-previous-16.png" /></td>
+ <td>查找上次搜索文本的上一个匹配项（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>F4</td>
+ <td><img src="../../icons/edit-16.png" /></td>
+ <td>在文本编辑器中打开当前文件（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>F11</td>
+ <td><img src="../../icons/fullscreen-16.png" /></td>
+ <td>切换全屏模式。</td>
+</tr>
+<tr>
+ <td>ESC</td>
+ <td></td>
+ <td>关闭查看器窗口。</td>
+</tr>
+<tr>
+ <td>Alt+LEFT</td>
+ <td><img src="../../icons/find-previous-16.png" /></td>
+ <td>查看上一个选中的文件。</td>
+</tr>
+<tr>
+ <td>Alt+RIGHT</td>
+ <td><img src="../../icons/find-next-16.png" /></td>
+ <td>查看下一个选中的文件。</td>
+</tr>
+<tr>
+ <td>Ctrl+-</td>
+ <td><img src="../../icons/zoom-out-16.png" /></td>
+ <td>缩小图像（仅图像模式）。</td>
+</tr>
+<tr>
+ <td>Ctrl+=</td>
+ <td><img src="../../icons/zoom-in-16.png" /></td>
+ <td>放大图像（仅图像模式）。</td>
+</tr>
+<tr>
+ <td>Ctrl+0</td>
+ <td><img src="../../icons/zoom-orig-16.png" /></td>
+ <td>以原始大小显示图像（仅图像模式）。</td>
+</tr>
+<tr>
+ <td>Ctrl+A</td>
+ <td></td>
+ <td>全选文本（文本和二进制模式）。</td>
+</tr>
+<tr>
+ <td>Ctrl+C</td>
+ <td><img src="../../icons/edit-copy-16.png" /></td>
+ <td>将所选文本或当前图像复制到剪贴板。</td>
+</tr>
+<tr>
+ <td>Ctrl+F</td>
+ <td><img src="../../icons/find-text-16.png" /></td>
+ <td>查找指定文本（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>Ctrl+G</td>
+ <td><img src="../../icons/goto-16.png" /></td>
+ <td>转到指定行（仅文本模式）。</td>
+</tr>
+<tr>
+ <td>Ctrl+R</td>
+ <td><img src="../../icons/refresh-16.png" /></td>
+ <td>重新加载当前文件。</td>
+</tr>
+</table>
+</body>
+</html>

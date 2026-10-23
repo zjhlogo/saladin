@@ -1,0 +1,48 @@
+<html>
+<head>
+  <title>工具</title>
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>工具</h1>
+
+<h2>ZIP 压缩包</h2>
+
+<p>Saladin 利用 Windows 资源管理器的标准功能处理 ZIP 压缩包。你可以像普通目录一样，通过双击或按 <b>Enter</b> 打开 ZIP 压缩包。你可以使用标准复制操作或拖放从 ZIP 压缩包中提取文件，或向现有压缩包添加文件。也可以在 ZIP 压缩包中创建文件夹，以及重命名和删除文件及文件夹。要向 ZIP 压缩包添加文件，请选择要打包的文件，选择 <b><img src="../../icons/pack-16.png" /> 打包</b> 命令（<b>Ctrl+P</b>），然后在目标目录中输入压缩包的名称。要处理其他类型的压缩包，请安装与 Windows Shell 集成的外部工具，例如 <a href="http://www.7-zip.org/">7-Zip</a>。</p>
+
+<h2>FTP 连接</h2>
+
+<p>Saladin 还通过 Windows 资源管理器功能对 FTP 协议提供基本支持。要连接到 FTP 服务器，请选择 <b>打开 &gt; <img src="../../icons/ftp-16.png" /> 连接到 FTP</b> 命令（<b>Ctrl+F</b>），然后输入主机名或 IP 地址，并可选地修改端口号和初始路径。如果服务器需要身份验证，你还可以输入用户名和密码。也可以直接在位置栏中输入站点的 URL。FTP 连接支持复制、移动、重命名和删除等标准文件操作。</p>
+
+<h2>搜索</h2>
+
+<p>要在当前目录及其子目录中搜索文件，请选择 <b><img src="../../icons/find-16.png" /> 搜索</b>（<b>Ctrl+S</b>）。使用<a href="wildcards.html">通配符</a>输入匹配模式，例如 <code>*.txt</code>。也可以输入多个模式，用分号分隔，例如 <code>*.txt;*.ini</code>。你还可以搜索包含指定文本的文件。启用 <b>文本</b> 选项并输入要搜索的文本。如果要执行区分大小写的搜索，请启用 <b>区分大小写</b>。搜索文本时，二进制文件将被自动排除在外。</p>
+
+<p>搜索结果列表与主窗口中的列表类似，只是显示相对于当前目录的路径。列表还显示文件大小（字节）、文件最后修改的日期和时间以及文件属性。单击列标题可以按任意列排序。你也可以在项目上单击鼠标右键显示该项目的上下文菜单，双击则可以在默认应用程序中打开它。</p>
+
+<p>使用 <b><img src="../../icons/view-16.png" /> 查看</b> 命令（<b>F3</b>）可以在查看器中打开搜索结果中的当前文件。<b><img src="../../icons/view-selected-16.png" /> 查看全部</b> 命令（<b>Shift+F3</b>）可以在内置查看器中快速查看所有搜索结果。最初会打开第一个匹配的文件，你可以在查看器中使用 <b><img src="../../icons/find-previous-16.png" /> 上一个</b>命令（<b>P</b> 或 <b>Alt+LEFT</b>）和 <b><img src="../../icons/find-next-16.png" /> 下一个</b>命令（<b>N</b> 或 <b>Alt+RIGHT</b>）在匹配的文件之间切换。</p>
+
+<p>使用 <b><img src="../../icons/edit-16.png" /> 编辑</b> 命令（<b>F4</b>）在文本编辑器中打开当前文件进行编辑。<b><img src="../../icons/goto-16.png" /> 转到文件</b> 命令（<b>Ctrl+G</b>）将关闭搜索结果并在活动面板中高亮显示所选文件。<b><img src="../../icons/copy-names-16.png" /> 复制文件名</b> 命令（<b>Ctrl+Shift+C</b>）可以将所有文件的相对路径复制到剪贴板。</p>
+
+<h2>浏览</h2>
+
+<p>可以使用 <b><img src="../../icons/explore-16.png" /> 浏览</b>（<b>Ctrl+Shift+E</b>）在 Windows 资源管理器中打开当前目录。</p>
+
+<h2>比较</h2>
+
+<p>你可以使用外部工具比较两个文件，例如 <a href="http://winmerge.org/">WinMerge</a> 或 <a href="http://tortoisesvn.net/">TortoiseSVN</a> 中的 TortoiseMerge 实用程序。要配置该工具，请打开 <b><img src="../../icons/configure-16.png" /> Saladin 设置</b> 并选择该工具可执行文件的路径。你可以在活动面板中选择两个文件，或在活动面板和目标面板中各选择一个文件，然后选择 <b><img src="../../icons/compare-16.png" /> 比较</b> 命令（<b>Ctrl+M</b>）运行比较工具。</p>
+
+<p>使用 <b>比较 &gt; <img src="../../icons/compare-16.png" /> 比较目录</b> 命令（<b>Ctrl+Shift+M</b>）比较当前目录和目标目录中的项目。该命令会选择当前目录中目标目录里不存在的所有文件和文件夹，以及比目标目录中更新的文件。这对于同步两个目录的内容非常有用。</p>
+
+<h2>书签</h2>
+
+<p>书签可用于记住常用的本地目录和 FTP 站点。单击 <b><img src="../../icons/bookmark-16.png" /> 书签</b> 图标并选择 <b><img src="../../icons/bookmark-16.png" /> 添加书签</b>（<b>Ctrl+Shift+D</b>），将当前位置以指定名称保存为书签。将 FTP 站点添加为书签时，你可以选择保存密码。</p>
+
+<p>要打开书签，请单击 <b><img src="../../icons/bookmark-16.png" /> 书签</b> 图标或按 <b>Ctrl+D</b>，然后从列表中选择书签。激活 FTP 书签时，将打开 <b>打开 FTP 站点</b> 窗口，你可以输入密码或修改 FTP 站点的详细信息，而无需修改原书签。可以从 <b>书签</b> 菜单中选择 <b><img src="../../icons/edit-16.png" /> 编辑书签</b> 命令来删除和重命名现有书签。书签由两个面板共享，并在关闭 Saladin 时自动保存。</p>
+
+<h2>历史记录</h2>
+
+<p>每个面板都会记住最近访问过的目录。你可以分别使用 <b>Alt+Right</b> 和 <b>Alt+Left</b> 键转到上一个或下一个位置，如果你的鼠标支持，也可以使用额外的鼠标按键。你还可以单击 <b><img src="../../icons/history-16.png" /> 历史记录</b> 图标或按 <b>Ctrl+G</b>，从列表中选择一个位置。</p>
+</body>
+</html>

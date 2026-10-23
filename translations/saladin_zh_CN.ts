@@ -492,7 +492,6 @@ Alpha 通道：%3</translation>
         <translation>发行说明</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="38"/>
         <location filename="../src/main_window.cpp" line="1385"/>
         <source>Quick Quide</source>
         <translation>快速指南</translation>
@@ -502,6 +501,11 @@ Alpha 通道：%3</translation>
         <location filename="../src/main_window.cpp" line="1386"/>
         <source>Settings...</source>
         <translation>设置…</translation>
+    </message>
+    <message>
+        <location filename="../src/main_window.cpp" line="38"/>
+        <source>Quick Guide</source>
+        <translation>快速指南</translation>
     </message>
     <message>
         <location filename="../src/main_window.cpp" line="46"/>

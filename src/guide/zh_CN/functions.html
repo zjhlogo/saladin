@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>基本功能</title>
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>基本功能</h1>
+
+<h2>查看</h2>
+
+<p><b><img src="../../icons/view-16.png" /> 查看</b>命令（<b>F3</b>）使用内置或外部查看器打开当前文件（光标所在文件）。默认使用<a href="viewer.html">内置查看器</a>。你也可以在 <b><img src="../../icons/configure-16.png" /> Saladin 设置</b> 中选择其他外部查看器程序。</p>
+
+<p><b><img src="../../icons/view-selected-16.png" /> 查看所选文件</b>命令（<b>Shift+F3</b>）可以快速查看当前所有选中的文件。该操作仅在启用内置查看器时可用。最初会打开第一个选中的文件，你可以在查看器中使用 <b><img src="../../icons/find-previous-16.png" /> 上一个</b>命令（<b>P</b> 或 <b>Alt+LEFT</b>）和 <b><img src="../../icons/find-next-16.png" /> 下一个</b>命令（<b>N</b> 或 <b>Alt+RIGHT</b>）在所选文件之间切换。</p>
+
+<h2>编辑</h2>
+
+<p><b><img src="../../icons/edit-16.png" /> 编辑</b>命令（<b>F4</b>）在文本编辑器中打开当前文件进行编辑。默认使用系统自带的记事本程序，但你也可以安装更强大的编辑器，例如 <a href="http://notepad-plus-plus.org/">Notepad++</a>，并在 <b><img src="../../icons/configure-16.png" /> Saladin 设置</b> 中选择它。你可以使用 <b><img src="../../icons/edit-16.png" /> 编辑 &gt; <img src="../../icons/file-new-16.png" /> 新建文件</b> 命令（<b>Shift+F4</b>）在当前目录中创建一个指定名称的空文件并在编辑器中打开它。</p>
+
+<h2>复制与移动</h2>
+
+<p>选中的文件和目录可以使用 <b><img src="../../icons/copy-16.png" /> 复制</b>（<b>F5</b>）进行复制，使用 <b><img src="../../icons/move-16.png" /> 移动</b>（<b>F6</b>）进行移动。使用 <b><img src="../../icons/copy-16.png" /> 复制 &gt; <img src="../../icons/clone-16.png" /> 在源目录中创建副本</b>（<b>Shift+F5</b>）在源目录中克隆所选项目。使用 <b><img src="../../icons/move-16.png" /> 移动 &gt; <img src="../../icons/multi-rename-16.png" /> 在源目录中重命名</b>（<b>Shift+F6</b>）一次重命名多个项目。当源目录和目标目录相同时，操作将变为克隆或多重命名。</p>
+
+<p>复制或移动单个项目时，可以直接在确认对话框中修改其名称。复制或移动多个项目时，可以通过单击 <b>重命名</b> 按钮打开批量重命名面板（在克隆或重命名时该面板会自动打开）。在某些情况下，如果 Windows 不支持，则不允许重命名。</p>
+
+<p>在批量重命名面板中，可以在 <b>名称</b> 和 <b>扩展名</b> 字段中输入特殊的<a href="masks.html">掩码</a>，以生成所选项目的新名称。还可以使用 <b>查找</b> 和 <b>替换</b> 选项替换名称的任意部分。如果启用 <b>正则表达式</b> 选项，查找字符串可以包含<a href="regexps.html">正则表达式</a>。替换在根据掩码生成名称之后进行。最后，可以使用 <b>大小写</b> 选项将结果名称中的字符转换为大写或小写。批量重命名面板底部的列表显示每个项目的原名称和新名称。</p>
+
+<p>对于耗时较长的操作，传输文件期间会显示标准的进度对话框。当操作试图覆盖已存在的文件时会显示警告消息。选中 <b>覆盖时不提示</b> 选项后，文件将被直接替换而不显示额外警告。</p>
+
+<h2>新建文件夹</h2>
+
+<p>使用 <b><img src="../../icons/folder-new-16.png" /> 新建文件夹</b>（<b>F7</b>）在当前目录中创建一个指定名称的新子目录。</p>
+
+<h2>删除</h2>
+
+<p>使用 <b><img src="../../icons/trashcan-16.png" /> 删除</b> 命令或 <b>F8</b>、<b>Delete</b> 键删除所选项目。如果相应驱动器启用了回收站，文件和目录将被移入回收站。<b><img src="../../icons/trashcan-16.png" /> 删除 &gt; <img src="../../icons/delete-16.png" /> 永久删除</b> 命令或 <b>Shift+F8</b>、<b>Shift+Delete</b> 键将在不使用回收站的情况下删除这些项目。两种情况下都会显示额外的警告以确认操作。</p>
+
+<h2>打开控制台</h2>
+
+<p>最后一个基本功能是 <b><img src="../../icons/terminal-16.png" /> 打开控制台</b>（<b>F9</b>），它会在当前目录中打开命令提示符。默认使用标准的 <tt>cmd.exe</tt> 程序，但你也可以选择其他控制台。Saladin 不包含内置的命令行解释器。</p>
+</body>
+</html>

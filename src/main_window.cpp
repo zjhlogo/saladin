@@ -35,7 +35,7 @@ MainWindow::MainWindow()
     connect(action, SIGNAL(triggered()), g_application, SLOT(openWebsite()));
     setAction("releaseNotes", action);
 
-    action = new QAction(tr("Quick Quide"), this);
+    action = new QAction(tr("Quick Guide"), this);
     connect(action, SIGNAL(triggered()), g_application, SLOT(showQuickGuide()));
     setAction("showQuickGuide", action);
 

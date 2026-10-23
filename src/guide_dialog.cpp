@@ -156,15 +156,32 @@ void GuideDialog::goForward()
 
 void GuideDialog::goHome()
 {
-    QString language = QLocale().name();
-    QString path = QString(":/guide/%1/index.html").arg(language);
+    // The guide pages live in ":/guide/en" and ":/guide/zh_CN". Prefer the
+    // exact locale if such a resource exists, then the language part ("zh"),
+    // then the traditional writing system used by other Chinese locales.
+    QStringList candidates;
+    const QLocale locale;
 
-    if (!QFile::exists(path))
+    candidates << locale.name() << locale.name().left(locale.name().indexOf('_'));
+
+    switch (locale.script())
     {
-        language = language.left(language.indexOf('_'));
+    case QLocale::TraditionalChineseScript:
+        candidates << QStringLiteral("zh_TW");
+        break;
+    default:
+        break;
+    }
+
+    candidates << QStringLiteral("en");
+
+    QString path;
+
+    for (const QString& language : candidates)
+    {
         path = QString(":/guide/%1/index.html").arg(language);
 
-        if (!QFile::exists(path)) path = ":/guide/en/index.html";
+        if (QFile::exists(path)) break;
     }
 
     m_browser->setSource(QUrl::fromLocalFile(path));

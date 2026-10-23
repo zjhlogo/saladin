@@ -1,0 +1,48 @@
+<html>
+<head>
+  <title>重命名掩码</title>
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>重命名掩码</h1>
+
+<p>在重命名或克隆多个文件时，可以在名称和扩展名掩码中使用以下命令：</p>
+
+<table width="100%">
+<tr>
+ <th>命令</th>
+ <th>说明</th>
+</tr>
+<tr>
+ <td valign="top">[n:<i>起</i>:<i>止</i>]</td>
+ <td>
+  插入原文件名（不含扩展名）的一部分。可以输入可选的起始和结束位置（正值表示从开头算起的偏移，负值表示从末尾算起的偏移）。例如：
+  <ul>
+   <li>[n] - 完整文件名</li>
+   <li>[n:3] - 文件名的第 3 个字符</li>
+   <li>[n:3:] - 从第 3 个字符到末尾的文件名</li>
+   <li>[n:3:6] - 从第 3 个字符到第 6 个字符的文件名</li>
+   <li>[n:3:-2] - 从第 3 个字符到倒数第 2 个字符的文件名</li>
+  </ul>
+ </td>
+</tr>
+<tr>
+ <td valign="top">[e:<i>起</i>:<i>止</i>]</td>
+ <td>插入原扩展名的一部分。可以输入可选的起始和结束位置（用法与 [n] 模式类似）。</td>
+</tr>
+<tr>
+ <td valign="top">[c:<i>宽度</i>:<i>起始值</i>:<i>步长</i>]</td>
+ <td>
+  插入计数器的值。可以输入可选的宽度、起始编号和步长。例如：
+  <ul>
+   <li>[c] - 1, 2, 3...</li>
+   <li>[c:3] - 001, 002, 003...</li>
+   <li>[c:3:100] - 100, 101, 102...</li>
+   <li>[c:3:100:10] - 100, 110, 120...</li>
+  </ul>
+ </td>
+</tr>
+</table>
+</body>
+</html>
