@@ -10,17 +10,21 @@
 
 ### 环境要求
 
-- **Qt 6.6+**：Core、Gui、Widgets、Network、Xml、Svg，且需要**私有头文件**（构建链接 `Qt6::CorePrivate` 等）
+- Windows 10+，仅支持 Windows（非 WIN32 会在 configure 阶段直接报错）
+- **CMake 3.21+**、**Qt 6.6+**（Core、Gui、Widgets、Network、Xml、Svg，且需要私有头文件：构建链接 `Qt6::CorePrivate` 等）
 - 编译器：**MSVC**（Visual Studio 2022+）
 
 ### 常用命令（pwsh 语法）
-
-MSVC（在本环境中的首选方式）：
 
 ```powershell
 cmake -S . -B build -G "Visual Studio 18 2026" -A x64 -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/msvc2022_64
 cmake --build build --config Release
 ```
+
+- 本环境首选 Visual Studio 生成器；**Ninja 在 DSH 工作区沙箱中会挂起**（见 `CMakeLists.txt` 顶部注释），在普通命令行才可用 `-G Ninja`。
+- **可执行文件不在 `build/`**：输出沿用旧 qmake 布局，写入源码树内的 `release/`（Release/RelWithDebInfo/MinSizeRel）或 `debug/`。运行 `release\saladin.exe` / `debug\saladin.exe`。
+- 每次成功链接后，构建会自动把 Qt DLL、运行时插件和 `translations/` 下的语言文件复制到 exe 旁；用 `-DSALADIN_DEPLOY_QT_RUNTIME=OFF` 可关闭。
+- 仓库**没有自动化测试或 CI**；验证方式是构建成功并启动 exe。`tmp/` 下是临时试验工程，已被 gitignore，不属于构建。
 
 ## 目录结构
 
@@ -28,15 +32,16 @@ cmake --build build --config Release
 src/                  应用源码（目标 saladin）
   shell/              Windows Shell 集成：COM/SHLWAPI、PIDL、图标缓存、变更通知
   viewer/             内建查看器：文本/二进制/图像
-  utils/              本地设置、数据序列化、编码、更新客户端等
+  utils/              本地设置、数据序列化、编码、主题、更新客户端等
   xmlui/              BSD 许可的 XML UI 库（勿混入 GPL 头，见其 README）
   custom_widgets/     通用自绘控件
+  plugin/             插件宿主端接口与加载器（对外仅 plugin_api.h）
   resources/          XML UI 布局（*.xml）与 resources.qrc
   icons/material/     Material Symbols 单色 SVG 图标（工具栏/菜单/对话框），material.qrc
   icons/ + icons/dark 仅保留程序图标 saladin-*.png，各自 .qrc
   guide/              多语言快速指南 HTML + guide.qrc
   themes/qt-material/ Qt-Material 主题：生成的 QSS/指示器 SVG + themes.qrc、手工覆盖样式 saladin.qss
-translations/         saladin_*.ts / *.qm、locale.ini
+translations/         saladin_*.ts 源文件、locale.ini（.qm 为生成物）
 cmake/                DeployQtRuntime.cmake
 plugins/              插件工程（每个插件一个子目录与 CMakeLists，见 plugins/README.md）
 tools/                开发期辅助脚本（Qt-Material 资源生成、翻译的 lupdate/lrelease 等），不参与构建
@@ -46,8 +51,10 @@ tools/                开发期辅助脚本（Qt-Material 资源生成、翻译�
 
 - **新源文件**必须登记到 `src/CMakeLists.txt`：源码加进 `SALADIN_SOURCES`，头文件加进 `SALADIN_HEADERS`，放在对应分组注释（`--- shell/ ---` 等）之下；新 `.qrc` 加进 `SALADIN_RESOURCES`。
 - **moc/uic/rcc**：工程开启 AUTOMOC/AUTOUIC/AUTORCC。含 `Q_OBJECT` 的头必须已在 `SALADIN_HEADERS` 中列出才会被 moc 处理。
-- **UI 构建**：菜单/工具条/动作由 XML（`src/resources/*.xml`）+ `xmlui` 库生成，不是 Qt Designer `.ui` 文件；改 UI 通常是"XML + 对应类"两处配合。
+- **UI 构建**：菜单/工具条/动作由 XML（`src/resources/*.xml`）+ `xmlui` 库生成，不是 Qt Designer `.ui` 文件；改 UI 通常是“XML + 对应类”两处配合。
 - **图标**：工具栏/菜单/对话框图标是 `src/icons/material/` 下的 Material Symbols 单色 SVG（与 Qt-Material 的 Material Design 风格一致），运行时由 `IconLoader` 按当前主题文字色着色，**一套即可覆盖明暗主题**。文件名就是 `IconLoader::icon("...")` 用的图标名；新增或替换图标时改 `tools/generate_material_icons.py` 里的 `MAPPING` 并重新生成，详见 `src/icons/material/README.md`。`src/icons`、`src/icons/dark` 只保留程序图标 `saladin-*.png`。
-- **翻译**：用户可见字符串一律 `tr()`。新增语言：新建 `translations/saladin_<lang>.ts`，注册到 `SALADIN_LANGUAGES`（`CMakeLists.txt`）与 `translations/locale.ini`。更新译文后运行 `python tools/release_translations.py` 重新生成 `.qm`（重新收集源码字符串用 `python tools/update_translations.py`；两个脚本自动定位 Qt 的 lupdate/lrelease，也可用 `--qt-bin` 指定）。插件翻译：插件 `metadata.json` 设 `"translations": true` 后由同样的两个脚本维护（`plugins/<插件>/translations/`，release 脚本会部署到 `<输出目录>/plugins/<插件目标名>/translations/`）。
-- **文件命名**：`snake_case.cpp/.h`
+- **主题**：`src/themes/qt-material/` 的 QSS/SVG/themes.qrc 是已提交的生成物，正常构建**不需要 Python**；只有换主色或升级 qt-material 时才按该目录 README 重新生成。紧凑布局微调直接改 `saladin.qss`。
+- **翻译**：用户可见字符串一律 `tr()`。当前主程序只注册了 `zh_CN`（`SALADIN_LANGUAGES`，`CMakeLists.txt`）。`.qm` 被 `.gitignore` 忽略、不是源码：新克隆或改完 `.ts` 后运行 `python tools/release_translations.py` 生成 `.qm` 并部署到 `release|debug`（缺失时 CMake configure 会告警）；重新收集源码字符串用 `python tools/update_translations.py`。新增语言：新建 `translations/saladin_<lang>.ts`，注册到 `SALADIN_LANGUAGES` 与 `translations/locale.ini`。两个脚本自动定位 Qt 的 lupdate/lrelease，也可用 `--qt-bin` 指定。插件翻译：插件 `metadata.json` 设 `"translations": true` 后由同样的两个脚本维护（`plugins/<插件>/translations/`，release 脚本会部署到 `<输出目录>/plugins/<插件目标名>/translations/`）。
+- **文件命名**：`snake_case.cpp/.h`；提交前按根目录 `.clang-format` 格式化（Allman 大括号、4 空格、列宽 160）。
 - **shell/ 子系统**：大量 COM 对象与 PIDL 手工生命周期管理，修改时注意 AddRef/Release 配对与 `::CoTaskMemFree` 的使用。
+- **插件**：插件**不链接 saladin.exe**，只依赖 Qt 与 `src/plugin/plugin_api.h`；`apiVersion` 必须匹配 `SALADIN_PLUGIN_API_VERSION`，且与宿主使用同一 Qt/编译器/架构配置。完整开发细节见 `plugins/README.md`。
