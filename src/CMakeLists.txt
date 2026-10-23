@@ -197,7 +197,7 @@ list(APPEND SALADIN_HEADERS
 set(SALADIN_RESOURCES
         saladin.rc
         guide/guide.qrc
-        icons/icons.qrc
+        icons/light/icons.qrc
         icons/dark/dark.qrc
         icons/material/material.qrc
         resources/resources.qrc

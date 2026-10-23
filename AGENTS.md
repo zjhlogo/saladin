@@ -38,7 +38,7 @@ src/                  应用源码（目标 saladin）
   plugin/             插件宿主端接口与加载器（对外仅 plugin_api.h）
   resources/          XML UI 布局（*.xml）与 resources.qrc
   icons/material/     Material Symbols 单色 SVG 图标（工具栏/菜单/对话框），material.qrc
-  icons/ + icons/dark 仅保留程序图标 saladin-*.png，各自 .qrc
+  icons/light + icons/dark 仅保留程序图标 saladin-*.png，各自 .qrc
   guide/              多语言快速指南 HTML + guide.qrc
   themes/qt-material/ Qt-Material 主题：生成的 QSS/指示器 SVG + themes.qrc、手工覆盖样式 saladin.qss
 translations/         saladin_*.ts 源文件、locale.ini（.qm 为生成物）
@@ -52,7 +52,7 @@ tools/                开发期辅助脚本（Qt-Material 资源生成、翻译�
 - **新源文件**必须登记到 `src/CMakeLists.txt`：源码加进 `SALADIN_SOURCES`，头文件加进 `SALADIN_HEADERS`，放在对应分组注释（`--- shell/ ---` 等）之下；新 `.qrc` 加进 `SALADIN_RESOURCES`。
 - **moc/uic/rcc**：工程开启 AUTOMOC/AUTOUIC/AUTORCC。含 `Q_OBJECT` 的头必须已在 `SALADIN_HEADERS` 中列出才会被 moc 处理。
 - **UI 构建**：菜单/工具条/动作由 XML（`src/resources/*.xml`）+ `xmlui` 库生成，不是 Qt Designer `.ui` 文件；改 UI 通常是“XML + 对应类”两处配合。
-- **图标**：工具栏/菜单/对话框图标是 `src/icons/material/` 下的 Material Symbols 单色 SVG（与 Qt-Material 的 Material Design 风格一致），运行时由 `IconLoader` 按当前主题文字色着色，**一套即可覆盖明暗主题**。文件名就是 `IconLoader::icon("...")` 用的图标名；新增或替换图标时改 `tools/generate_material_icons.py` 里的 `MAPPING` 并重新生成，详见 `src/icons/material/README.md`。`src/icons`、`src/icons/dark` 只保留程序图标 `saladin-*.png`。
+- **图标**：工具栏/菜单/对话框图标是 `src/icons/material/` 下的 Material Symbols 单色 SVG（与 Qt-Material 的 Material Design 风格一致），运行时由 `IconLoader` 按当前主题文字色着色，**一套即可覆盖明暗主题**。文件名就是 `IconLoader::icon("...")` 用的图标名；新增或替换图标时改 `tools/generate_material_icons.py` 里的 `MAPPING` 并重新生成，详见 `src/icons/material/README.md`。`src/icons/light`、`src/icons/dark` 只保留程序图标 `saladin-*.png`。
 - **主题**：`src/themes/qt-material/` 的 QSS/SVG/themes.qrc 是已提交的生成物，正常构建**不需要 Python**；只有换主色或升级 qt-material 时才按该目录 README 重新生成。紧凑布局微调直接改 `saladin.qss`。
 - **翻译**：用户可见字符串一律 `tr()`。当前主程序只注册了 `zh_CN`（`SALADIN_LANGUAGES`，`CMakeLists.txt`）。`.qm` 被 `.gitignore` 忽略、不是源码：新克隆或改完 `.ts` 后运行 `python tools/release_translations.py` 生成 `.qm` 并部署到 `release|debug`（缺失时 CMake configure 会告警）；重新收集源码字符串用 `python tools/update_translations.py`。新增语言：新建 `translations/saladin_<lang>.ts`，注册到 `SALADIN_LANGUAGES` 与 `translations/locale.ini`。两个脚本自动定位 Qt 的 lupdate/lrelease，也可用 `--qt-bin` 指定。插件翻译：插件 `metadata.json` 设 `"translations": true` 后由同样的两个脚本维护（`plugins/<插件>/translations/`，release 脚本会部署到 `<输出目录>/plugins/<插件目标名>/translations/`）。
 - **文件命名**：`snake_case.cpp/.h`；提交前按根目录 `.clang-format` 格式化（Allman 大括号、4 空格、列宽 160）。
