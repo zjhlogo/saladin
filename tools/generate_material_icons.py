@@ -87,7 +87,6 @@ MAPPING = {
     "move": "drive_file_move",
     "multi-rename": "edit_note",
     "open": "folder_open",
-    "pack": "folder_zip",
     "pane-same": "vertical_split",
     "pane-swap": "swap_horiz",
     "refresh": "refresh",

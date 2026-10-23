@@ -36,7 +36,7 @@ plugins\
 
 ## 最小示例
 
-一个插件 = 一个继承 `QObject` + `Saladin::Plugin` 的类 + 元数据 JSON + 可选的 UI XML。完整可编译的参考实现在 [`plugins/example/`](example/)；仓库自带的 FTP 插件（[`plugins/ftp/`](ftp/)，"连接到 FTP" 动作 + 连接对话框 + 自带翻译目录）是一个更完整的实际例子。
+一个插件 = 一个继承 `QObject` + `Saladin::Plugin` 的类 + 元数据 JSON + 可选的 UI XML。完整可编译的参考实现在 [`plugins/example/`](example/)；仓库自带的 FTP 插件（[`plugins/ftp/`](ftp/)，"连接到 FTP" 动作 + 连接对话框 + 自带翻译目录）与 Pack 插件（[`plugins/pack/`](pack/)，"打包"动作 + ZIP 创建对话框 + 自带图标与翻译目录）是更完整的实际例子。
 
 ### 1. 插件类
 
@@ -96,7 +96,7 @@ public:
 
 ### 3. plugin.xml（可选，动作的摆放位置）
 
-格式与 [`src/resources/mainwindow.xml`](../src/resources/mainwindow.xml) 相同。引用宿主已存在的容器 id，`XmlUi::Builder` 会把元素**合并**进对应位置：
+格式与 [`src/resources/main_window.xml`](../src/resources/main_window.xml) 相同。引用宿主已存在的容器 id，`XmlUi::Builder` 会把元素**合并**进对应位置：
 
 | 容器 id | 位置 |
 | --- | --- |

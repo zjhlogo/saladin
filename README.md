@@ -9,7 +9,7 @@ Saladin 由 Michał Męciński 创建（2011-2017）。本仓库包含对原始�
 - **双栏与标签页** —— 一个活动（源）面板和一个目标面板，每个面板都有驱动器条、位置栏和文件列表；可切换、互换、克隆和同步面板。
 - **Windows Shell 深度集成** —— 文件操作使用与 Windows 资源管理器相同的引擎（带进度与冲突处理的复制/移动、删除到回收站、拖放、资源管理器上下文菜单），并具备实时图标和目录变更通知。
 - **内建查看器** —— 支持编码检测的文本查看、带跳转功能的二进制/十六进制视图，以及图像查看器（缩放、旋转、全屏）。
-- **工具** —— 文件搜索、支持掩码和正则表达式的批量重命名、ZIP 打包、FTP 浏览、大小统计、文件与目录比较，以及可配置的外部工具（编辑器、控制台、diff、查看器）。
+- **工具** —— 文件搜索、支持掩码和正则表达式的批量重命名、ZIP 打包（Pack 插件）、FTP 浏览（FTP 插件）、大小统计、文件与目录比较，以及可配置的外部工具（编辑器、控制台、diff、查看器）。
 - **书签与历史记录**，方便访问常用位置。
 - **插件框架** —— 支持用 C++ + Qt 编写原生插件（DLL）扩展工具条、菜单与文件右键菜单，并可读写双栏面板；见[插件开发指南](plugins/README.md)。
 - **明暗主题**，基于 [qt-material](https://github.com/dunderlab/qt-material)（BSD-2-Clause）样式表，含深色图标集；可在设置中跟随系统或强制明暗。
@@ -64,7 +64,7 @@ cmake --install build --config Release
 
 代码变更后重新收集源码中的字符串：`python tools/update_translations.py`（扫描 `src/` 与启用翻译的插件源码，刷新所有 `.ts`，并自动清理已删除字符串对应的废弃条目；`--keep-obsolete` 可将其保留为 vanished 条目）。仅重新编译语言文件（`.ts` → `.qm`，直接写回源码树）：`python tools/release_translations.py`，它还会把 `.qm` 部署到 `release|debug` 输出目录（应用 → `translations/`，插件 → `plugins/<插件目标名>/translations/`），并剪除已不再存在的语言的过期目录。两个脚本会自动定位 Qt 安装中的 `lupdate` / `lrelease`，也可用 `--qt-bin` 显式指定（查找顺序见 `tools/qt_linguist.py`）。
 
-插件也可以自带翻译（如 FTP 插件）：在插件 `metadata.json` 中设置 `"translations": true`，脚本即会维护 `plugins/<插件>/translations/<插件id>_<lang>.ts/.qm`；插件运行时从自己文件夹下的 `translations/`（`<exe 目录>/plugins/<插件目标名>/translations`）按宿主语言加载，详见 [plugins/README.md](plugins/README.md)。
+插件也可以自带翻译（如 FTP、Pack 插件）：在插件 `metadata.json` 中设置 `"translations": true`，脚本即会维护 `plugins/<插件>/translations/<插件id>_<lang>.ts/.qm`；插件运行时从自己文件夹下的 `translations/`（`<exe 目录>/plugins/<插件目标名>/translations`）按宿主语言加载，详见 [plugins/README.md](plugins/README.md)。
 
 ## 许可证
 

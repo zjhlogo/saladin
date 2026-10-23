@@ -68,7 +68,7 @@ ViewerWindow::ViewerWindow()
     shortcut = new QShortcut(Qt::Key_Escape, this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(close()));
 
-    loadXmlUiFile(":/resources/viewerwindow.xml");
+    loadXmlUiFile(":/resources/viewer_window.xml");
 
     auto strip = new XmlUi::ToolStrip(this);
     strip->setContentsMargins(3, 3, 3, 3);

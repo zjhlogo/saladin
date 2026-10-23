@@ -81,7 +81,7 @@ TextView::TextView(QObject* parent, QWidget* parentWidget)
 
     connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
-    loadXmlUiFile(":/resources/textview.xml");
+    loadXmlUiFile(":/resources/text_view.xml");
 
     auto main = new QWidget(parentWidget);
     QVBoxLayout* mainLayout = new QVBoxLayout(main);

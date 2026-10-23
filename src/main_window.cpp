@@ -247,11 +247,6 @@ MainWindow::MainWindow()
     connect(action, SIGNAL(triggered()), this, SLOT(openTerminal()));
     setAction("openTerminal", action);
 
-    action = new QAction(tr("Pack..."), this);
-    action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_P));
-    connect(action, SIGNAL(triggered()), this, SLOT(packToZip()));
-    setAction("packToZip", action);
-
     action = new QAction(tr("Open"), this);
     setAction("popupOpen", action);
 
@@ -337,7 +332,7 @@ MainWindow::MainWindow()
     setPopupMenu("popupOpen", "menuOpen", "browse");
     setPopupMenu("popupCompare", "menuCompare", "compareFiles");
 
-    loadXmlUiFile(":/resources/mainwindow.xml");
+    loadXmlUiFile(":/resources/main_window.xml");
 
     auto builder = new XmlUi::Builder(this);
     builder->addClient(this);
@@ -1213,62 +1208,6 @@ void MainWindow::openTerminal()
     startTool(ConsoleTool, QString(), folder->path());
 }
 
-void MainWindow::packToZip()
-{
-    QList<ShellItem> items = m_sourcePane->selectedItems();
-    if (items.isEmpty()) return;
-
-    ShellFolder* targetFolder = m_targetPane->getFolder();
-    ShellItem::Attributes attributes = targetFolder->attributes();
-
-    if (!attributes.testFlag(ShellItem::FileSystem) || !attributes.testFlag(ShellItem::Directory)) return;
-
-    OperationDialog dialog(OperationDialog::WithName | OperationDialog::CanEditName | OperationDialog::WithTarget | OperationDialog::WithCheckBox, this);
-
-    dialog.setWindowTitle(tr("Pack To Zip"));
-    dialog.setPromptPixmap(IconLoader::pixmap("pack", 22));
-
-    if (items.count() == 1)
-    {
-        QString itemName = items.first().name();
-        dialog.setPrompt(tr("Pack <b>%1</b>:").arg(itemName));
-
-        int pos = itemName.lastIndexOf('.');
-        if (pos > 0) itemName.truncate(pos);
-        dialog.setName(itemName + ".zip");
-    }
-    else
-    {
-        dialog.setPrompt(tr("Pack <b>%1</b> selected items:").arg(items.count()));
-        dialog.setName(m_sourcePane->getFolder()->name() + ".zip");
-    }
-
-    dialog.setTarget(targetFolder->path());
-
-    dialog.setCheckBoxText(tr("O&verwrite without prompt"));
-
-    if (dialog.exec() != QDialog::Accepted) return;
-
-    QString name = dialog.name();
-
-    static constexpr char zipData[22] = {'P', 'K', 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-    if (!targetFolder->createFile(name, dialog.checkBoxChecked(), zipData, sizeof(zipData))) return;
-
-    ShellItem item = targetFolder->childItem(name);
-    if (!item.isValid()) return;
-
-    ShellFolder* zipFolder = targetFolder->openFolder(item);
-    if (!zipFolder) return;
-
-    ShellSelection selection(m_sourcePane->getFolder(), items, this);
-    bool done = selection.dragDropTo(zipFolder, ShellSelection::Copy);
-
-    delete zipFolder;
-
-    if (done) m_sourcePane->unselectAll();
-}
-
 void MainWindow::browse()
 {
     m_sourcePane->browse();
@@ -1512,7 +1451,6 @@ void MainWindow::retranslateUi()
     action("openTerminal")->setText(tr("Open Console"));
     action("openTerminal")->setIconText(tr("Console\nF9"));
 
-    action("packToZip")->setText(tr("Pack..."));
     action("popupOpen")->setText(tr("Open"));
     action("openDirectory")->setText(tr("Open Directory"));
     action("browse")->setText(tr("Browse For Folder..."));
@@ -1672,7 +1610,6 @@ void MainWindow::loadIcons()
     action("moveToTrashCan")->setIcon(IconLoader::icon("trashcan"));
     action("deleteSelected")->setIcon(IconLoader::icon("delete"));
     action("openTerminal")->setIcon(IconLoader::icon("terminal"));
-    action("packToZip")->setIcon(IconLoader::icon("pack"));
     action("popupOpen")->setIcon(IconLoader::icon("browse"));
     action("openDirectory")->setIcon(IconLoader::icon("open"));
     action("browse")->setIcon(IconLoader::icon("browse"));

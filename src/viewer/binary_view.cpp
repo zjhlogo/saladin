@@ -35,7 +35,7 @@ BinaryView::BinaryView(QObject* parent, QWidget* parentWidget)
 
     connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
-    loadXmlUiFile(":/resources/binaryview.xml");
+    loadXmlUiFile(":/resources/binary_view.xml");
 
     auto main = new QWidget(parentWidget);
     auto mainLayout = new QVBoxLayout(main);

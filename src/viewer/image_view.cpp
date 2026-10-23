@@ -68,7 +68,7 @@ ImageView::ImageView(QObject* parent, QWidget* parentWidget)
 
     connect(g_application, SIGNAL(themeChanged()), this, SLOT(loadIcons()));
 
-    loadXmlUiFile(":/resources/imageview.xml");
+    loadXmlUiFile(":/resources/image_view.xml");
 
     auto main = new QWidget(parentWidget);
     QVBoxLayout* mainLayout = new QVBoxLayout(main);

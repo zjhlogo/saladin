@@ -73,7 +73,7 @@ GuideDialog::GuideDialog(QWidget* parent)
     connect(action, SIGNAL(triggered()), this, SLOT(goHome()));
     setAction("goHome", action);
 
-    loadXmlUiFile(":/resources/guidedialog.xml");
+    loadXmlUiFile(":/resources/guide_dialog.xml");
 
     auto builder = new XmlUi::Builder(this);
     builder->addClient(this);

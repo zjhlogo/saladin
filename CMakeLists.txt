@@ -141,6 +141,12 @@ if(SALADIN_BUILD_FTP_PLUGIN)
     add_subdirectory(plugins/ftp)
 endif()
 
+option(SALADIN_BUILD_PACK_PLUGIN "Build the Pack Saladin plugin (Pack To Zip)" ON)
+
+if(SALADIN_BUILD_PACK_PLUGIN)
+    add_subdirectory(plugins/pack)
+endif()
+
 # ---------------------------------------------------------------------------
 # Translations
 #

@@ -1,12 +1,12 @@
 <RCC version="1.0">
 <qresource prefix="/resources">
-  <file>binaryview.xml</file>
-  <file>bookmarksdialog.xml</file>
-  <file>guidedialog.xml</file>
-  <file>imageview.xml</file>
-  <file>mainwindow.xml</file>
-  <file>searchdialog.xml</file>
-  <file>textview.xml</file>
-  <file>viewerwindow.xml</file>
+  <file>binary_view.xml</file>
+  <file>bookmarks_dialog.xml</file>
+  <file>guide_dialog.xml</file>
+  <file>image_view.xml</file>
+  <file>main_window.xml</file>
+  <file>search_dialog.xml</file>
+  <file>text_view.xml</file>
+  <file>viewer_window.xml</file>
 </qresource>
 </RCC>

@@ -26,7 +26,7 @@ BookmarksDialog::BookmarksDialog(QWidget* parent)
     connect(action, SIGNAL(triggered()), this, SLOT(editDelete()));
     setAction("editDelete", action);
 
-    loadXmlUiFile(":/resources/bookmarksdialog.xml");
+    loadXmlUiFile(":/resources/bookmarks_dialog.xml");
 
     auto builder = new XmlUi::Builder(this);
     builder->addClient(this);

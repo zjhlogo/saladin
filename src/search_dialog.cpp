@@ -122,7 +122,7 @@ SearchDialog::SearchDialog(ShellFolder* folder, QWidget* parent)
 
     setPopupMenu("popupView", "menuView", "viewCurrent");
 
-    loadXmlUiFile(":/resources/searchdialog.xml");
+    loadXmlUiFile(":/resources/search_dialog.xml");
 
     auto builder = new XmlUi::Builder(this);
     builder->addClient(this);

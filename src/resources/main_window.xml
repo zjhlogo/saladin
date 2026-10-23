@@ -33,7 +33,6 @@
       <action id="openTerminal"/>
     </section>
     <section id="sectionTools">
-      <action id="packToZip"/>
       <action id="popupOpen"/>
       <action id="calculateSize"/>
       <action id="popupCompare"/>
@@ -93,8 +92,6 @@
     <action id="openTerminal"/>
   </menu>
   <menu id="menuBarTools">
-    <action id="packToZip"/>
-    <separator/>
     <action id="openDirectory"/>
     <action id="browse"/>
     <separator/>

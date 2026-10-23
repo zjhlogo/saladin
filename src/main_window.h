@@ -102,7 +102,6 @@ private slots:
     void deleteSelected();
     void openTerminal();
 
-    void packToZip();
     void browse();
     void calculateSize();
     void compareFiles();

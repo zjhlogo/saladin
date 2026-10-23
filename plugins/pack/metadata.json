@@ -1,0 +1,10 @@
+{
+    "name": "pack",
+    "displayName": "Pack",
+    "version": "1.0.0",
+    "apiVersion": "1.0",
+    "author": "Saladin",
+    "description": "打包插件：把源面板中选中的文件打包为 ZIP 压缩包。",
+    "ui": "plugin.xml",
+    "translations": true
+}

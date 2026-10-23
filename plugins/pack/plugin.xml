@@ -1,0 +1,10 @@
+<xmlui>
+  <strip id="stripMain">
+    <section id="sectionTools">
+      <action id="pack.toZip"/>
+    </section>
+  </strip>
+  <menu id="menuBarTools">
+    <action id="pack.toZip"/>
+  </menu>
+</xmlui>
